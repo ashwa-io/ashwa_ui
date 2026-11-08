@@ -70,7 +70,7 @@ describe('brandTheme', () => {
   });
 
   it('uses a black label when white needs a big shift', () => {
-    expect(brandTheme('#ffff00').light['--brand-foreground']).toBe('oklch(0.000 0.000 0.0)');
+    expect(brandTheme('#ffff00').light['--brand-foreground']).toBe('oklch(0 0 0)');
   });
 
   it('keeps hue', () => {
@@ -89,11 +89,11 @@ describe('brandTheme', () => {
   });
 
   it('prefers white foreground whenever white passes 4.5', () => {
-    expect(brandTheme('#1a73e8').light['--brand-foreground']).toBe('oklch(1.000 0.000 0.0)');
+    expect(brandTheme('#1a73e8').light['--brand-foreground']).toBe('oklch(1 0 0)');
   });
 
   it('default brand keeps white foreground like today', () => {
-    expect(brandTheme(null).light['--brand-foreground']).toBe('oklch(1.000 0.000 0.0)');
+    expect(brandTheme(null).light['--brand-foreground']).toBe('oklch(1 0 0)');
   });
 
   it('null falls back to default without warning', () => {

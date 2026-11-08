@@ -100,8 +100,11 @@ const stepUntil = (
 const minContrast = (color: Oklch, surfaces: Oklch[]): number =>
   Math.min(...surfaces.map(surface => wcagContrast(color, surface)));
 
+// Number() drops trailing zeros, so output matches Prettier-formatted CSS exactly.
+const round = (value: number, digits: number): number => Number(value.toFixed(digits));
+
 const formatOklch = (color: Oklch): string =>
-  `oklch(${color.l.toFixed(3)} ${color.c.toFixed(3)} ${(color.h ?? 0).toFixed(1)})`;
+  `oklch(${round(color.l, 3)} ${round(color.c, 3)} ${round(color.h ?? 0, 1)})`;
 
 // White is how brand buttons usually read: darken the brand slightly if that is all it
 // takes for a white label, otherwise keep the brand and use black.

@@ -60,6 +60,12 @@ const openModal = async (
   return screen.findByRole('dialog', { name: 'Edit vehicle' });
 };
 
+// A text-only scrolling body gets its tab stop just after layout; axe must not run before that.
+const bodyHasTabStop = () =>
+  waitFor(() =>
+    expect(document.querySelector('[data-slot="modal-body"]')).toHaveAttribute('tabindex', '0')
+  );
+
 export const Default: Story = {
   play: async ({ args, canvas, userEvent }) => {
     const dialog = await openModal(canvas, userEvent);
@@ -117,6 +123,7 @@ export const FixedHeight: Story = {
     await openModal(canvas, userEvent);
     const body = document.querySelector('[data-slot="modal-body"]')!;
     await expect(body.scrollHeight).toBeGreaterThan(body.clientHeight);
+    await bodyHasTabStop();
     await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeVisible());
   },
 };
@@ -223,6 +230,7 @@ export const ScrollbarOnDialogEdge: Story = {
     const body = document.querySelector('[data-slot="modal-body"]')!.getBoundingClientRect();
     await expect(body.right).toBe(dialog.right);
     await expect(body.left).toBe(dialog.left);
+    await bodyHasTabStop();
   },
 };
 

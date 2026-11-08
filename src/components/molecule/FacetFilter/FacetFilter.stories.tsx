@@ -217,6 +217,21 @@ export const ActiveSummaryHasOwnSurface: Story = {
   },
 };
 
+// The row's highlight recolours everything inside it; the tick must stay on its checkbox colour.
+export const TickKeepsColourOnHover: Story = {
+  args: { value: ['car', 'truck'] },
+  play: async ({ canvas, userEvent }) => {
+    await open(canvas, userEvent);
+    const row = screen.getByRole('option', { name: /Truck/ });
+    const stroke = () => getComputedStyle(row.querySelector('svg path')!).stroke;
+    const resting = stroke();
+    await userEvent.hover(row);
+    await waitFor(() => expect(row).toHaveAttribute('data-highlighted'));
+    await expect(stroke()).toBe(resting);
+    await close(userEvent);
+  },
+};
+
 // Stays open so axe checks the popup and the selected row.
 export const Dark: Story = {
   args: { value: ['car'] },

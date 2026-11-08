@@ -4,6 +4,8 @@ export { Button } from './components/atomic/Button';
 export type { ButtonProps, ButtonVariant } from './components/atomic/Button';
 export { Checkbox } from './components/atomic/Checkbox';
 export type { CheckboxProps } from './components/atomic/Checkbox';
+export { ColorInput } from './components/atomic/ColorInput';
+export type { ColorInputProps } from './components/atomic/ColorInput';
 export { Divider } from './components/atomic/Divider';
 export type { DividerProps } from './components/atomic/Divider';
 export { Heading } from './components/atomic/Heading';

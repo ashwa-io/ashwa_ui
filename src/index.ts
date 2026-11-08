@@ -6,4 +6,8 @@ export { Heading } from './components/atomic/Heading';
 export type { HeadingLevel, HeadingProps } from './components/atomic/Heading';
 export { Text } from './components/atomic/Text';
 export type { TextProps, TextSize, TextTone, TextWeight } from './components/atomic/Text';
+export { Skeleton } from './components/atomic/Skeleton';
+export type { SkeletonProps, SkeletonShape } from './components/atomic/Skeleton';
+export { Spinner } from './components/atomic/Spinner';
+export type { SpinnerProps } from './components/atomic/Spinner';
 export type { IconComponent, Size, Tone } from './lib/types';

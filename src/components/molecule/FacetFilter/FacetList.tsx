@@ -44,7 +44,8 @@ const CheckBox: React.FC<{ checked: boolean }> = props => (
       props.checked && 'border-primary bg-primary'
     )}
   >
-    {props.checked && <CheckIcon className="text-primary-foreground! size-3.5" />}
+    {/* A stroke colour, not text: the row highlight recolours every element inside it. */}
+    {props.checked && <CheckIcon className="stroke-primary-foreground size-3.5" />}
   </span>
 );
 

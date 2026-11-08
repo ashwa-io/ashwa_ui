@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.9
+
+### Patch Changes
+
+- Fix the tick in filter lists turning dark when its row is hovered.
+
 ## 0.0.8
 
 ### Patch Changes

@@ -161,6 +161,62 @@ export const ReturnsFocus: Story = {
   },
 };
 
+// Picking several matches from a long list must not mean retyping the search each time.
+export const SearchSurvivesPick: Story = {
+  play: async ({ canvas, userEvent }) => {
+    await open(canvas, userEvent);
+    const search = screen.getByRole('combobox', { name: 'Vehicle type' });
+    await userEvent.type(search, 'r');
+    await waitFor(() => expect(screen.getAllByRole('option')).toHaveLength(2));
+    await userEvent.click(screen.getByRole('option', { name: /Truck/ }));
+    await expect(search).toHaveValue('r');
+    await expect(screen.getAllByRole('option')).toHaveLength(2);
+    await close(userEvent);
+  },
+};
+
+// A disabled option can't be toggled, not even through Select all.
+export const SelectAllKeepsLocked: Story = {
+  args: {
+    options: [...OPTIONS.slice(0, 2), { value: 'bus', label: 'Bus', disabled: true }],
+    value: ['bus'],
+  },
+  play: async ({ args, canvas, userEvent }) => {
+    await open(canvas, userEvent);
+    await userEvent.click(screen.getByRole('button', { name: 'Select all' }));
+    await expect(args.onChange).toHaveBeenLastCalledWith(['bus', 'car', 'truck']);
+    await userEvent.click(screen.getByRole('button', { name: 'Select all' }));
+    await expect(args.onChange).toHaveBeenLastCalledWith(['bus']);
+    await close(userEvent);
+  },
+};
+
+export const SelectAllShowsKeyboardFocus: Story = {
+  play: async ({ canvas, userEvent }) => {
+    await open(canvas, userEvent);
+    await waitFor(() =>
+      expect(screen.getByRole('combobox', { name: 'Vehicle type' })).toHaveFocus()
+    );
+    await userEvent.tab();
+    const selectAll = screen.getByRole('button', { name: 'Select all' });
+    await expect(selectAll).toHaveFocus();
+    await waitFor(() =>
+      expect(getComputedStyle(selectAll).backgroundColor).not.toBe('rgba(0, 0, 0, 0)')
+    );
+    await close(userEvent);
+  },
+};
+
+// Brand text is only guaranteed on background and card, but the button changes colour on hover
+// and while open, so the summary brings its own surface.
+export const ActiveSummaryHasOwnSurface: Story = {
+  args: { value: ['car'] },
+  play: async ({ canvas }) => {
+    const summary = canvas.getByText('1');
+    await expect(getComputedStyle(summary).backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+  },
+};
+
 // Stays open so axe checks the popup and the selected row.
 export const Dark: Story = {
   args: { value: ['car'] },

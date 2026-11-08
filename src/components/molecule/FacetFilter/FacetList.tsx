@@ -63,6 +63,7 @@ export const FacetList: React.FC<FacetListProps> = props => {
   const byValue = new Map(options.map(option => [option.value, option]));
   const enabled = options.filter(option => !option.disabled).map(option => option.value);
   const allSelected = enabled.length > 0 && enabled.every(item => value.includes(item));
+  const locked = value.filter(item => byValue.get(item)?.disabled);
 
   // The list always runs in multiple mode so picking the selected option can clear it.
   const handleChange = (next: string[]) => {
@@ -83,7 +84,10 @@ export const FacetList: React.FC<FacetListProps> = props => {
       value={value}
       onValueChange={handleChange}
       inputValue={query}
-      onInputValueChange={setQuery}
+      // Base UI clears the search after each pick; keep it so several matches can be picked.
+      onInputValueChange={(next, details) => {
+        if (!details.isItemPress) setQuery(next);
+      }}
     >
       <div className="border-b p-1">
         <ComboboxInput showTrigger={false} placeholder="Search" aria-label={label} />
@@ -93,8 +97,8 @@ export const FacetList: React.FC<FacetListProps> = props => {
           <button
             type="button"
             aria-pressed={allSelected}
-            onClick={() => onChange(allSelected ? [] : enabled)}
-            className="hover:bg-accent hover:text-accent-foreground flex w-full cursor-default items-center gap-2 rounded-md py-1 pl-1.5 text-sm font-medium outline-none"
+            onClick={() => onChange(allSelected ? locked : [...locked, ...enabled])}
+            className="hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground flex w-full cursor-default items-center gap-2 rounded-md py-1 pl-1.5 text-sm font-medium outline-none"
           >
             <CheckBox checked={allSelected} />
             Select all

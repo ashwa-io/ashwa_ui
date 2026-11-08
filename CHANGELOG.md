@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.16
+
+### Patch Changes
+
+- 856f2e6: toast takes closeButton, for messages that stay until dismissed.
+
 ## 0.0.15
 
 ### Patch Changes

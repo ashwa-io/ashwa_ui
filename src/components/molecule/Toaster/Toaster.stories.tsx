@@ -42,6 +42,22 @@ export const Success: Story = {
   },
 };
 
+// An error that stays until read needs a way to dismiss it.
+export const CloseButton: Story = {
+  render: () => (
+    <>
+      <Toaster />
+      <Button onClick={() => toast.error('Could not save', { closeButton: true })}>Fail</Button>
+    </>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Fail' }));
+    await shows('Could not save');
+    await userEvent.click(await screen.findByRole('button', { name: 'Close toast' }));
+    await waitFor(() => expect(screen.queryByText('Could not save')).toBeNull());
+  },
+};
+
 export const AllTypes: Story = {
   render: () => <Toaster />,
   play: async () => {

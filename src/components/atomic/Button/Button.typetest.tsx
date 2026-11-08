@@ -12,6 +12,8 @@ export const ButtonTypeTest: React.FC = () => (
     <Button asChild>a</Button>
     {/* @ts-expect-error render is not part of the public API */}
     <Button render={<a href="/x">x</a>}>a</Button>
+    {/* @ts-expect-error href is a URL string */}
+    <Button href={5}>a</Button>
     <Button variant="ghost" size="sm">
       a
     </Button>

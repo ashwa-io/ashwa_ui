@@ -11,6 +11,26 @@
   "engines": {
     "node": ">=22.18"
   },
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./theme": {
+      "types": "./dist/theme.d.ts",
+      "import": "./dist/theme.js"
+    },
+    "./styles.css": "./src/styles/index.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src/styles"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
   "packageManager": "yarn@4.7.0",
   "publishConfig": {
     "access": "public"
@@ -22,7 +42,10 @@
     "typecheck": "tsc -b",
     "test": "vitest run",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "build": "tsdown",
+    "check:dist": "node scripts/check-dist.mjs",
+    "prepublishOnly": "yarn build && yarn check:dist"
   },
   "peerDependencies": {
     "lucide-react": "^1",
@@ -63,6 +86,7 @@
     "shadcn": "^4.23.0",
     "storybook": "^10.6.6",
     "tailwindcss": "^4",
+    "tsdown": "^0.23.7",
     "typescript": "^6",
     "typescript-eslint": "^8.72.1",
     "vite": "^8",

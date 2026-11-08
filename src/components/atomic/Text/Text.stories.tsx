@@ -95,3 +95,21 @@ export const Truncate: Story = {
     await expect(style.display).toBe('block');
   },
 };
+
+// Without a size, Text keeps its parent's size, so an emphasised span stays in line.
+export const NestedKeepsSize: Story = {
+  render: () => (
+    <Text size="sm">
+      Total:{' '}
+      <Text as="span" weight="semibold">
+        42
+      </Text>
+    </Text>
+  ),
+  play: async ({ canvas }) => {
+    const inner = canvas.getByText('42');
+    await expect(getComputedStyle(inner).fontSize).toBe(
+      getComputedStyle(inner.parentElement!).fontSize
+    );
+  },
+};

@@ -10,6 +10,7 @@ export type TextWeight = 'normal' | 'medium' | 'semibold';
 export interface TextProps {
   children: React.ReactNode;
   as?: 'p' | 'span' | 'div';
+  /** Leave unset to inherit the parent's size (the page default is md). */
   size?: TextSize;
   /** Leave unset to inherit the parent's colour. */
   tone?: TextTone;
@@ -49,7 +50,7 @@ export const Text: React.FC<TextProps> = props => {
   const {
     children,
     as: Element = 'p',
-    size = 'md',
+    size,
     tone,
     weight,
     truncate = false,
@@ -62,7 +63,7 @@ export const Text: React.FC<TextProps> = props => {
       id={id}
       data-testid={testId}
       className={cn(
-        SIZE[size],
+        size && SIZE[size],
         tone && TONE[tone],
         weight && WEIGHT[weight],
         truncate && 'block truncate'

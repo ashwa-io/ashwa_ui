@@ -1,4 +1,3 @@
-import { useCallback, useState } from 'react';
 import type React from 'react';
 
 import {
@@ -9,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { useScrollTabStop } from '@/hooks/useScrollTabStop';
 import { cn } from '@/lib/utils';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
@@ -42,9 +42,6 @@ const SIZE: Record<ModalSize, string> = {
   '2xl': 'sm:max-w-3xl',
 };
 
-const FOCUSABLE =
-  'a[href],button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]:not([tabindex="-1"])';
-
 export const Modal: React.FC<ModalProps> = props => {
   const {
     open,
@@ -59,20 +56,7 @@ export const Modal: React.FC<ModalProps> = props => {
     closable = true,
     'data-testid': testId,
   } = props;
-  const [needsTabStop, setNeedsTabStop] = useState(false);
-
-  // A scrolling body with nothing focusable needs a tab stop for keyboard scrolling; anywhere
-  // else a tab stop would take first focus from the form's first input.
-  // shortcut: children swapped in after open aren't observed, observe a wrapper if that shows up.
-  const bodyRef = useCallback((body: HTMLDivElement | null) => {
-    if (!body) return undefined;
-    const check = () =>
-      setNeedsTabStop(body.scrollHeight > body.clientHeight && !body.querySelector(FOCUSABLE));
-    const observer = new ResizeObserver(check);
-    observer.observe(body);
-    Array.from(body.children).forEach(child => observer.observe(child));
-    return () => observer.disconnect();
-  }, []);
+  const tabStop = useScrollTabStop();
 
   return (
     <Dialog
@@ -96,12 +80,19 @@ export const Modal: React.FC<ModalProps> = props => {
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
         <div
-          ref={bodyRef}
+          ref={tabStop.ref}
           data-slot="modal-body"
-          tabIndex={needsTabStop ? 0 : undefined}
+          tabIndex={tabStop.tabIndex}
           // Runs to the dialog's edge so the scrollbar sits on the border; the padding moves inside.
           // py-1 keeps room for 3px focus rings, which this clipping element would cut.
-          className={cn('min-h-0 flex-1 overflow-y-auto', flush ? '-m-4' : '-mx-4 -my-1 px-4 py-1')}
+          // The @supports guard: without scroll timelines the fade would sit over the first line.
+          // Not when flush: a fade would wash out a table's sticky header.
+          className={cn(
+            'min-h-0 flex-1 overflow-y-auto',
+            flush
+              ? '-m-4'
+              : 'supports-[animation-timeline:scroll()]:scroll-fade-y -mx-4 -my-1 px-4 py-1'
+          )}
         >
           {children}
         </div>

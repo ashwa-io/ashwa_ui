@@ -253,3 +253,32 @@ export const FlushClipsToCorners: Story = {
     await expect(getComputedStyle(dialog).overflow).toBe('clip');
   },
 };
+
+const openBody = async (
+  canvas: { getByRole: (role: string, options: { name: string }) => HTMLElement },
+  userEvent: { click: (element: Element) => Promise<void> }
+) => {
+  await userEvent.click(canvas.getByRole('button', { name: 'Open' }));
+  await screen.findByRole('dialog');
+  const body = document.querySelector<HTMLElement>('[data-slot="modal-body"]')!;
+  // The tab stop arrives from a ResizeObserver; axe must not run before it.
+  await waitFor(() => expect(body).toHaveAttribute('tabindex', '0'));
+  return body;
+};
+
+export const ScrollFade: Story = {
+  args: { children: LONG_BODY },
+  play: async ({ canvas, userEvent }) => {
+    const body = await openBody(canvas, userEvent);
+    await expect(getComputedStyle(body).maskImage).not.toBe('none');
+  },
+};
+
+// A flush body holds tables: a fade would wash out their sticky header.
+export const FlushHasNoFade: Story = {
+  args: { children: LONG_BODY, flush: true },
+  play: async ({ canvas, userEvent }) => {
+    const body = await openBody(canvas, userEvent);
+    await expect(getComputedStyle(body).maskImage).toBe('none');
+  },
+};

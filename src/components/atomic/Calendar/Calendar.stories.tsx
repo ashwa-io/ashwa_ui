@@ -100,3 +100,27 @@ export const KeyboardMoves: Story = {
 export const Dark: Story = {
   globals: { theme: 'dark' },
 };
+
+const Rerendering: React.FC<CalendarProps> = props => {
+  const [tick, setTick] = useState(0);
+
+  return (
+    <div>
+      <button type="button" onClick={() => setTick(tick + 1)}>
+        Tick {tick}
+      </button>
+      <Calendar {...props} />
+    </div>
+  );
+};
+
+// A parent re-render must not rebuild the grid: a click in progress would be lost.
+export const SurvivesParentRender: Story = {
+  render: args => <Rerendering {...args} />,
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    const before = canvasElement.querySelector('[data-slot="calendar"]');
+    await userEvent.click(canvas.getByRole('button', { name: 'Tick 0' }));
+    await canvas.findByRole('button', { name: 'Tick 1' });
+    await expect(canvasElement.querySelector('[data-slot="calendar"]')).toBe(before);
+  },
+};

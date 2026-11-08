@@ -23,7 +23,8 @@ export const InputAddons: React.FC<InputAddonsProps> = props => {
   const { icon: Icon, startText, endText, endAction, children } = props;
 
   return (
-    <InputGroup>
+    // The primitive dims on any disabled descendant, so a disabled end button would dim the field.
+    <InputGroup className="dark:has-disabled:bg-input/30 has-[input:disabled]:bg-input/50 dark:has-[input:disabled]:bg-input/80 has-disabled:bg-transparent has-disabled:opacity-100 has-[input:disabled]:opacity-50">
       {children}
       {(Icon || startText) && (
         <InputGroupAddon>

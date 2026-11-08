@@ -116,3 +116,23 @@ export const Horizontal: Story = {
 export const Dark: Story = {
   globals: { theme: 'dark' },
 };
+
+export const DisabledOptionLooksDisabled: Story = {
+  play: async ({ canvas }) => {
+    const radio = canvas.getByRole('radio', { name: /Mark as lost/ });
+    await waitFor(() => expect(getComputedStyle(radio).opacity).toBe('0.5'));
+  },
+};
+
+export const DisabledGroupLooksDisabled: Story = {
+  args: { disabled: true },
+  // Disabled controls are exempt from contrast (WCAG 1.4.3); axe can't tie this label to them.
+  parameters: { a11y: { config: { rules: [{ id: 'color-contrast', enabled: false }] } } },
+  play: async ({ canvas }) => {
+    const radio = canvas.getByRole('radio', { name: /Go back to inventory/ });
+    await waitFor(() => expect(getComputedStyle(radio).opacity).toBe('0.5'));
+    await expect(getComputedStyle(canvas.getByText('Go back to inventory')).cursor).not.toBe(
+      'pointer'
+    );
+  },
+};

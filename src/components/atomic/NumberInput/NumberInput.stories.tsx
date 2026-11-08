@@ -104,3 +104,15 @@ export const Dark: Story = {
   args: { value: 12, endText: 'km' },
   globals: { theme: 'dark' },
 };
+
+// Scrolling past a focused field must not quietly change its number.
+export const WheelLeavesValueAlone: Story = {
+  args: { value: 2024 },
+  play: async ({ canvas }) => {
+    const input = field(canvas);
+    input.focus();
+    await expect(input).toHaveFocus();
+    await fireEvent.wheel(input, { deltaY: 100 });
+    await expect(input).not.toHaveFocus();
+  },
+};

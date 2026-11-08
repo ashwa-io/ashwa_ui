@@ -90,6 +90,8 @@ export const DateInput: React.FC<DateInputProps> = props => {
             <CalendarIcon aria-hidden data-icon="inline-start" />
             <span id={valueId} className={cn(!selected && 'text-muted-foreground')}>
               {selected ? format(selected, 'd MMM yyyy') : placeholder}
+              {/* The label's asterisk is hidden from screen readers, and buttons can't be aria-required. */}
+              {required && <span className="sr-only">, required</span>}
             </span>
           </PopoverTrigger>
           <PopoverContent aria-label={label} align="start" className="w-auto gap-0 p-0">

@@ -52,7 +52,8 @@ export const TextInput: React.FC<TextInputProps> = props => {
     autoComplete,
     ref,
   } = props;
-  const grouped = Boolean(startText || endText || endAction);
+  // By key, not value: a clear button that appears while typing must not remount the input.
+  const grouped = 'startText' in props || 'endText' in props || 'endAction' in props;
   const Control = grouped ? InputGroupInput : Input;
 
   return (

@@ -41,7 +41,8 @@ export const NumberInput: React.FC<NumberInputProps> = props => {
     endText,
     ref,
   } = props;
-  const grouped = Boolean(startText || endText);
+  // By key, not value: a unit that appears while typing must not remount the input.
+  const grouped = 'startText' in props || 'endText' in props;
   const Control = grouped ? InputGroupInput : Input;
 
   return (
@@ -78,6 +79,8 @@ export const NumberInput: React.FC<NumberInputProps> = props => {
               onChange(Number.isNaN(next) ? null : next);
             }}
             onBlur={onBlur}
+            // A wheel over a focused number input changes its value without the user noticing.
+            onWheel={event => event.currentTarget.blur()}
           />
         );
 

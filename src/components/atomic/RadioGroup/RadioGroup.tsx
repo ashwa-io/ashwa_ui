@@ -20,22 +20,23 @@ export interface RadioGroupProps extends FieldBaseProps {
   orientation?: 'vertical' | 'horizontal';
 }
 
-const RadioRow: React.FC<{ option: RadioOption }> = props => {
-  const { option } = props;
+const RadioRow: React.FC<{ option: RadioOption; groupDisabled?: boolean }> = props => {
+  const { option, groupDisabled = false } = props;
   const descriptionId = useId();
 
   return (
     <label
       className={cn(
         'flex items-start gap-2 text-sm',
-        option.disabled ? 'text-muted-foreground' : 'cursor-pointer'
+        option.disabled || groupDisabled ? 'text-muted-foreground' : 'cursor-pointer'
       )}
     >
       <RadioGroupItem
         value={option.value}
         disabled={option.disabled}
         aria-describedby={option.description ? descriptionId : undefined}
-        className="mt-0.5"
+        // The primitive's disabled: styles never match, because Base UI renders a span.
+        className="mt-0.5 data-disabled:opacity-50"
       />
       <span className="grid gap-0.5">
         {option.label}
@@ -89,7 +90,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = props => {
           className={cn(orientation === 'horizontal' && 'flex flex-wrap gap-x-4')}
         >
           {options.map(option => (
-            <RadioRow key={option.value} option={option} />
+            <RadioRow key={option.value} option={option} groupDisabled={control.disabled} />
           ))}
         </RadioGroupPrimitive>
       )}

@@ -144,3 +144,11 @@ export const Dark: Story = {
     await waitFor(() => expect(grid).toBeVisible());
   },
 };
+
+// The label's asterisk is hidden from screen readers, so the name has to say it.
+export const RequiredIsAnnounced: Story = {
+  args: { required: true },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('button', { name: /required/ })).toBeVisible();
+  },
+};

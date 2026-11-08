@@ -159,3 +159,55 @@ export const AddonsDark: Story = {
   args: { startText: '+91', endText: 'km' },
   globals: { theme: 'dark' },
 };
+
+const AppearingAction: React.FC<TextInputProps> = props => {
+  const [value, setValue] = useState('');
+
+  return (
+    <TextInput
+      {...props}
+      value={value}
+      onChange={setValue}
+      endAction={
+        value ? (
+          <IconButton
+            icon={XIcon}
+            aria-label="Clear"
+            variant="ghost"
+            onClick={() => setValue('')}
+          />
+        ) : undefined
+      }
+    />
+  );
+};
+
+// The clear button arrives with the first letter: the input must not remount under the typist.
+export const EndActionCanAppear: Story = {
+  render: args => <AppearingAction {...args} />,
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.type(canvas.getByRole('textbox', { name: 'Name' }), 'hello');
+    await expect(canvas.getByRole('textbox', { name: 'Name' })).toHaveValue('hello');
+    await expect(canvas.getByRole('textbox', { name: 'Name' })).toHaveFocus();
+  },
+};
+
+const group = (root: HTMLElement) => root.querySelector('[data-slot="input-group"]')!;
+
+export const DisabledActionLeavesFieldEnabled: Story = {
+  args: {
+    endAction: <IconButton icon={XIcon} aria-label="Clear" variant="ghost" disabled />,
+  },
+  play: async ({ canvasElement }) => {
+    await expect(getComputedStyle(group(canvasElement)).opacity).toBe('1');
+  },
+};
+
+export const DisabledInputDimsField: Story = {
+  args: { endText: 'km', disabled: true },
+  // Disabled controls are exempt from contrast (WCAG 1.4.3); axe can't tie the addon to the input.
+  parameters: { a11y: { config: { rules: [{ id: 'color-contrast', enabled: false }] } } },
+  play: async ({ canvasElement }) => {
+    await expect(getComputedStyle(group(canvasElement)).opacity).toBe('0.5');
+  },
+};

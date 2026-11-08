@@ -21,6 +21,8 @@ export interface DateInputProps extends FieldBaseProps {
   max?: string;
   placeholder?: string;
   size?: 'sm' | 'md';
+  /** false: no Clear action, for a date that must stay set once picked. */
+  clearable?: boolean;
 }
 
 const SIZE = { sm: 'sm', md: 'default' } as const;
@@ -42,6 +44,7 @@ export const DateInput: React.FC<DateInputProps> = props => {
     max,
     placeholder = 'Pick a date',
     size = 'md',
+    clearable = true,
   } = props;
   const [open, setOpen] = useState(false);
   const valueId = useId();
@@ -96,7 +99,7 @@ export const DateInput: React.FC<DateInputProps> = props => {
           </PopoverTrigger>
           <PopoverContent aria-label={label} align="start" className="w-auto gap-0 p-0">
             <Calendar value={value} onChange={pick} min={min} max={max} />
-            {!required && selected && (
+            {clearable && !required && selected && (
               <div className="border-t p-1">
                 <Button variant="ghost" size="sm" className="w-full" onClick={() => pick(null)}>
                   Clear

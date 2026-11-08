@@ -87,6 +87,16 @@ export const Disabled: Story = {
   },
 };
 
+// A deactivated option or one still loading: never print the raw value.
+export const UnknownValueShowsPlaceholder: Story = {
+  args: { value: 'value-not-in-options', placeholder: 'Pick one' },
+  play: async ({ canvasElement }) => {
+    const trigger = canvasElement.querySelector('[data-slot="select-trigger"]')!;
+    await expect(trigger).toHaveTextContent('Pick one');
+    await expect(trigger).not.toHaveTextContent('value-not-in-options');
+  },
+};
+
 export const Dark: Story = {
   args: { value: 'car' },
   globals: { theme: 'dark' },

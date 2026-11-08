@@ -135,6 +135,16 @@ export const Disabled: Story = {
   },
 };
 
+// For a date that must stay set once picked.
+export const NotClearable: Story = {
+  args: { value: '2026-03-14', clearable: false },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button'));
+    await screen.findByRole('dialog');
+    await expect(screen.queryByRole('button', { name: 'Clear' })).toBeNull();
+  },
+};
+
 export const Dark: Story = {
   args: { value: '2026-11-08' },
   globals: { theme: 'dark' },

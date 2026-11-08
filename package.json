@@ -1,6 +1,6 @@
 {
   "name": "@ashwa-io/ui",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Ashwa design system: locked React components on shadcn/ui (Base UI) and Tailwind v4, with per-org brand theming.",
   "license": "MIT",
   "type": "module",

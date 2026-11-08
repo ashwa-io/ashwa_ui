@@ -101,5 +101,11 @@ export { EmptyState } from './components/molecule/EmptyState';
 export type { EmptyStateProps } from './components/molecule/EmptyState';
 export { Progress } from './components/atomic/Progress';
 export type { ProgressProps } from './components/atomic/Progress';
+export { Attachment, AttachmentGroup } from './components/molecule/Attachment';
+export type {
+  AttachmentGroupProps,
+  AttachmentProps,
+  AttachmentState,
+} from './components/molecule/Attachment';
 export { UIProvider } from './providers/UIProvider';
 export type { UIProviderProps } from './providers/UIProvider';

@@ -32,6 +32,8 @@ export { FormLayout } from './components/layout/FormLayout';
 export type { FormLayoutDirection, FormLayoutProps } from './components/layout/FormLayout';
 export { FormField } from './components/molecule/FormField';
 export type { FormFieldControlProps, FormFieldProps } from './components/molecule/FormField';
+export { Popover } from './components/molecule/Popover';
+export type { PopoverProps, PopoverWidth } from './components/molecule/Popover';
 export { HStack, Stack, VStack } from './components/layout/Stack';
 export type {
   HStackProps,

@@ -1,0 +1,39 @@
+name: Release
+
+# Publishes when package.json holds a version that is not on npm yet
+# (bump it with `yarn version-packages`). npm trusted publishing: no token, provenance automatic.
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # push the version tag
+      id-token: write # npm OIDC trusted publishing + provenance
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: corepack enable
+      - run: yarn install --immutable
+      - name: Publish if this version is new
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "@ashwa-io/ui@$VERSION" version > /dev/null 2>&1; then
+            echo "@ashwa-io/ui@$VERSION is already on npm, nothing to publish."
+            exit 0
+          fi
+          echo "npm $(npm -v)"
+          npm publish --access public
+          git tag "v$VERSION"
+          git push origin "v$VERSION"

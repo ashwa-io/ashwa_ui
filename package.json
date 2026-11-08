@@ -45,7 +45,9 @@
     "build-storybook": "storybook build",
     "build": "tsdown",
     "check:dist": "node scripts/check-dist.mjs",
-    "prepublishOnly": "yarn build && yarn check:dist"
+    "prepublishOnly": "yarn build && yarn check:dist",
+    "changeset": "changeset",
+    "version-packages": "changeset version"
   },
   "peerDependencies": {
     "lucide-react": "^1",
@@ -53,6 +55,7 @@
     "react-dom": "^19"
   },
   "devDependencies": {
+    "@changesets/cli": "^3",
     "@eslint/compat": "^2.1.1",
     "@eslint/js": "^9",
     "@storybook/addon-a11y": "^10.6.6",

@@ -15,7 +15,7 @@ export const Toaster: React.FC = () => (
   <Sonner
     position="bottom-right"
     style={TOKENS}
-    // sonner's description grey ignores .dark (1.7:1 on the dark popover).
-    toastOptions={{ classNames: { description: 'text-muted-foreground!' } }}
+    // sonner sets its own font, and its description grey ignores .dark (1.7:1 on the popover).
+    toastOptions={{ classNames: { toast: 'font-sans', description: 'text-muted-foreground!' } }}
   />
 );

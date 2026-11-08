@@ -1,3 +1,4 @@
+import { useCallback, useState } from 'react';
 import type React from 'react';
 
 import {
@@ -25,7 +26,7 @@ export interface ModalProps {
   size?: ModalSize;
   /** Fixed height (min(40rem, 85dvh)): the body scrolls, header and footer stay put. */
   fixedHeight?: boolean;
-  /** Body without side padding, for lists and tables that run edge to edge. */
+  /** Body without padding, for lists and tables that run edge to edge. */
   flush?: boolean;
   /** false: no close button; Escape and outside clicks do nothing (blocking flows). */
   closable?: boolean;
@@ -41,6 +42,9 @@ const SIZE: Record<ModalSize, string> = {
   '2xl': 'sm:max-w-3xl',
 };
 
+const FOCUSABLE =
+  'a[href],button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]:not([tabindex="-1"])';
+
 export const Modal: React.FC<ModalProps> = props => {
   const {
     open,
@@ -55,6 +59,20 @@ export const Modal: React.FC<ModalProps> = props => {
     closable = true,
     'data-testid': testId,
   } = props;
+  const [needsTabStop, setNeedsTabStop] = useState(false);
+
+  // A scrolling body with nothing focusable needs a tab stop for keyboard scrolling; anywhere
+  // else a tab stop would take first focus from the form's first input.
+  // shortcut: children swapped in after open aren't observed, observe a wrapper if that shows up.
+  const bodyRef = useCallback((body: HTMLDivElement | null) => {
+    if (!body) return undefined;
+    const check = () =>
+      setNeedsTabStop(body.scrollHeight > body.clientHeight && !body.querySelector(FOCUSABLE));
+    const observer = new ResizeObserver(check);
+    observer.observe(body);
+    Array.from(body.children).forEach(child => observer.observe(child));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <Dialog
@@ -77,11 +95,11 @@ export const Modal: React.FC<ModalProps> = props => {
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
         <div
+          ref={bodyRef}
           data-slot="modal-body"
-          // shortcut: only fixed-height bodies are tabbable (a tabbable body would take first focus
-          // from a form's first input), so long text-only modals need fixedHeight for keyboard scroll.
-          tabIndex={fixedHeight ? 0 : undefined}
-          className={cn('min-h-0 flex-1 overflow-y-auto', flush && '-mx-4')}
+          tabIndex={needsTabStop ? 0 : undefined}
+          // The body clips (it scrolls), so non-flush bodies keep room for 3px focus rings.
+          className={cn('min-h-0 flex-1 overflow-y-auto', flush ? '-m-4' : '-m-1 p-1')}
         >
           {children}
         </div>

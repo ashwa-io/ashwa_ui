@@ -97,3 +97,13 @@ export const Dark: Story = {
     await screen.findByRole('menuitem', { name: /Delete role/ });
   },
 };
+
+// Hover highlights the item: its description must stay readable on the red tint (axe checks it).
+export const DestructiveHighlighted: Story = {
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Actions' }));
+    const item = await screen.findByRole('menuitem', { name: /Delete role/ });
+    await userEvent.hover(item);
+    await waitFor(() => expect(item).toHaveFocus());
+  },
+};

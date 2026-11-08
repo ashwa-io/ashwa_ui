@@ -5,6 +5,7 @@ import { expect, fn, screen, waitFor } from 'storybook/test';
 
 import { Button } from '@/components/atomic/Button';
 import { Text } from '@/components/atomic/Text';
+import { TextInput } from '@/components/atomic/TextInput';
 
 import { Modal, type ModalProps } from './Modal';
 
@@ -155,5 +156,61 @@ export const LongContentFits: Story = {
     await waitFor(() =>
       expect(dialog.getBoundingClientRect().height).toBeLessThanOrEqual(window.innerHeight)
     );
+  },
+};
+
+// Long text with nothing focusable: the body itself takes a tab stop so keyboards can scroll it.
+export const TextOnlyLongBody: Story = {
+  args: { children: LONG_BODY },
+  play: async ({ canvas, userEvent }) => {
+    await openModal(canvas, userEvent);
+    const body = document.querySelector('[data-slot="modal-body"]')!;
+    await waitFor(() => expect(body).toHaveAttribute('tabindex', '0'));
+  },
+};
+
+// A picker's search field gets first focus; the scrolling body must not take it.
+export const FixedHeightFocusesFirstInput: Story = {
+  args: {
+    fixedHeight: true,
+    children: (
+      <>
+        <TextInput label="Search devices" value="" onChange={fn()} />
+        {LONG_BODY}
+      </>
+    ),
+  },
+  play: async ({ canvas, userEvent }) => {
+    await openModal(canvas, userEvent);
+    await waitFor(() =>
+      expect(screen.getByRole('textbox', { name: 'Search devices' })).toHaveFocus()
+    );
+    await expect(document.querySelector('[data-slot="modal-body"]')).not.toHaveAttribute(
+      'tabindex'
+    );
+  },
+};
+
+// The body scrolls, so it clips; a field's 3px focus ring must still fit inside it.
+export const FocusRingNotClipped: Story = {
+  args: { children: <TextInput label="Name" value="" onChange={fn()} /> },
+  play: async ({ canvas, userEvent }) => {
+    await openModal(canvas, userEvent);
+    const body = document.querySelector('[data-slot="modal-body"]')!.getBoundingClientRect();
+    const input = screen.getByRole('textbox', { name: 'Name' }).getBoundingClientRect();
+    await expect(input.left - body.left).toBeGreaterThanOrEqual(3);
+    await expect(body.right - input.right).toBeGreaterThanOrEqual(3);
+  },
+};
+
+// Lists and tables run edge to edge: no gap on any side.
+export const Flush: Story = {
+  args: { flush: true, children: <div data-testid="edge">Row</div> },
+  play: async ({ canvas, userEvent }) => {
+    const dialog = (await openModal(canvas, userEvent)).getBoundingClientRect();
+    const edge = screen.getByTestId('edge').getBoundingClientRect();
+    await expect(Math.abs(edge.left - dialog.left)).toBeLessThanOrEqual(1);
+    await expect(Math.abs(dialog.right - edge.right)).toBeLessThanOrEqual(1);
+    await expect(Math.abs(dialog.bottom - edge.bottom)).toBeLessThanOrEqual(1);
   },
 };

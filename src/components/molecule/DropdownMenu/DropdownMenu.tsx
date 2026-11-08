@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { IconComponent, OverlayAlign, Size } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 export interface MenuItem {
   label: string;
@@ -80,7 +81,10 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = props => {
               <span className="flex flex-col">
                 <span>{item.label}</span>
                 {item.description && (
-                  <span className="text-muted-foreground text-xs">{item.description}</span>
+                  // Muted grey fails contrast on the red highlight, so destructive items stay red.
+                  <span className={cn('text-xs', !item.destructive && 'text-muted-foreground')}>
+                    {item.description}
+                  </span>
                 )}
               </span>
             </DropdownMenuItem>

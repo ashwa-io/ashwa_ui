@@ -37,6 +37,8 @@ export const Success: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Save' }));
     await shows('Saved');
     await shows('Vehicle updated');
+    const card = screen.getByText('Saved').closest('[data-sonner-toast]')!;
+    await expect(getComputedStyle(card).fontFamily).toContain('Inter');
   },
 };
 

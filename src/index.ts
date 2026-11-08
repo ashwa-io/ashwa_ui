@@ -40,6 +40,8 @@ export { Modal } from './components/molecule/Modal';
 export type { ModalProps, ModalSize } from './components/molecule/Modal';
 export { Popover } from './components/molecule/Popover';
 export type { PopoverProps, PopoverWidth } from './components/molecule/Popover';
+export { toast, Toaster } from './components/molecule/Toaster';
+export type { ToastOptions } from './components/molecule/Toaster';
 export { HStack, Stack, VStack } from './components/layout/Stack';
 export type {
   HStackProps,

@@ -112,3 +112,14 @@ export const WithoutProvider: Story = {
 export const Dark: Story = {
   globals: { theme: 'dark' },
 };
+
+// Links can carry server data: a script URL must not become a live link.
+export const UnsafeHrefIsBlocked: Story = {
+  args: { href: 'javascript:alert(1)', children: 'Unsafe' },
+  play: async ({ canvasElement, userEvent }) => {
+    const link = canvasElement.querySelector('a')!;
+    await expect(link).not.toHaveAttribute('href');
+    await userEvent.click(link);
+    await expect(navigate).not.toHaveBeenCalled();
+  },
+};

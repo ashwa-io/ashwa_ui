@@ -6,7 +6,9 @@ import { Button as ButtonPrimitive } from '@/components/ui/button';
 import type { IconComponent, Size } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link';
+import { BUTTON_VARIANT, type ButtonVariant } from './buttonVariant';
+
+export type { ButtonVariant } from './buttonVariant';
 
 export interface ButtonProps {
   variant?: ButtonVariant;
@@ -28,15 +30,6 @@ export interface ButtonProps {
 }
 
 type PrimitiveProps = React.ComponentProps<typeof ButtonPrimitive>;
-
-const VARIANT: Record<ButtonVariant, PrimitiveProps['variant']> = {
-  primary: 'default',
-  secondary: 'secondary',
-  outline: 'outline',
-  ghost: 'ghost',
-  destructive: 'destructive',
-  link: 'link',
-};
 
 // Brand-coloured text must use --brand-text (≥4.5:1); the primitive's text-primary is the
 // fill colour, guaranteed only 3:1 against the background.
@@ -74,7 +67,7 @@ export const Button: React.FC<ButtonProps> = props => {
       ref={ref}
       id={id}
       type={type}
-      variant={VARIANT[variant]}
+      variant={BUTTON_VARIANT[variant]}
       size={SIZE[size]}
       className={cn(VARIANT_CLASS[variant], fullWidth && 'w-full')}
       disabled={disabled || loading}

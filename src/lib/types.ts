@@ -5,6 +5,12 @@ export type Size = 'sm' | 'md' | 'lg';
 
 export type Tone = 'neutral' | 'brand' | 'success' | 'warning' | 'danger' | 'info';
 
+/** Which side of the trigger an overlay opens on. */
+export type OverlaySide = 'top' | 'bottom' | 'left' | 'right';
+
+/** How an overlay lines up with its trigger along that side. */
+export type OverlayAlign = 'start' | 'center' | 'end';
+
 /** An icon component (lucide-react, svgr): the design system controls its size and colour. */
 export type IconComponent = React.ComponentType<{
   className?: string;

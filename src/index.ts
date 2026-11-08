@@ -16,6 +16,8 @@ export { Text } from './components/atomic/Text';
 export type { TextAreaProps } from './components/atomic/TextArea';
 export { TextArea } from './components/atomic/TextArea';
 export { TextInput } from './components/atomic/TextInput';
+export { Tooltip } from './components/atomic/Tooltip';
+export type { TooltipProps } from './components/atomic/Tooltip';
 export type { TextInputProps, TextInputType } from './components/atomic/TextInput';
 export type { TextProps, TextSize, TextTone, TextWeight } from './components/atomic/Text';
 export { IconButton } from './components/atomic/IconButton';
@@ -39,4 +41,11 @@ export type {
   StackProps,
   VStackProps,
 } from './components/layout/Stack';
-export type { FieldBaseProps, IconComponent, Size, Tone } from './lib/types';
+export type {
+  FieldBaseProps,
+  IconComponent,
+  OverlayAlign,
+  OverlaySide,
+  Size,
+  Tone,
+} from './lib/types';

@@ -26,6 +26,8 @@ export { Skeleton } from './components/atomic/Skeleton';
 export type { SkeletonProps, SkeletonShape } from './components/atomic/Skeleton';
 export { Spinner } from './components/atomic/Spinner';
 export type { SpinnerProps } from './components/atomic/Spinner';
+export { FormLayout } from './components/layout/FormLayout';
+export type { FormLayoutDirection, FormLayoutProps } from './components/layout/FormLayout';
 export { FormField } from './components/molecule/FormField';
 export type { FormFieldControlProps, FormFieldProps } from './components/molecule/FormField';
 export { HStack, Stack, VStack } from './components/layout/Stack';

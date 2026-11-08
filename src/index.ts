@@ -1,3 +1,5 @@
+export { Badge } from './components/atomic/Badge';
+export type { BadgeProps } from './components/atomic/Badge';
 export { Button } from './components/atomic/Button';
 export type { ButtonProps, ButtonVariant } from './components/atomic/Button';
 export { Heading } from './components/atomic/Heading';

@@ -62,6 +62,8 @@ export { MetadataList, MetadataListItem } from './components/molecule/MetadataLi
 export type { MetadataListItemProps, MetadataListProps } from './components/molecule/MetadataList';
 export { Modal } from './components/molecule/Modal';
 export type { ModalProps, ModalSize } from './components/molecule/Modal';
+export { Link } from './components/atomic/Link';
+export type { LinkProps } from './components/atomic/Link';
 export { Popover } from './components/molecule/Popover';
 export type { PopoverProps, PopoverWidth } from './components/molecule/Popover';
 export { Tabs } from './components/molecule/Tabs';
@@ -87,3 +89,11 @@ export type {
   Size,
   Tone,
 } from './lib/types';
+export { AppShell } from './components/organism/AppShell';
+export type { AppShellProps } from './components/organism/AppShell';
+export { SideNav } from './components/organism/SideNav';
+export type { SideNavGroup, SideNavItem, SideNavProps } from './components/organism/SideNav';
+export { TopNav } from './components/organism/TopNav';
+export type { TopNavProps } from './components/organism/TopNav';
+export { UIProvider } from './providers/UIProvider';
+export type { UIProviderProps } from './providers/UIProvider';

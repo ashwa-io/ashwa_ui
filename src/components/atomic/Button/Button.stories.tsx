@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PlusIcon } from 'lucide-react';
 import { expect, fireEvent, fn } from 'storybook/test';
 
+import { UIProvider } from '@/providers/UIProvider';
+
 import { Button, type ButtonVariant } from './Button';
 
 const VARIANTS: ButtonVariant[] = [
@@ -97,4 +99,44 @@ export const Disabled: Story = {
 export const FullWidth: Story = {
   args: { fullWidth: true },
   decorators: [Story => <div className="w-96">{Story()}</div>],
+};
+
+const navigate = fn();
+
+export const AsLink: Story = {
+  args: { href: '/vehicles', children: 'Vehicles' },
+  decorators: [Story => <UIProvider navigate={navigate}>{Story()}</UIProvider>],
+  play: async ({ canvas, userEvent }) => {
+    navigate.mockClear();
+    const link = canvas.getByRole('link', { name: 'Vehicles' });
+    await expect(link).toHaveAttribute('href', '/vehicles');
+    await userEvent.click(link);
+    await expect(navigate).toHaveBeenCalledWith('/vehicles');
+  },
+};
+
+export const DisabledLink: Story = {
+  args: { href: '/vehicles', children: 'Vehicles', disabled: true },
+  decorators: [Story => <UIProvider navigate={navigate}>{Story()}</UIProvider>],
+  play: async ({ canvasElement }) => {
+    navigate.mockClear();
+    const link = canvasElement.querySelector('a')!;
+    await expect(link).not.toHaveAttribute('href');
+    await expect(link).toHaveAttribute('aria-disabled', 'true');
+    await expect(getComputedStyle(link).opacity).toBe('0.5');
+    await expect(getComputedStyle(link).pointerEvents).toBe('none');
+    await fireEvent.click(link);
+    await expect(navigate).not.toHaveBeenCalled();
+  },
+};
+
+// A blocked href must not leave a focusable link that goes nowhere.
+export const UnsafeHrefIsInert: Story = {
+  args: { href: 'javascript:alert(1)', children: 'Unsafe' },
+  play: async ({ canvasElement }) => {
+    const link = canvasElement.querySelector('a')!;
+    await expect(link).not.toHaveAttribute('href');
+    await expect(link).toHaveAttribute('aria-disabled', 'true');
+    await expect(getComputedStyle(link).opacity).toBe('0.5');
+  },
 };

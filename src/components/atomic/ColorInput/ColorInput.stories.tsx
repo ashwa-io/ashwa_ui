@@ -37,27 +37,30 @@ export const Default: Story = {
   },
 };
 
-// Partial hex never reaches the form; a complete one arrives normalized.
+// A complete hex arrives normalized; anything else reaches the form as typed, so its
+// validation (e.g. "Use a 6-digit hex") can flag a typo instead of silently keeping the old colour.
 export const TypingHex: Story = {
   play: async ({ args, canvas, userEvent }) => {
     const text = canvas.getByRole('textbox', { name: 'Brand colour' });
     await userEvent.clear(text);
     await userEvent.type(text, '#1a7');
-    await expect(args.onChange).not.toHaveBeenCalled();
+    await expect(args.onChange).toHaveBeenLastCalledWith('#1a7');
     await userEvent.type(text, '3E8');
     await expect(args.onChange).toHaveBeenLastCalledWith('#1a73e8');
+    await expect(text).toHaveValue('#1a73e8');
     await expect(canvas.getByLabelText('Brand colour picker')).toHaveValue('#1a73e8');
   },
 };
 
-export const InvalidBlurResets: Story = {
+// A typo survives blur (no silent revert to the old colour), so Save cannot submit it unseen.
+export const InvalidKeptForValidation: Story = {
   play: async ({ args, canvas, userEvent }) => {
     const text = canvas.getByRole('textbox', { name: 'Brand colour' });
     await userEvent.clear(text);
-    await userEvent.type(text, 'zzz');
+    await userEvent.type(text, '#1a73e');
     await userEvent.tab();
-    await expect(text).toHaveValue('#8750f6');
-    await expect(args.onChange).not.toHaveBeenCalled();
+    await expect(text).toHaveValue('#1a73e');
+    await expect(args.onChange).toHaveBeenLastCalledWith('#1a73e');
   },
 };
 

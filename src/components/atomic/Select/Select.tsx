@@ -10,6 +10,9 @@ import {
 } from '@/components/ui/select';
 import type { FieldBaseProps } from '@/lib/types';
 
+// Base UI close reasons that mean focus left the field (not a pick or Escape back to the trigger).
+const LEFT_FIELD_REASONS = new Set(['outside-press', 'focus-out']);
+
 export interface SelectOption {
   value: string;
   label: string;
@@ -65,6 +68,10 @@ export const Select: React.FC<SelectProps> = props => {
           onValueChange={next => {
             if (next !== null) onChange(next);
           }}
+          // Focus that leaves from the open list is the field's blur (react-hook-form onBlur).
+          onOpenChange={(open, details) => {
+            if (!open && LEFT_FIELD_REASONS.has(details.reason)) onBlur?.();
+          }}
           name={name}
           disabled={control.disabled}
         >
@@ -74,7 +81,10 @@ export const Select: React.FC<SelectProps> = props => {
             aria-describedby={control['aria-describedby']}
             aria-invalid={control['aria-invalid']}
             aria-required={control['aria-required']}
-            onBlur={onBlur}
+            // Opening the list moves focus into it; that is not a blur of the field.
+            onBlur={event => {
+              if (!event.relatedTarget?.closest('[data-slot="select-content"]')) onBlur?.();
+            }}
             className="w-full"
           >
             <SelectValue placeholder={placeholder} />

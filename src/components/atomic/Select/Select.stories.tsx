@@ -86,3 +86,26 @@ export const Dark: Story = {
   args: { value: 'car' },
   globals: { theme: 'dark' },
 };
+
+// Opening the list moves focus into it; that is not a blur of the field (react-hook-form onBlur).
+export const BlurOnlyWhenLeaving: Story = {
+  args: { onBlur: fn() },
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('combobox', { name: 'Category' }));
+    await userEvent.click(await screen.findByRole('option', { name: 'Car' }));
+    await expect(args.onBlur).not.toHaveBeenCalled();
+    await userEvent.tab();
+    await expect(args.onBlur).toHaveBeenCalledOnce();
+  },
+};
+
+// Clicking outside the open list leaves the field: that is a blur.
+export const BlurOnOutsideClick: Story = {
+  args: { onBlur: fn() },
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('combobox', { name: 'Category' }));
+    await screen.findByRole('listbox');
+    await userEvent.click(document.body);
+    await expect(args.onBlur).toHaveBeenCalledOnce();
+  },
+};

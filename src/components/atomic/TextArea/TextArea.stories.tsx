@@ -68,3 +68,18 @@ export const StatesDark: Story = {
   ...States,
   globals: { theme: 'dark' },
 };
+
+// rows sets the visible height (the shadcn primitive auto-sizes to content otherwise).
+export const Rows: Story = {
+  render: args => (
+    <div className="flex flex-col gap-4">
+      <Controlled {...args} label="Three rows" rows={3} />
+      <Controlled {...args} label="Six rows" rows={6} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const three = canvas.getByRole('textbox', { name: 'Three rows' }).getBoundingClientRect();
+    const six = canvas.getByRole('textbox', { name: 'Six rows' }).getBoundingClientRect();
+    await expect(six.height).toBeGreaterThan(three.height);
+  },
+};

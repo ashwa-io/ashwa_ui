@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type React from 'react';
 
 import { FormField } from '@/components/molecule/FormField';
@@ -8,9 +7,12 @@ import type { FieldBaseProps } from '@/lib/types';
 import { normalizeHex } from './colorHex';
 
 export interface ColorInputProps extends FieldBaseProps {
-  /** 6-digit hex, e.g. '#1a73e8' (orgs.primaryColor). */
+  /** 6-digit hex, e.g. '#1a73e8' (orgs.primaryColor), or the text being typed. */
   value: string;
-  /** Always called with a normalized 6-digit lowercase hex. */
+  /**
+   * A valid 6-digit hex arrives normalized ('#1a73e8'); anything else arrives as typed, so the
+   * form's validation can flag it (e.g. `validate: v => /^#[0-9a-f]{6}$/.test(v) || '…'`).
+   */
   onChange: (value: string) => void;
   onBlur?: () => void;
   name?: string;
@@ -33,19 +35,7 @@ export const ColorInput: React.FC<ColorInputProps> = props => {
     name,
     ref,
   } = props;
-  // The text field keeps what the user is typing; only complete hex values reach onChange.
-  const [draft, setDraft] = useState(value);
-  const [syncedValue, setSyncedValue] = useState(value);
-  if (value !== syncedValue) {
-    setSyncedValue(value);
-    setDraft(value);
-  }
-
-  const handleDraft = (next: string) => {
-    setDraft(next);
-    const hex = normalizeHex(next);
-    if (hex) onChange(hex);
-  };
+  const handleText = (next: string) => onChange(normalizeHex(next) ?? next);
 
   return (
     <FormField
@@ -65,7 +55,7 @@ export const ColorInput: React.FC<ColorInputProps> = props => {
             aria-label={`${label} picker`}
             value={normalizeHex(value) ?? '#000000'}
             disabled={control.disabled}
-            onChange={event => handleDraft(event.target.value)}
+            onChange={event => handleText(event.target.value)}
             className="border-input h-8 w-10 shrink-0 cursor-pointer rounded-lg border bg-transparent p-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           />
           <Input
@@ -76,14 +66,11 @@ export const ColorInput: React.FC<ColorInputProps> = props => {
             aria-required={control['aria-required']}
             disabled={control.disabled}
             name={name}
-            value={draft}
+            value={value}
             spellCheck={false}
             autoComplete="off"
-            onChange={event => handleDraft(event.target.value)}
-            onBlur={() => {
-              if (!normalizeHex(draft)) setDraft(value);
-              onBlur?.();
-            }}
+            onChange={event => handleText(event.target.value)}
+            onBlur={onBlur}
           />
         </div>
       )}

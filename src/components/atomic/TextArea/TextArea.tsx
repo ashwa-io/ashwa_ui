@@ -64,6 +64,8 @@ export const TextArea: React.FC<TextAreaProps> = props => {
           readOnly={readOnly}
           onChange={event => onChange(event.target.value)}
           onBlur={onBlur}
+          // rows sets the height; the primitive would otherwise auto-size to content and ignore it.
+          className="field-sizing-fixed"
         />
       )}
     </FormField>

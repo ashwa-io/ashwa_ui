@@ -44,6 +44,12 @@ export type {
   NumberCondition,
   NumberFilterValue,
 } from './components/molecule/FacetFilterNumber';
+export { FilterMenu } from './components/molecule/FilterMenu';
+export type {
+  FilterCategory,
+  FilterMenuProps,
+  FilterMenuValue,
+} from './components/molecule/FilterMenu';
 export { FormField } from './components/molecule/FormField';
 export type { FormFieldControlProps, FormFieldProps } from './components/molecule/FormField';
 export { Modal } from './components/molecule/Modal';

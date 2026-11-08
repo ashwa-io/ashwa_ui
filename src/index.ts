@@ -107,5 +107,15 @@ export type {
   AttachmentProps,
   AttachmentState,
 } from './components/molecule/Attachment';
+export { AspectRatio } from './components/atomic/AspectRatio';
+export type { AspectRatioProps } from './components/atomic/AspectRatio';
+export { Code } from './components/atomic/Code';
+export type { CodeProps } from './components/atomic/Code';
+export { CodeBlock } from './components/molecule/CodeBlock';
+export type { CodeBlockProps } from './components/molecule/CodeBlock';
+export { HoverCard } from './components/molecule/HoverCard';
+export type { HoverCardProps } from './components/molecule/HoverCard';
+export { Kbd } from './components/atomic/Kbd';
+export type { KbdProps } from './components/atomic/Kbd';
 export { UIProvider } from './providers/UIProvider';
 export type { UIProviderProps } from './providers/UIProvider';

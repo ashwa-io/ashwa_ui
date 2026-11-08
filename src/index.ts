@@ -89,5 +89,7 @@ export type {
   Size,
   Tone,
 } from './lib/types';
+export { SideNav } from './components/organism/SideNav';
+export type { SideNavGroup, SideNavItem, SideNavProps } from './components/organism/SideNav';
 export { UIProvider } from './providers/UIProvider';
 export type { UIProviderProps } from './providers/UIProvider';

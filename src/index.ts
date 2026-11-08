@@ -30,6 +30,8 @@ export { Spinner } from './components/atomic/Spinner';
 export type { SpinnerProps } from './components/atomic/Spinner';
 export { FormLayout } from './components/layout/FormLayout';
 export type { FormLayoutDirection, FormLayoutProps } from './components/layout/FormLayout';
+export { ConfirmDialog } from './components/molecule/ConfirmDialog';
+export type { ConfirmDialogProps } from './components/molecule/ConfirmDialog';
 export { DropdownMenu } from './components/molecule/DropdownMenu';
 export type { DropdownMenuProps, MenuItem } from './components/molecule/DropdownMenu';
 export { FormField } from './components/molecule/FormField';

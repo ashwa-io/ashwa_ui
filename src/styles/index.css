@@ -132,7 +132,9 @@
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  /* Lighter than base-nova's red-400: destructive text on its 20% tint must reach 4.5:1 on muted
+     and dialog-footer surfaces too (red-400 only reached 3.9 and 4.3). */
+  --destructive: oklch(0.76 0.191 22.216);
   --success: oklch(0.792 0.209 151.711);
   --warning: oklch(0.828 0.189 84.429);
   --info: oklch(0.707 0.165 254.624);

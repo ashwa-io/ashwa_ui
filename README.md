@@ -4,7 +4,7 @@ Ashwa's design system: React components built on [shadcn/ui](https://ui.shadcn.c
 
 - **Locked API.** Components take `variant`, `size` and a few booleans. They never accept `className` or `style`, so screens stay consistent.
 - **Org theming.** One brand colour themes the whole app in light and dark mode, with WCAG contrast guaranteed in code.
-- **Storybook:** https://ashwa-io.github.io/ashwa_ui/
+- **Storybook:** https://ds.ashwa.io
 
 ## Install
 

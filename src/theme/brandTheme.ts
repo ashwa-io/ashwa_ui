@@ -18,8 +18,8 @@ registerMode(modeLrgb);
 registerMode(modeOklab);
 registerMode(modeOklch);
 
-// Today's button violet: oklch(0.585 0.233 293) from src/index.css.
-export const DEFAULT_BRAND_HEX = '#8750f6';
+// nigam's violet (#8b5cf6) after the generator's darkening for a 4.5:1 white label.
+export const DEFAULT_BRAND_HEX = '#8556ef';
 
 export type BrandWarning = 'adjusted' | 'near-destructive' | 'invalid';
 
@@ -45,8 +45,8 @@ export interface BrandTheme {
 const SURFACES: Record<BrandMode, Oklch[]> = {
   light: [{ mode: 'oklch', l: 1, c: 0 }],
   dark: [
-    { mode: 'oklch', l: 0.145, c: 0 },
-    { mode: 'oklch', l: 0.205, c: 0 },
+    { mode: 'oklch', l: 0.141, c: 0.005, h: 285.823 },
+    { mode: 'oklch', l: 0.21, c: 0.006, h: 285.885 },
   ],
 };
 // Light mode searches toward black, dark mode toward white.
@@ -59,7 +59,7 @@ const WHITE: Oklch = { mode: 'oklch', l: 1, c: 0 };
 const BLACK: Oklch = { mode: 'oklch', l: 0, c: 0 };
 
 const MIN_UI_CONTRAST = 3; // WCAG 1.4.11 non-text contrast
-const MIN_TEXT_CONTRAST = 4.5; // WCAG 1.4.3 text contrast
+const MIN_TEXT_CONTRAST = 4.55; // WCAG 1.4.3 is 4.5; the margin absorbs browsers rounding to 8-bit colour
 const LIGHTNESS_STEP = 0.005;
 const MAX_STEPS = 200; // 200 × 0.005 covers the full lightness range
 const WHITE_LABEL_MAX_STEPS = 10; // darken the brand by at most 0.05 L to keep a white label

@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- Add Tooltip, Popover, DropdownMenu, Modal, ConfirmDialog and Toaster + toast. Dark destructive colour is lighter so it reaches 4.5:1 on muted surfaces.
+- Add Tooltip, Popover, DropdownMenu, Modal, ConfirmDialog and Toaster + toast. Colours now follow the nigam shadcn theme (zinc neutrals, multi-colour charts, violet default brand). The theme generator keeps a small contrast margin so brand text stays above 4.5:1 after browser colour rounding.
 
 ## 0.0.4
 

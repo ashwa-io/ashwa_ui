@@ -59,8 +59,18 @@ describe('src/styles/index.css', () => {
 
   it('surfaces match the generator', () => {
     expect(root['--background']).toBe('oklch(1 0 0)');
-    expect(dark['--background']).toBe('oklch(0.145 0 0)');
-    expect(dark['--card']).toBe('oklch(0.205 0 0)');
+    expect(dark['--background']).toBe('oklch(0.141 0.005 285.823)');
+    expect(dark['--card']).toBe('oklch(0.21 0.006 285.885)');
+  });
+
+  it('neutrals and charts follow the nigam shadcn theme', () => {
+    expect(root['--foreground']).toBe('oklch(0.141 0.005 285.823)');
+    expect(root['--muted']).toBe('oklch(0.967 0.001 286.375)');
+    expect(root['--border']).toBe('oklch(0.92 0.004 286.32)');
+    expect(root['--chart-2']).toBe('oklch(0.6 0.118 184.704)');
+    expect(dark['--muted']).toBe('oklch(0.274 0.006 286.033)');
+    expect(dark['--chart-2']).toBe('oklch(0.696 0.17 162.48)');
+    expect(DEFAULT_BRAND_HEX).toBe('#8556ef');
   });
 
   it('primary, ring, sidebar-primary and chart-1 follow the brand in both modes', () => {

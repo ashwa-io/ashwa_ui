@@ -1,7 +1,11 @@
+export { Avatar } from './components/atomic/Avatar';
+export type { AvatarProps } from './components/atomic/Avatar';
 export { Badge } from './components/atomic/Badge';
 export type { BadgeProps } from './components/atomic/Badge';
 export { Button } from './components/atomic/Button';
 export type { ButtonProps, ButtonVariant } from './components/atomic/Button';
+export { Card } from './components/atomic/Card';
+export type { CardPadding, CardProps } from './components/atomic/Card';
 export { Checkbox } from './components/atomic/Checkbox';
 export type { CheckboxProps } from './components/atomic/Checkbox';
 export { ColorInput } from './components/atomic/ColorInput';

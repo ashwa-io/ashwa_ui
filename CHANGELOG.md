@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.17
+
+### Patch Changes
+
+- 01821d3: Modal takes headerActions and dismissOnBackdrop, DateInput takes clearable, and Select shows its placeholder for a value that has no option.
+
 ## 0.0.16
 
 ### Patch Changes

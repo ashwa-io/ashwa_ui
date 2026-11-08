@@ -3,7 +3,10 @@ import type React from 'react';
 import { Card as CardPrimitive } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
-export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
+import { CARD_BUTTON, PADDING } from './cardLook';
+import type { CardPadding } from './cardLook';
+
+export type { CardPadding };
 
 export interface CardProps {
   children: React.ReactNode;
@@ -13,13 +16,6 @@ export interface CardProps {
   'aria-label'?: string;
   'data-testid'?: string;
 }
-
-const PADDING: Record<CardPadding, string> = {
-  none: 'p-0',
-  sm: 'p-3',
-  md: 'p-4',
-  lg: 'p-6',
-};
 
 export const Card: React.FC<CardProps> = props => {
   const {
@@ -37,10 +33,7 @@ export const Card: React.FC<CardProps> = props => {
         onClick={onClick}
         aria-label={ariaLabel}
         data-testid={testId}
-        className={cn(
-          'bg-card text-card-foreground ring-foreground/10 hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 focus-visible:outline-ring flex w-full flex-col gap-4 overflow-hidden rounded-xl text-left text-sm ring-1 transition-colors focus-visible:ring-3 focus-visible:outline-1',
-          PADDING[padding]
-        )}
+        className={cn(CARD_BUTTON, PADDING[padding])}
       >
         {children}
       </button>

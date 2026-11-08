@@ -134,5 +134,9 @@ export type {
 } from './components/molecule/SegmentedControl';
 export { Toggle } from './components/atomic/Toggle';
 export type { ToggleProps } from './components/atomic/Toggle';
+export { Calendar } from './components/atomic/Calendar';
+export type { CalendarProps } from './components/atomic/Calendar';
+export { DateInput } from './components/molecule/DateInput';
+export type { DateInputProps } from './components/molecule/DateInput';
 export { UIProvider } from './providers/UIProvider';
 export type { UIProviderProps } from './providers/UIProvider';

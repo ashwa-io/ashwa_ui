@@ -64,7 +64,8 @@ export const Select: React.FC<SelectProps> = props => {
         // items lets the trigger show an option's label instead of its value.
         <SelectRoot
           items={options}
-          value={value}
+          // Base UI prints a value it has no item for; the placeholder is what the user should see.
+          value={options.some(option => option.value === value) ? value : null}
           onValueChange={next => {
             if (next !== null) onChange(next);
           }}

@@ -30,6 +30,10 @@ export interface ModalProps {
   flush?: boolean;
   /** false: no close button; Escape and outside clicks do nothing (blocking flows). */
   closable?: boolean;
+  /** false: a click outside does not close it, for forms that would lose their input. */
+  dismissOnBackdrop?: boolean;
+  /** Beside the title, e.g. an Edit button. */
+  headerActions?: React.ReactNode;
   'data-testid'?: string;
 }
 
@@ -54,6 +58,8 @@ export const Modal: React.FC<ModalProps> = props => {
     fixedHeight = false,
     flush = false,
     closable = true,
+    dismissOnBackdrop = true,
+    headerActions,
     'data-testid': testId,
   } = props;
   const tabStop = useScrollTabStop();
@@ -61,6 +67,7 @@ export const Modal: React.FC<ModalProps> = props => {
   return (
     <Dialog
       open={open}
+      disablePointerDismissal={!dismissOnBackdrop}
       onOpenChange={next => {
         if (!next && closable) onClose();
       }}
@@ -79,6 +86,16 @@ export const Modal: React.FC<ModalProps> = props => {
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
+        {headerActions && (
+          <div
+            className={cn(
+              'absolute top-2 flex items-center gap-1',
+              closable ? 'right-10' : 'right-2'
+            )}
+          >
+            {headerActions}
+          </div>
+        )}
         <div
           ref={tabStop.ref}
           data-slot="modal-body"

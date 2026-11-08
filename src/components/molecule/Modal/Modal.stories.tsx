@@ -143,6 +143,29 @@ export const WithFooter: Story = {
   },
 };
 
+// Beside the title and outside the body, so the body's scroll fade can't clip them.
+export const HeaderActions: Story = {
+  args: { headerActions: <Button size="sm">Edit</Button> },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Open' }));
+    const edit = await screen.findByRole('button', { name: 'Edit' });
+    await expect(edit.closest('[data-slot="modal-body"]')).toBeNull();
+    await expect(edit.closest('[role="dialog"]')).not.toBeNull();
+  },
+};
+
+// A stray click must not throw away what's typed into a form.
+export const BackdropKeepsOpen: Story = {
+  args: { dismissOnBackdrop: false },
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Open' }));
+    await screen.findByRole('dialog');
+    await userEvent.click(document.querySelector('[data-slot="dialog-overlay"]')!);
+    await expect(args.onClose).not.toHaveBeenCalled();
+    await expect(screen.getByRole('dialog')).toBeInTheDocument();
+  },
+};
+
 export const Dark: Story = {
   ...WithFooter,
   globals: { theme: 'dark' },

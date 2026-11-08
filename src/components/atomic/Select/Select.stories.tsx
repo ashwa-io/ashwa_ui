@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fireEvent, fn, screen } from 'storybook/test';
+import { expect, fireEvent, fn, screen, waitFor } from 'storybook/test';
 
 import { Select, type SelectOption, type SelectProps } from './Select';
 
@@ -42,6 +42,10 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+// Stories that close the list finish after it unmounts: mid-close, Floating UI's focus guards
+// are aria-hidden yet focusable, so the a11y check fails intermittently.
+const listClosed = () => waitFor(() => expect(screen.queryByRole('listbox')).toBeNull());
+
 export const Default: Story = {
   play: async ({ args, canvas, userEvent }) => {
     const trigger = canvas.getByRole('combobox', { name: 'Category' });
@@ -51,6 +55,7 @@ export const Default: Story = {
     await userEvent.click(await screen.findByRole('option', { name: 'Truck' }));
     await expect(args.onChange).toHaveBeenCalledWith('truck');
     await expect(trigger).toHaveTextContent('Truck');
+    await listClosed();
   },
 };
 
@@ -91,8 +96,11 @@ export const Dark: Story = {
 export const BlurOnlyWhenLeaving: Story = {
   args: { onBlur: fn() },
   play: async ({ args, canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole('combobox', { name: 'Category' }));
+    const trigger = canvas.getByRole('combobox', { name: 'Category' });
+    await userEvent.click(trigger);
     await userEvent.click(await screen.findByRole('option', { name: 'Car' }));
+    await listClosed();
+    await waitFor(() => expect(trigger).toHaveFocus());
     await expect(args.onBlur).not.toHaveBeenCalled();
     await userEvent.tab();
     await expect(args.onBlur).toHaveBeenCalledOnce();
@@ -108,5 +116,6 @@ export const BlurOnOutsideClick: Story = {
     await userEvent.click(document.body);
     // Can fire twice: Base UI may return focus to the trigger, which then blurs. Harmless for forms.
     await expect(args.onBlur).toHaveBeenCalled();
+    await listClosed();
   },
 };

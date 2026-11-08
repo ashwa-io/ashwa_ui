@@ -91,5 +91,7 @@ export type {
 } from './lib/types';
 export { SideNav } from './components/organism/SideNav';
 export type { SideNavGroup, SideNavItem, SideNavProps } from './components/organism/SideNav';
+export { TopNav } from './components/organism/TopNav';
+export type { TopNavProps } from './components/organism/TopNav';
 export { UIProvider } from './providers/UIProvider';
 export type { UIProviderProps } from './providers/UIProvider';

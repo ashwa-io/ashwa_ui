@@ -16,6 +16,8 @@ export { Text } from './components/atomic/Text';
 export type { TextAreaProps } from './components/atomic/TextArea';
 export { TextArea } from './components/atomic/TextArea';
 export { TextInput } from './components/atomic/TextInput';
+export { Tooltip } from './components/atomic/Tooltip';
+export type { TooltipProps } from './components/atomic/Tooltip';
 export type { TextInputProps, TextInputType } from './components/atomic/TextInput';
 export type { TextProps, TextSize, TextTone, TextWeight } from './components/atomic/Text';
 export { IconButton } from './components/atomic/IconButton';
@@ -28,8 +30,18 @@ export { Spinner } from './components/atomic/Spinner';
 export type { SpinnerProps } from './components/atomic/Spinner';
 export { FormLayout } from './components/layout/FormLayout';
 export type { FormLayoutDirection, FormLayoutProps } from './components/layout/FormLayout';
+export { ConfirmDialog } from './components/molecule/ConfirmDialog';
+export type { ConfirmDialogProps } from './components/molecule/ConfirmDialog';
+export { DropdownMenu } from './components/molecule/DropdownMenu';
+export type { DropdownMenuProps, MenuItem } from './components/molecule/DropdownMenu';
 export { FormField } from './components/molecule/FormField';
 export type { FormFieldControlProps, FormFieldProps } from './components/molecule/FormField';
+export { Modal } from './components/molecule/Modal';
+export type { ModalProps, ModalSize } from './components/molecule/Modal';
+export { Popover } from './components/molecule/Popover';
+export type { PopoverProps, PopoverWidth } from './components/molecule/Popover';
+export { toast, Toaster } from './components/molecule/Toaster';
+export type { ToastOptions } from './components/molecule/Toaster';
 export { HStack, Stack, VStack } from './components/layout/Stack';
 export type {
   HStackProps,
@@ -39,4 +51,11 @@ export type {
   StackProps,
   VStackProps,
 } from './components/layout/Stack';
-export type { FieldBaseProps, IconComponent, Size, Tone } from './lib/types';
+export type {
+  FieldBaseProps,
+  IconComponent,
+  OverlayAlign,
+  OverlaySide,
+  Size,
+  Tone,
+} from './lib/types';

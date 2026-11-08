@@ -3,10 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { brandTheme, brandThemeCss, DEFAULT_BRAND_HEX, type BrandTokens } from './brandTheme';
 
-// Must match --background / --card in src/styles/index.css (shadcn base-nova neutral).
+// Must match --background / --card in src/styles/index.css (nigam's shadcn zinc).
 const SURFACES = {
   light: ['oklch(1 0 0)'],
-  dark: ['oklch(0.145 0 0)', 'oklch(0.205 0 0)'],
+  dark: ['oklch(0.141 0.005 285.823)', 'oklch(0.21 0.006 285.885)'],
 };
 const SAMPLES = ['#ffffff', '#000000', '#ffff00', '#ff0000', '#000080', '#8b5cf6', '#1a73e8'];
 

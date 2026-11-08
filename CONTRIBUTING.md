@@ -23,7 +23,8 @@ test/            repo-level tests (lint guard rules, token drift)
 ## Add a shadcn primitive
 
 ```bash
-yarn shadcn add dialog
+yarn shadcn add dialog --overwrite
+git checkout src/components/ui/button.tsx  # restore any existing primitive the CLI touched
 yarn lint:fix
 ```
 
@@ -32,7 +33,7 @@ The CLI writes straight into `src/components/ui` and `src/styles/index.css` (see
 - Convert any `function X()` component to `const X = (…) =>` (house rule; ESLint flags it).
 - If the CLI re-adds `@import "shadcn/tailwind.css"`, change it back to `@import './shadcn.css'`. Consumers must not need the shadcn CLI package.
 - Never export anything from `ui/`. Wrap it in a public component.
-- Edit a primitive only to fix accessibility, types or a CLI bug, and say why in the commit.
+- Never edit `ui/` files by hand: customise in the wrapper. Only lint-driven changes that match our code style (`yarn lint:fix`, arrow `const`, import order) touch them, never behaviour or styling.
 
 ## Add a public component
 

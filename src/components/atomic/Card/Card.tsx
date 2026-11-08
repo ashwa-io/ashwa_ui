@@ -38,7 +38,7 @@ export const Card: React.FC<CardProps> = props => {
         aria-label={ariaLabel}
         data-testid={testId}
         className={cn(
-          'bg-card text-card-foreground ring-foreground/10 hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 flex w-full flex-col rounded-xl text-left text-sm ring-1 transition-colors outline-none focus-visible:ring-3',
+          'bg-card text-card-foreground ring-foreground/10 hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 focus-visible:outline-ring flex w-full flex-col gap-4 overflow-hidden rounded-xl text-left text-sm ring-1 transition-colors focus-visible:ring-3 focus-visible:outline-1',
           PADDING[padding]
         )}
       >

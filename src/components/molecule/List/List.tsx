@@ -80,7 +80,7 @@ export const ListItem: React.FC<ListItemProps> = props => {
           aria-current={selected || undefined}
           className={cn(
             row,
-            'hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 outline-none focus-visible:ring-3 disabled:pointer-events-none disabled:opacity-50'
+            'hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 focus-visible:outline-ring focus-visible:ring-3 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50'
           )}
         >
           {content}

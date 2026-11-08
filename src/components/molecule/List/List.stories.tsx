@@ -123,3 +123,15 @@ export const Sizes: Story = {
 export const Dark: Story = {
   globals: { theme: 'dark' },
 };
+
+const onFocusRow = fn();
+
+export const ClickableFocusIndicator: Story = {
+  args: { children: <ListItem label="Truck 12" onClick={onFocusRow} /> },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.tab();
+    const style = getComputedStyle(canvas.getByRole('button'));
+    await expect(style.outlineStyle).toBe('solid');
+    await expect(style.outlineWidth).toBe('1px');
+  },
+};

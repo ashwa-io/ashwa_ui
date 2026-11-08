@@ -3,6 +3,8 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fireEvent, fn, waitFor } from 'storybook/test';
 
+import { HStack } from '@/components/layout/Stack';
+
 import { Tabs, type TabItem, type TabsProps } from './Tabs';
 
 const ITEMS: TabItem[] = [
@@ -117,4 +119,51 @@ export const Overflow: Story = {
 export const Dark: Story = {
   args: { items: [{ value: 'vehicles', label: 'Vehicles', count: 12 }, ...ITEMS.slice(1)] },
   globals: { theme: 'dark' },
+};
+
+const MANY: TabItem[] = Array.from({ length: 20 }, (_, i) => ({
+  value: `t${i}`,
+  label: `Group ${i}`,
+}));
+
+// Classic scrollbars (Windows default) would eat the fixed-height row; the test browser hides them.
+export const NoScrollbarInRow: Story = {
+  args: { items: MANY, value: 't0' },
+  decorators: [Story => <div className="w-80">{Story()}</div>],
+  play: async ({ canvas }) => {
+    const style = getComputedStyle(canvas.getByRole('tablist'));
+    await expect(style.scrollbarWidth).toBe('none');
+    await expect(style.overflowY).toBe('hidden');
+  },
+};
+
+export const InsideFlexRow: Story = {
+  args: { items: MANY, value: 't0', 'data-testid': 'tabs' },
+  decorators: [
+    Story => (
+      <div className="w-80">
+        <HStack>{Story()}</HStack>
+      </div>
+    ),
+  ],
+  play: async ({ canvas }) => {
+    await expect(canvas.getByTestId('tabs').getBoundingClientRect().width).toBeLessThanOrEqual(320);
+    await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+  },
+};
+
+// Arrowing back must bring the whole focused tab into view.
+export const ArrowLeftKeepsTabVisible: Story = {
+  args: { items: MANY, value: 't0' },
+  decorators: [Story => <div className="ml-12 w-80">{Story()}</div>],
+  play: async ({ canvas, userEvent }) => {
+    canvas.getByRole('tab', { name: 'Group 0' }).focus();
+    await userEvent.keyboard('{End}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}');
+    const list = canvas.getByRole('tablist').getBoundingClientRect();
+    await waitFor(() => {
+      const tab = document.activeElement!.getBoundingClientRect();
+      expect(tab.left).toBeGreaterThanOrEqual(list.left - 1);
+      expect(tab.right).toBeLessThanOrEqual(list.right + 1);
+    });
+  },
 };

@@ -80,3 +80,24 @@ export const ClickableDark: Story = {
   ...Clickable,
   globals: { theme: 'dark' },
 };
+
+// Keyboard focus needs a solid indicator: the soft ring alone is under 3:1.
+export const ClickableFocusIndicator: Story = {
+  args: { onClick: fn(), 'aria-label': 'Card content, open' },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.tab();
+    const style = getComputedStyle(canvas.getByRole('button'));
+    await expect(style.outlineStyle).toBe('solid');
+    await expect(style.outlineWidth).toBe('1px');
+  },
+};
+
+// Adding onClick must not change how the card lays out its content.
+export const ClickableMatchesPlain: Story = {
+  args: { onClick: fn(), 'aria-label': 'Card content, open' },
+  play: async ({ canvas }) => {
+    const style = getComputedStyle(canvas.getByRole('button'));
+    await expect(style.rowGap).toBe('16px');
+    await expect(style.overflow).toBe('hidden');
+  },
+};

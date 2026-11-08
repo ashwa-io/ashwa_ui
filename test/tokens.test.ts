@@ -32,7 +32,14 @@ registerMode(modeLrgb);
 registerMode(modeOklab);
 registerMode(modeOklch);
 
-const contrast = (a: string, b: string): number => wcagContrast(a, b);
+// What an sRGB screen paints: out-of-gamut channels are clipped, which lowers real contrast.
+const painted = (text: string) => {
+  const { r, g, b } = toRgb(parse(text))!;
+  const clip = (channel: number) => Math.min(1, Math.max(0, channel));
+  return { mode: 'rgb' as const, r: clip(r), g: clip(g), b: clip(b) };
+};
+
+const contrast = (a: string, b: string): number => wcagContrast(painted(a), painted(b));
 
 // Fixed text colours (status tones, muted) must be readable on every surface, light and dark.
 const TEXT_TOKENS = [
@@ -49,8 +56,8 @@ const toRgb = converter('rgb');
 
 // A status colour on its own Badge tint (10% light, 20% dark) composited over a surface.
 const tintContrast = (token: string, surface: string, alpha: number): number => {
-  const fg = toRgb(parse(token))!;
-  const bg = toRgb(parse(surface))!;
+  const fg = painted(token);
+  const bg = painted(surface);
   const mix = (a: number, b: number) => a * alpha + b * (1 - alpha);
   return wcagContrast(fg, {
     mode: 'rgb',
@@ -132,6 +139,18 @@ describe('src/styles/index.css', () => {
     [root, { ...root, ...dark }].forEach(mode =>
       expect(contrast(mode[token], mode['--brand-tint'])).toBeGreaterThanOrEqual(4.5)
     );
+  });
+
+  it.each(STATUS_TOKENS)('%s Badge tint reaches 4.5:1 on every org brand tint', token => {
+    ['#ffffff', '#000000', '#ffff00', '#ff0000', '#000080', '#8b5cf6', '#1a73e8'].forEach(hex => {
+      const theme = brandTheme(hex);
+      expect(tintContrast(root[token], theme.light['--brand-tint'], 0.1)).toBeGreaterThanOrEqual(
+        4.5
+      );
+      expect(tintContrast(dark[token], theme.dark['--brand-tint'], 0.2)).toBeGreaterThanOrEqual(
+        4.5
+      );
+    });
   });
 
   it.each(STATUS_TOKENS)('%s Badge tint reaches 4.5:1 on muted and the brand tint', token => {

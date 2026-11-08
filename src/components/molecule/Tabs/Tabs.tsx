@@ -33,11 +33,18 @@ export const Tabs: React.FC<TabsProps> = props => {
   } = props;
 
   return (
-    <TabsRoot value={value} onValueChange={next => onChange(String(next))} data-testid={testId}>
+    <TabsRoot
+      value={value}
+      onValueChange={next => onChange(String(next))}
+      data-testid={testId}
+      className="min-w-0"
+    >
       <TabsList
         aria-label={ariaLabel}
         className={cn(
-          'max-w-full justify-start overflow-x-auto',
+          // relative: Base UI scrolls the focused tab using offsets from this element.
+          // No visible scrollbar: a classic one would eat the fixed-height row.
+          'relative max-w-full [scrollbar-width:none] justify-start overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:hidden',
           size === 'sm' && 'group-data-horizontal/tabs:h-7'
         )}
       >

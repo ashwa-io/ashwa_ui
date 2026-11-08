@@ -1,6 +1,5 @@
 import type React from 'react';
 
-import { Heading } from '@/components/atomic/Heading';
 import { useLink } from '@/providers/useLink';
 
 export interface TopNavProps {
@@ -28,7 +27,7 @@ export const TopNav: React.FC<TopNavProps> = props => {
   return (
     <header
       data-testid={testId}
-      className="bg-background flex h-14 shrink-0 items-center justify-between gap-4 border-b px-4"
+      className="bg-background flex h-10 shrink-0 items-center justify-between gap-4 border-b px-4"
     >
       <div className="flex min-w-0 items-center gap-3">
         {logoHref ? (
@@ -47,12 +46,9 @@ export const TopNav: React.FC<TopNavProps> = props => {
         )}
         {title && (
           <>
-            {logo && <span aria-hidden className="bg-border h-6 w-px shrink-0" />}
-            <div className="min-w-0">
-              <Heading level={1} truncate>
-                {title}
-              </Heading>
-            </div>
+            {logo && <span aria-hidden className="bg-border h-5 w-px shrink-0" />}
+            {/* An h1 for screen readers; a 40px bar has no room for the page-heading size. */}
+            <h1 className="min-w-0 truncate text-sm font-semibold">{title}</h1>
           </>
         )}
       </div>

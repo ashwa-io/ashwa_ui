@@ -8,7 +8,7 @@ import { TopNav } from './TopNav';
 
 const navigate = fn();
 
-const Logo: React.FC = () => <span className="bg-brand block size-8 rounded-md" />;
+const Logo: React.FC = () => <span className="bg-brand block size-6 rounded-md" />;
 
 const meta = {
   title: 'Organism/TopNav',
@@ -26,7 +26,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('banner').getBoundingClientRect().height).toBe(56);
+    await expect(canvas.getByRole('banner').getBoundingClientRect().height).toBe(40);
     await expect(canvas.getByRole('heading', { level: 1, name: 'Fleet' })).toBeVisible();
   },
 };

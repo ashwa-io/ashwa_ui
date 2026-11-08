@@ -9,7 +9,7 @@
       "node"
     ],
     "skipLibCheck": true,
-    "module": "nodenext",
+    "module": "esnext",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
@@ -19,7 +19,8 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "strict": true,
-    "allowJs": true
+    "allowJs": true,
+    "moduleResolution": "bundler"
   },
   "include": [
     "*.ts",

@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.8
+
+### Patch Changes
+
+- Add DataTable: sticky header, virtualised rows, and it scrolls with the page rather than inside itself.
+
 ## 0.0.7
 
 ### Patch Changes

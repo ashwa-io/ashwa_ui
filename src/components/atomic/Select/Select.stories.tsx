@@ -1,0 +1,88 @@
+import { useState } from 'react';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fireEvent, fn, screen } from 'storybook/test';
+
+import { Select, type SelectOption, type SelectProps } from './Select';
+
+const CATEGORIES: SelectOption[] = [
+  { value: 'car', label: 'Car' },
+  { value: 'truck', label: 'Truck' },
+  { value: 'bus', label: 'Bus', disabled: true },
+];
+
+const Controlled: React.FC<SelectProps> = props => {
+  const [value, setValue] = useState(props.value);
+  return (
+    <Select
+      {...props}
+      value={value}
+      onChange={next => {
+        setValue(next);
+        props.onChange(next);
+      }}
+    />
+  );
+};
+
+const meta = {
+  title: 'Atomic/Select',
+  component: Select,
+  args: {
+    label: 'Category',
+    options: CATEGORIES,
+    value: null,
+    onChange: fn(),
+    placeholder: 'Select a category',
+  },
+  render: args => <Controlled {...args} />,
+} satisfies Meta<typeof Select>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  play: async ({ args, canvas, userEvent }) => {
+    const trigger = canvas.getByRole('combobox', { name: 'Category' });
+    await expect(trigger).toHaveTextContent('Select a category');
+    await userEvent.click(trigger);
+    // The list renders in a portal, outside the story canvas.
+    await userEvent.click(await screen.findByRole('option', { name: 'Truck' }));
+    await expect(args.onChange).toHaveBeenCalledWith('truck');
+    await expect(trigger).toHaveTextContent('Truck');
+  },
+};
+
+// The trigger shows the option's label, never its raw value.
+export const ShowsLabel: Story = {
+  args: { value: 'truck' },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('combobox', { name: 'Category' });
+    await expect(trigger).toHaveTextContent('Truck');
+    await expect(trigger).not.toHaveTextContent('truck');
+  },
+};
+
+export const WithError: Story = {
+  args: { required: true, error: 'Please pick a category' },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('combobox', { name: 'Category' });
+    await expect(trigger).toHaveAttribute('aria-invalid', 'true');
+    await expect(trigger).toHaveAccessibleDescription('Please pick a category');
+  },
+};
+
+export const Disabled: Story = {
+  args: { disabled: true },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('combobox', { name: 'Category' });
+    await fireEvent.click(trigger);
+    await expect(screen.queryByRole('listbox')).toBeNull();
+  },
+};
+
+export const Dark: Story = {
+  args: { value: 'car' },
+  globals: { theme: 'dark' },
+};

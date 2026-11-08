@@ -14,6 +14,8 @@ export type { TextInputProps, TextInputType } from './components/atomic/TextInpu
 export type { TextProps, TextSize, TextTone, TextWeight } from './components/atomic/Text';
 export { IconButton } from './components/atomic/IconButton';
 export type { IconButtonProps, IconButtonVariant } from './components/atomic/IconButton';
+export { Select } from './components/atomic/Select';
+export type { SelectOption, SelectProps } from './components/atomic/Select';
 export { Skeleton } from './components/atomic/Skeleton';
 export type { SkeletonProps, SkeletonShape } from './components/atomic/Skeleton';
 export { Spinner } from './components/atomic/Spinner';

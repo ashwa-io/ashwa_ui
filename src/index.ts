@@ -56,6 +56,10 @@ export type {
 } from './components/molecule/FilterMenu';
 export { FormField } from './components/molecule/FormField';
 export type { FormFieldControlProps, FormFieldProps } from './components/molecule/FormField';
+export { List, ListItem } from './components/molecule/List';
+export type { ListItemProps, ListProps } from './components/molecule/List';
+export { MetadataList, MetadataListItem } from './components/molecule/MetadataList';
+export type { MetadataListItemProps, MetadataListProps } from './components/molecule/MetadataList';
 export { Modal } from './components/molecule/Modal';
 export type { ModalProps, ModalSize } from './components/molecule/Modal';
 export { Popover } from './components/molecule/Popover';

@@ -21,7 +21,8 @@ export const OpensOnHover: Story = {
   play: async ({ canvas, userEvent }) => {
     const trigger = canvas.getByRole('button', { name: 'KA01AB1234' });
     await userEvent.hover(trigger);
-    await expect(await screen.findByText(DETAIL, {}, { timeout: 3000 })).toBeVisible();
+    const card = await screen.findByText(DETAIL, {}, { timeout: 3000 });
+    await waitFor(() => expect(card).toBeVisible());
     await userEvent.unhover(trigger);
     await waitFor(() => expect(screen.queryByText(DETAIL)).toBeNull(), { timeout: 3000 });
   },
@@ -30,7 +31,8 @@ export const OpensOnHover: Story = {
 export const OpensOnFocus: Story = {
   play: async ({ userEvent }) => {
     await userEvent.tab();
-    await expect(await screen.findByText(DETAIL, {}, { timeout: 3000 })).toBeVisible();
+    const card = await screen.findByText(DETAIL, {}, { timeout: 3000 });
+    await waitFor(() => expect(card).toBeVisible());
     await userEvent.tab();
     await waitFor(() => expect(screen.queryByText(DETAIL)).toBeNull(), { timeout: 3000 });
   },
@@ -40,6 +42,7 @@ export const Dark: Story = {
   globals: { theme: 'dark' },
   play: async ({ canvas, userEvent }) => {
     await userEvent.hover(canvas.getByRole('button', { name: 'KA01AB1234' }));
-    await expect(await screen.findByText(DETAIL, {}, { timeout: 3000 })).toBeVisible();
+    const card = await screen.findByText(DETAIL, {}, { timeout: 3000 });
+    await waitFor(() => expect(card).toBeVisible());
   },
 };

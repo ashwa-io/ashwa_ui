@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.10
+
+### Patch Changes
+
+- Modal's scrollbar now sits on the dialog's edge instead of inside its padding.
+
 ## 0.0.9
 
 ### Patch Changes

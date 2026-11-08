@@ -85,7 +85,8 @@ export const Modal: React.FC<ModalProps> = props => {
         showCloseButton={closable}
         data-testid={testId}
         className={cn(
-          'flex max-h-[85dvh] flex-col [--surface:var(--popover)]',
+          // overflow-clip: a flush body reaches the rounded corners.
+          'flex max-h-[85dvh] flex-col overflow-clip [--surface:var(--popover)]',
           SIZE[size],
           fixedHeight && 'h-[min(40rem,85dvh)]'
         )}
@@ -98,8 +99,9 @@ export const Modal: React.FC<ModalProps> = props => {
           ref={bodyRef}
           data-slot="modal-body"
           tabIndex={needsTabStop ? 0 : undefined}
-          // The body clips (it scrolls), so non-flush bodies keep room for 3px focus rings.
-          className={cn('min-h-0 flex-1 overflow-y-auto', flush ? '-m-4' : '-m-1 p-1')}
+          // Runs to the dialog's edge so the scrollbar sits on the border; the padding moves inside.
+          // py-1 keeps room for 3px focus rings, which this clipping element would cut.
+          className={cn('min-h-0 flex-1 overflow-y-auto', flush ? '-m-4' : '-mx-4 -my-1 px-4 py-1')}
         >
           {children}
         </div>

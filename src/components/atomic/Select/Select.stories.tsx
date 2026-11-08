@@ -96,12 +96,14 @@ export const Dark: Story = {
 export const BlurOnlyWhenLeaving: Story = {
   args: { onBlur: fn() },
   play: async ({ args, canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole('combobox', { name: 'Category' }));
+    const trigger = canvas.getByRole('combobox', { name: 'Category' });
+    await userEvent.click(trigger);
     await userEvent.click(await screen.findByRole('option', { name: 'Car' }));
+    await listClosed();
+    await waitFor(() => expect(trigger).toHaveFocus());
     await expect(args.onBlur).not.toHaveBeenCalled();
     await userEvent.tab();
     await expect(args.onBlur).toHaveBeenCalledOnce();
-    await listClosed();
   },
 };
 

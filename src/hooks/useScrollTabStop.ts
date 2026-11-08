@@ -10,7 +10,6 @@ const FOCUSABLE =
 export const useScrollTabStop = () => {
   const [needsTabStop, setNeedsTabStop] = useState(false);
 
-  // shortcut: children swapped in after mount aren't observed, observe a wrapper if that shows up.
   const ref = useCallback((element: HTMLElement | null) => {
     if (!element) return undefined;
     const check = () => {
@@ -18,10 +17,23 @@ export const useScrollTabStop = () => {
         element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
       setNeedsTabStop(overflows && !element.querySelector(FOCUSABLE));
     };
-    const observer = new ResizeObserver(check);
-    observer.observe(element);
-    Array.from(element.children).forEach(child => observer.observe(child));
-    return () => observer.disconnect();
+    const resize = new ResizeObserver(check);
+    const watchChildren = () => {
+      resize.disconnect();
+      resize.observe(element);
+      Array.from(element.children).forEach(child => resize.observe(child));
+    };
+    // A fixed-height scroller doesn't resize when its content arrives or is swapped.
+    const mutation = new MutationObserver(() => {
+      watchChildren();
+      check();
+    });
+    mutation.observe(element, { childList: true, subtree: true });
+    watchChildren();
+    return () => {
+      resize.disconnect();
+      mutation.disconnect();
+    };
   }, []);
 
   return { ref, tabIndex: needsTabStop ? 0 : undefined };

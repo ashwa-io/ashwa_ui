@@ -43,11 +43,15 @@ export const CodeBlock: React.FC<CodeBlockProps> = props => {
 
   return (
     // overflow-clip: the scroller reaches the rounded border, so its scrollbar sits on it.
-    <div data-testid={testId} className="bg-muted/50 relative overflow-clip rounded-lg border">
+    <div
+      data-testid={testId}
+      className="bg-muted/50 relative w-full min-w-0 overflow-clip rounded-lg border"
+    >
       <pre
         ref={tabStop.ref}
         tabIndex={tabStop.tabIndex}
-        className={cn('overflow-x-auto py-3 pr-11 pl-3 font-mono', SIZE[size])}
+        // w-0 min-w-full: a long line adds nothing to the width flex and grid parents measure.
+        className={cn('w-0 min-w-full overflow-x-auto py-3 pr-11 pl-3 font-mono', SIZE[size])}
       >
         <code className="block w-fit min-w-full">
           {lineNumbers ? (

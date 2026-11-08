@@ -60,3 +60,20 @@ export const WithAction: Story = {
     await expect(canvas.getByRole('button', { name: 'Retry' })).toBeVisible();
   },
 };
+
+// The action sits below the text: beside it, a wide button would cover the words.
+export const WideActionKeepsTextClear: Story = {
+  args: {
+    title: 'Your plan expires in three days and tracking stops after that',
+    description: 'Renew now to keep every vehicle online.',
+    action: <Button size="sm">Open billing</Button>,
+  },
+  decorators: [Story => <div className="w-80">{Story()}</div>],
+  play: async ({ canvas, canvasElement }) => {
+    const action = canvas.getByRole('button', { name: 'Open billing' }).getBoundingClientRect();
+    const description = canvasElement
+      .querySelector('[data-slot="alert-description"]')!
+      .getBoundingClientRect();
+    await expect(action.top).toBeGreaterThanOrEqual(description.bottom);
+  },
+};

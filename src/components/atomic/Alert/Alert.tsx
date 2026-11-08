@@ -44,14 +44,15 @@ export const Alert: React.FC<AlertProps> = props => {
       // Only errors interrupt; announcing every banner on page load would drown the page.
       role={tone === 'danger' ? 'alert' : 'status'}
       data-testid={testId}
-      className={cn('border-current/20', TONE_CLASS[tone])}
+      className={cn('border-current/20 has-data-[slot=alert-action]:pr-2.5', TONE_CLASS[tone])}
     >
       <Icon aria-hidden />
       <AlertTitle>{title}</AlertTitle>
       {description && (
         <AlertDescription className="text-foreground">{description}</AlertDescription>
       )}
-      {action && <AlertAction>{action}</AlertAction>}
+      {/* Below the text: the primitive's corner spot lets a wide button cover the words. */}
+      {action && <AlertAction className="static col-start-2 mt-1.5">{action}</AlertAction>}
     </AlertPrimitive>
   );
 };

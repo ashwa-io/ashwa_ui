@@ -94,3 +94,31 @@ export const Dark: Story = {
   args: { lineNumbers: true },
   globals: { theme: 'dark' },
 };
+
+// A wide line must not stretch a flex or grid parent past its own width.
+export const InFlexAndGridParents: Story = {
+  args: { code: LONG },
+  render: args => (
+    <div className="flex w-80 flex-col gap-2">
+      <div className="flex">
+        <CodeBlock {...args} data-testid="in-flex" />
+      </div>
+      <div className="flex">
+        <div className="flex-1">
+          <CodeBlock {...args} data-testid="in-flex-child" />
+        </div>
+      </div>
+      <div className="grid grid-cols-[1fr]">
+        <CodeBlock {...args} data-testid="in-grid" />
+      </div>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    for (const id of ['in-flex', 'in-flex-child', 'in-grid']) {
+      const block = canvas.getByTestId(id);
+      await expect(block.getBoundingClientRect().width).toBeLessThanOrEqual(320);
+      await waitFor(() => expect(block.querySelector('pre')).toHaveAttribute('tabindex', '0'));
+    }
+    await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+  },
+};

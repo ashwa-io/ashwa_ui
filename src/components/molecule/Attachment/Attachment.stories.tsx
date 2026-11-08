@@ -148,7 +148,25 @@ export const GroupScrolls: Story = {
   ),
   play: async ({ canvas }) => {
     const group = canvas.getByTestId('group');
+    // Without scroll timelines the primitive's fade would sit over the last tile for good.
+    await expect(group.className).toContain(
+      'not-supports-[animation-timeline:scroll()]:scroll-fade-none'
+    );
     await waitFor(() => expect(group.scrollWidth).toBeGreaterThan(group.clientWidth));
     await waitFor(() => expect(group).toHaveAttribute('tabindex', '0'));
+  },
+};
+
+// Upload trays stack tiles: each fills the row whatever the length of its name.
+export const FullWidth: Story = {
+  render: () => (
+    <div className="flex w-80 flex-col gap-2">
+      <Attachment name="a.pdf" fullWidth data-testid="short" />
+      <Attachment name="a-much-longer-file-name.pdf" fullWidth data-testid="long" />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByTestId('short').getBoundingClientRect().width).toBe(320);
+    await expect(canvas.getByTestId('long').getBoundingClientRect().width).toBe(320);
   },
 };

@@ -71,15 +71,16 @@ export const Drawer: React.FC<DrawerProps> = props => {
           tabIndex={tabStop.tabIndex}
           data-slot="drawer-body"
           // Runs to the panel's edge so the scrollbar sits on it; the padding moves inside.
+          // pt-1 keeps room for 3px focus rings, which this clipping element would cut.
           // The @supports guard: without scroll timelines the fade would sit over the first line.
           className={cn(
             'min-h-0 flex-1 overflow-y-auto',
-            !flush && 'supports-[animation-timeline:scroll()]:scroll-fade-y px-4 pb-4'
+            !flush && 'supports-[animation-timeline:scroll()]:scroll-fade-y px-4 pt-1 pb-4'
           )}
         >
           {children}
         </div>
-        {footer && <SheetFooter>{footer}</SheetFooter>}
+        {footer && <SheetFooter className="flex-row justify-end">{footer}</SheetFooter>}
       </SheetContent>
     </Sheet>
   );

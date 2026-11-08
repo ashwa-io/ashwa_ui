@@ -17,6 +17,7 @@ import {
 import { Spinner } from '@/components/ui/spinner';
 import { useScrollTabStop } from '@/hooks/useScrollTabStop';
 import type { IconComponent } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 export type AttachmentState = 'idle' | 'uploading' | 'processing' | 'error' | 'done';
 
@@ -32,6 +33,8 @@ export interface AttachmentProps {
   imageSrc?: string;
   size?: 'xs' | 'sm' | 'md';
   orientation?: 'horizontal' | 'vertical';
+  /** Fills the row, e.g. stacked in an upload tray. */
+  fullWidth?: boolean;
   /** Makes the whole tile open the file. */
   onOpen?: () => void;
   onRemove?: () => void;
@@ -57,6 +60,7 @@ export const Attachment: React.FC<AttachmentProps> = props => {
     imageSrc,
     size = 'md',
     orientation = 'horizontal',
+    fullWidth = false,
     onOpen,
     onRemove,
     onRetry,
@@ -71,6 +75,7 @@ export const Attachment: React.FC<AttachmentProps> = props => {
       size={SIZE[size]}
       orientation={orientation}
       data-testid={testId}
+      className={cn(fullWidth && 'w-full')}
     >
       {imageSrc ? (
         <AttachmentMedia variant="image">
@@ -114,7 +119,13 @@ export const AttachmentGroup: React.FC<AttachmentGroupProps> = props => {
   const tabStop = useScrollTabStop();
 
   return (
-    <AttachmentGroupPrimitive ref={tabStop.ref} tabIndex={tabStop.tabIndex} data-testid={testId}>
+    <AttachmentGroupPrimitive
+      ref={tabStop.ref}
+      tabIndex={tabStop.tabIndex}
+      data-testid={testId}
+      // Without scroll timelines the primitive's fade would sit over the last tile for good.
+      className="not-supports-[animation-timeline:scroll()]:scroll-fade-none"
+    >
       {children}
     </AttachmentGroupPrimitive>
   );

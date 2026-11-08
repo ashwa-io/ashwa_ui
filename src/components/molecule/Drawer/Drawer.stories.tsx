@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, screen, waitFor } from 'storybook/test';
@@ -122,5 +122,56 @@ export const Dark: Story = {
   play: async () => {
     const dialog = await screen.findByRole('dialog');
     await waitFor(() => expect(dialog).toBeVisible());
+  },
+};
+
+const LateContent: React.FC = () => {
+  const [tall, setTall] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setTall(true), 200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <Drawer open onClose={() => undefined} title="Vehicle details">
+      {tall ? TALL : null}
+    </Drawer>
+  );
+};
+
+// Bodies often fill in after opening: keyboard scrolling must still work.
+export const LateContentGetsTabStop: Story = {
+  render: () => <LateContent />,
+  play: async () => {
+    await screen.findByRole('dialog');
+    await waitFor(() => expect(body()).toHaveAttribute('tabindex', '0'), { timeout: 3000 });
+  },
+};
+
+export const FooterIsInline: Story = {
+  args: {
+    footer: (
+      <>
+        <Button variant="secondary">Cancel</Button>
+        <Button>Save</Button>
+      </>
+    ),
+  },
+  play: async () => {
+    const dialog = await screen.findByRole('dialog');
+    await waitFor(() => expect(dialog).toBeVisible());
+    const cancel = screen.getByRole('button', { name: 'Cancel' }).getBoundingClientRect();
+    const save = screen.getByRole('button', { name: 'Save' }).getBoundingClientRect();
+    await expect(cancel.top).toBe(save.top);
+    await expect(save.left).toBeGreaterThan(cancel.left);
+  },
+};
+
+// The scroller clips: a first control's focus ring needs room inside it.
+export const FirstControlRingHasRoom: Story = {
+  play: async () => {
+    await screen.findByRole('dialog');
+    await expect(getComputedStyle(body()).paddingTop).toBe('4px');
   },
 };

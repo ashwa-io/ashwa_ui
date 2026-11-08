@@ -22,6 +22,13 @@ describe('classifyHref', () => {
     ' //evil.com',
     '/\t/evil.com',
     '\thttps://evil.com',
+    // A scheme with no slashes is relative only when it matches the page's own scheme.
+    'http:evil.com',
+    'https:evil.com',
+    'http:/evil.com',
+    'HTTP:evil.com',
+    'http://internal.invalid/x',
+    'https://internal.invalid/x',
   ])('%j is external', href => {
     expect(classifyHref(href)).toBe('external');
   });

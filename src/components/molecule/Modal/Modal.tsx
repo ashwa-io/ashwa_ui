@@ -85,7 +85,7 @@ export const Modal: React.FC<ModalProps> = props => {
         showCloseButton={closable}
         data-testid={testId}
         className={cn(
-          'flex max-h-[85dvh] flex-col',
+          'flex max-h-[85dvh] flex-col [--surface:var(--popover)]',
           SIZE[size],
           fixedHeight && 'h-[min(40rem,85dvh)]'
         )}

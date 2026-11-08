@@ -77,6 +77,8 @@ export type {
   StackProps,
   VStackProps,
 } from './components/layout/Stack';
+export { DataTable } from './components/molecule/DataTable';
+export type { DataTableColumnMeta, DataTableProps } from './components/molecule/DataTable';
 export type {
   FieldBaseProps,
   IconComponent,

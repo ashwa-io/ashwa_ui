@@ -48,7 +48,12 @@ export const Card: React.FC<CardProps> = props => {
   }
 
   return (
-    <CardPrimitive aria-label={ariaLabel} data-testid={testId} className={PADDING[padding]}>
+    <CardPrimitive
+      aria-label={ariaLabel}
+      data-testid={testId}
+      // overflow-clip, not hidden: hidden would make the card the scroll container for sticky content.
+      className={cn('overflow-clip [--surface:var(--card)]', PADDING[padding])}
+    >
       {children}
     </CardPrimitive>
   );

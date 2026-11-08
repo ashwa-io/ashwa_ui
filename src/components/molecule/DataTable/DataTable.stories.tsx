@@ -1,8 +1,13 @@
+import { useMemo, useState } from 'react';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ColumnDef } from '@tanstack/react-table';
-import { expect, fn, waitFor } from 'storybook/test';
+import { expect, fireEvent, fn, screen, waitFor } from 'storybook/test';
 
 import { Button } from '@/components/atomic/Button';
+import { Card } from '@/components/atomic/Card';
+import { Checkbox } from '@/components/atomic/Checkbox';
+import { Modal } from '@/components/molecule/Modal';
 
 import { DataTable, type DataTableColumnMeta } from './DataTable';
 
@@ -29,7 +34,7 @@ const Pane: React.FC<{ children: React.ReactNode }> = props => (
 );
 
 const meta = {
-  title: 'Organism/DataTable',
+  title: 'Molecule/DataTable',
   component: DataTable<Vehicle, string>,
   args: { columns, data: makeRows(3) },
   decorators: [
@@ -255,5 +260,159 @@ export const Dark: Story = {
   globals: { theme: 'dark' },
   play: async ({ canvas }) => {
     await canvas.findByText('Row 0');
+  },
+};
+
+// Column closures often depend on data that loads later (a role name map); the rows don't change.
+const STABLE_ROWS = makeRows(1);
+
+const ColumnsChangeDemo: React.FC = () => {
+  const [role, setRole] = useState('-');
+  const lateColumns = useMemo<ColumnDef<Vehicle, string>[]>(
+    () => [
+      { accessorKey: 'name', header: 'Name' },
+      { id: 'role', header: 'Role', cell: () => role },
+    ],
+    [role]
+  );
+  return (
+    <>
+      <Button onClick={() => setRole('Manager')}>Load roles</Button>
+      <DataTable columns={lateColumns} data={STABLE_ROWS} />
+    </>
+  );
+};
+
+export const ColumnsChangeUpdatesCells: Story = {
+  render: () => <ColumnsChangeDemo />,
+  play: async ({ canvas, userEvent }) => {
+    await canvas.findByRole('cell', { name: '-' });
+    await userEvent.click(canvas.getByRole('button', { name: 'Load roles' }));
+    await expect(await canvas.findByRole('cell', { name: 'Manager' })).toBeInTheDocument();
+  },
+};
+
+const LONG_TEXT = 'A very long value that would widen its column under automatic table layout';
+
+// Widths must not depend on which rows happen to be mounted.
+export const ColumnWidthsStayStable: Story = {
+  args: {
+    data: makeRows(2000).map((row, index) => ({
+      ...row,
+      name: index > 1000 ? LONG_TEXT : row.name,
+    })),
+  },
+  play: async ({ canvas }) => {
+    await canvas.findByText('Row 0');
+    const header = () => canvas.getByRole('columnheader', { name: 'Name' }).getBoundingClientRect();
+    const before = header().width;
+    const scroller = pane(canvas);
+    scroller.scrollTop = scroller.scrollHeight;
+    await waitFor(() => {
+      scroller.scrollTop = scroller.scrollHeight;
+      expect(canvas.getAllByText(LONG_TEXT).length).toBeGreaterThan(0);
+    });
+    await expect(header().width).toBe(before);
+  },
+};
+
+const onSelectRow = fn();
+
+// Dragging to copy a plate number must not open the row.
+export const IgnoresTextSelection: Story = {
+  args: { onRowClick: onSelectRow, data: makeRows(1) },
+  play: async ({ canvas }) => {
+    onSelectRow.mockClear();
+    const cell = await canvas.findByRole('cell', { name: 'Row 0' });
+    window.getSelection()!.selectAllChildren(cell);
+    await fireEvent.click(cell);
+    window.getSelection()!.removeAllRanges();
+    await expect(onSelectRow).not.toHaveBeenCalled();
+  },
+};
+
+// A focused row scrolled upward must clear the 40px sticky header.
+export const FocusClearsStickyHeader: Story = {
+  args: { onRowClick: fn(), data: makeRows(3) },
+  play: async ({ canvas }) => {
+    const row = (await canvas.findByRole('cell', { name: 'Row 0' })).closest('tr')!;
+    await expect(getComputedStyle(row).scrollMarginTop).toBe('40px');
+  },
+};
+
+const onDisabledRow = fn();
+
+const disabledColumns: ColumnDef<Vehicle, string>[] = [
+  {
+    id: 'pick',
+    header: 'Pick',
+    cell: () => <Checkbox label="Pick" value={false} onChange={fn()} />,
+  },
+  {
+    id: 'edit',
+    header: 'Edit',
+    cell: () => (
+      <Button disabled data-testid="disabled">
+        Edit
+      </Button>
+    ),
+  },
+];
+
+// A disabled button ignores the pointer, so the click lands on its cell; a label is a control too.
+export const IgnoresDisabledControlsAndLabels: Story = {
+  args: { columns: disabledColumns, onRowClick: onDisabledRow, data: makeRows(1) },
+  play: async ({ canvas, userEvent }) => {
+    onDisabledRow.mockClear();
+    const button = await canvas.findByTestId('disabled');
+    const box = button.getBoundingClientRect();
+    await fireEvent.click(button.closest('td')!, {
+      clientX: box.left + box.width / 2,
+      clientY: box.top + box.height / 2,
+    });
+    await expect(onDisabledRow).not.toHaveBeenCalled();
+    await userEvent.click(canvas.getByText('Pick', { selector: 'label' }));
+    await expect(onDisabledRow).not.toHaveBeenCalled();
+  },
+};
+
+// On a dialog or card, the sticky header must match that surface, not the page behind it.
+export const HeaderMatchesModalSurface: Story = {
+  globals: { theme: 'dark' },
+  parameters: { pane: false },
+  render: args => (
+    <Modal open onClose={fn()} title="Vehicles" flush>
+      <DataTable columns={args.columns} data={args.data} />
+    </Modal>
+  ),
+  play: async () => {
+    const dialog = await screen.findByRole('dialog', { name: 'Vehicles' });
+    const header = await screen.findByRole('columnheader', { name: 'Name' });
+    await waitFor(() =>
+      expect(getComputedStyle(header).backgroundColor).toBe(
+        getComputedStyle(dialog).backgroundColor
+      )
+    );
+  },
+};
+
+export const StickyInsideCard: Story = {
+  args: { data: makeRows(100) },
+  globals: { theme: 'dark' },
+  render: args => (
+    <Card padding="none" data-testid="card">
+      <DataTable columns={args.columns} data={args.data} />
+    </Card>
+  ),
+  play: async ({ canvas }) => {
+    await canvas.findByText('Row 0');
+    const header = canvas.getByRole('columnheader', { name: 'Name' });
+    await expect(getComputedStyle(header).backgroundColor).toBe(
+      getComputedStyle(canvas.getByTestId('card')).backgroundColor
+    );
+    pane(canvas).scrollTop = 400;
+    await waitFor(() =>
+      expect(header.getBoundingClientRect().top).toBe(pane(canvas).getBoundingClientRect().top)
+    );
   },
 };

@@ -35,11 +35,13 @@ export interface DataTableProps<TData, TValue> {
 // Roomy enough for 40px avatars; the virtualizer measures the real height after mount.
 const ROW_HEIGHT_ESTIMATE_PX = 72;
 const OVERSCAN_ROWS = 8;
-const BODY_CELL = 'border-b px-4 py-3 whitespace-normal';
+const BODY_CELL = 'border-b px-4 py-3 break-words whitespace-normal';
+// Fixed layout keeps widths independent of which rows are mounted; Astryx's floor for flexible columns.
+const FLEXIBLE_COLUMN_MIN_WIDTH = 60;
 const ARCHIVED_ROW =
   'text-muted-foreground bg-[repeating-linear-gradient(135deg,transparent_0_6px,color-mix(in_oklch,var(--color-border)_60%,transparent)_6px_7px)]';
 const CONTROLS =
-  'a,button,input,select,textarea,[role="menuitem"],[role="option"],[role="checkbox"],[role="switch"]';
+  'a,button,input,select,textarea,label,[role="menuitem"],[role="option"],[role="checkbox"],[role="switch"]';
 
 const columnWidth = (column: { columnDef: { meta?: unknown } }): number | undefined =>
   (column.columnDef.meta as DataTableColumnMeta | undefined)?.width;
@@ -62,18 +64,33 @@ const offsetWithin = (element: HTMLElement, scrollParent: HTMLElement): number =
 // Portalled content (menus, dialogs) bubbles through React but isn't inside the row in the DOM.
 const isRowOwnClick = (event: React.MouseEvent<HTMLTableRowElement>): boolean => {
   const target = event.target as Element;
-  return event.currentTarget.contains(target) && target.closest(CONTROLS) === null;
+  if (!event.currentTarget.contains(target) || target.closest(CONTROLS)) return false;
+  // Dragging to select text ends in a click; copying a value must not open the row.
+  if (window.getSelection()?.isCollapsed === false) return false;
+  // Disabled controls ignore the pointer, so their clicks land on the cell behind them.
+  return !Array.from(
+    event.currentTarget.querySelectorAll('button:disabled,[aria-disabled="true"]')
+  ).some(control => {
+    const box = control.getBoundingClientRect();
+    return (
+      event.clientX >= box.left &&
+      event.clientX <= box.right &&
+      event.clientY >= box.top &&
+      event.clientY <= box.bottom
+    );
+  });
 };
 
-interface DataTableRowProps<TData> {
+interface DataTableRowProps<TData, TValue> {
   row: Row<TData>;
+  columns: ColumnDef<TData, TValue>[];
   index: number;
   isArchived: boolean;
   onRowClick?: (row: TData) => void;
   measureRef: (node: HTMLTableRowElement | null) => void;
 }
 
-const DataTableRowInner = <TData,>(props: DataTableRowProps<TData>) => {
+const DataTableRowInner = <TData, TValue>(props: DataTableRowProps<TData, TValue>) => {
   const { row, index, isArchived, onRowClick, measureRef } = props;
 
   return (
@@ -100,7 +117,9 @@ const DataTableRowInner = <TData,>(props: DataTableRowProps<TData>) => {
           : undefined
       }
       className={cn(
-        onRowClick && 'focus-visible:outline-ring cursor-pointer focus-visible:outline-1',
+        // scroll-mt: Shift+Tab must not leave the focused row under the sticky header.
+        onRowClick &&
+          'focus-visible:outline-ring cursor-pointer scroll-mt-10 focus-visible:outline-1',
         isArchived && ARCHIVED_ROW
       )}
     >
@@ -113,12 +132,13 @@ const DataTableRowInner = <TData,>(props: DataTableRowProps<TData>) => {
   );
 };
 
-// TanStack rebuilds every Row when `data` changes; a row only re-renders when its record changed.
+// TanStack rebuilds every Row when `data` changes; a row only re-renders when its record or columns
+// changed (column closures often depend on data that loads later).
 const DataTableRow = memo(
   DataTableRowInner,
   (prev, next) =>
     prev.row.original === next.row.original &&
-    prev.row.getVisibleCells().length === next.row.getVisibleCells().length &&
+    prev.columns === next.columns &&
     prev.index === next.index &&
     prev.isArchived === next.isArchived &&
     prev.onRowClick === next.onRowClick
@@ -177,7 +197,12 @@ export const DataTable = <TData, TValue>(props: DataTableProps<TData, TValue>) =
   // Spacer rows keep the table's own column layout; absolutely positioned rows would not.
   const paddingTop = isVirtual && first ? first.start - scrollMargin : 0;
   const paddingBottom = isVirtual && last ? virtualizer.getTotalSize() - last.end : 0;
-  const columnCount = table.getVisibleLeafColumns().length;
+  const leafColumns = table.getVisibleLeafColumns();
+  const columnCount = leafColumns.length;
+  const minWidth = leafColumns.reduce(
+    (total, column) => total + (columnWidth(column) ?? FLEXIBLE_COLUMN_MIN_WIDTH),
+    0
+  );
 
   const spacer = (height: number) =>
     height > 0 ? (
@@ -194,7 +219,8 @@ export const DataTable = <TData, TValue>(props: DataTableProps<TData, TValue>) =
       <table
         aria-label={ariaLabel}
         aria-rowcount={rows.length + 1}
-        className="w-full border-separate border-spacing-0 text-sm"
+        className="w-full table-fixed border-separate border-spacing-0 text-sm"
+        style={{ minWidth }}
       >
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
@@ -203,7 +229,7 @@ export const DataTable = <TData, TValue>(props: DataTableProps<TData, TValue>) =
                 <TableHead
                   key={header.id}
                   colSpan={header.colSpan}
-                  className="bg-background sticky top-0 z-10 border-b px-4 py-2"
+                  className="bg-surface sticky top-0 z-10 truncate border-b px-4 py-2"
                   style={{ width: columnWidth(header.column) }}
                 >
                   {header.isPlaceholder
@@ -222,6 +248,7 @@ export const DataTable = <TData, TValue>(props: DataTableProps<TData, TValue>) =
                 <DataTableRow
                   key={rows[index].id}
                   row={rows[index]}
+                  columns={columns}
                   index={index}
                   isArchived={isRowArchived?.(rows[index].original) ?? false}
                   onRowClick={onRowClick}

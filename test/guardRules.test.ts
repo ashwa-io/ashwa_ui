@@ -1,5 +1,5 @@
 import { ESLint } from 'eslint';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 const eslint = new ESLint({ cwd: process.cwd() });
 
@@ -27,6 +27,11 @@ export { Button };
 `;
 
 describe('public API guard rules', () => {
+  // First lint loads every plugin (several seconds); keep it out of each test's timeout.
+  beforeAll(async () => {
+    await eslint.lintText('', { filePath: PUBLIC_FILE });
+  }, 60_000);
+
   it.each(['className', 'style', 'asChild', 'render'])(
     'rejects %s in a public props interface',
     async prop => {

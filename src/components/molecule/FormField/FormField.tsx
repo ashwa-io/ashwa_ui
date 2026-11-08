@@ -14,6 +14,8 @@ import { cn } from '@/lib/utils';
 /** Wiring FormField hands to its control; pass each prop by name. */
 export interface FormFieldControlProps {
   id: string;
+  /** For controls a label's `for` can't name, e.g. sliders and radio groups. */
+  labelId: string;
   'aria-describedby'?: string;
   'aria-invalid'?: true;
   'aria-required'?: true;
@@ -41,12 +43,14 @@ export const FormField: React.FC<FormFieldProps> = props => {
   } = props;
   const generatedId = useId();
   const id = idProp ?? generatedId;
+  const labelId = `${id}-label`;
   const descriptionId = description ? `${id}-description` : undefined;
   const errorId = error ? `${id}-error` : undefined;
   const describedBy = [descriptionId, errorId].filter(Boolean).join(' ') || undefined;
 
   const control = children({
     id,
+    labelId,
     'aria-describedby': describedBy,
     'aria-invalid': error ? true : undefined,
     'aria-required': required ? true : undefined,
@@ -54,7 +58,7 @@ export const FormField: React.FC<FormFieldProps> = props => {
   });
 
   const labelNode = (
-    <FieldLabel htmlFor={id} className={cn(hideLabel && 'sr-only')}>
+    <FieldLabel id={labelId} htmlFor={id} className={cn(hideLabel && 'sr-only')}>
       {label}
       {required && (
         <span aria-hidden className="text-destructive">

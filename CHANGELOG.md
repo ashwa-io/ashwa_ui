@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.13
+
+### Patch Changes
+
+- Add Slider, RadioGroup, Toggle, SegmentedControl, Calendar, DateInput, NumberInput, Timestamp, StatusDot and SelectableCard. TextInput gains startText, endText and endAction.
+
 ## 0.0.12
 
 ### Patch Changes

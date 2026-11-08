@@ -60,6 +60,12 @@ const openModal = async (
   return screen.findByRole('dialog', { name: 'Edit vehicle' });
 };
 
+// A text-only scrolling body gets its tab stop just after layout; axe must not run before that.
+const bodyHasTabStop = () =>
+  waitFor(() =>
+    expect(document.querySelector('[data-slot="modal-body"]')).toHaveAttribute('tabindex', '0')
+  );
+
 export const Default: Story = {
   play: async ({ args, canvas, userEvent }) => {
     const dialog = await openModal(canvas, userEvent);
@@ -117,6 +123,7 @@ export const FixedHeight: Story = {
     await openModal(canvas, userEvent);
     const body = document.querySelector('[data-slot="modal-body"]')!;
     await expect(body.scrollHeight).toBeGreaterThan(body.clientHeight);
+    await bodyHasTabStop();
     await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeVisible());
   },
 };
@@ -212,5 +219,37 @@ export const Flush: Story = {
     await expect(Math.abs(edge.left - dialog.left)).toBeLessThanOrEqual(1);
     await expect(Math.abs(dialog.right - edge.right)).toBeLessThanOrEqual(1);
     await expect(Math.abs(dialog.bottom - edge.bottom)).toBeLessThanOrEqual(1);
+  },
+};
+
+// The body scrolls right up to the dialog's edge, so the scrollbar sits on the border.
+export const ScrollbarOnDialogEdge: Story = {
+  args: { fixedHeight: true, children: LONG_BODY },
+  play: async ({ canvas, userEvent }) => {
+    const dialog = (await openModal(canvas, userEvent)).getBoundingClientRect();
+    const body = document.querySelector('[data-slot="modal-body"]')!.getBoundingClientRect();
+    await expect(body.right).toBe(dialog.right);
+    await expect(body.left).toBe(dialog.left);
+    await bodyHasTabStop();
+  },
+};
+
+// Text stays lined up with the title even though the scroller runs to the edge.
+export const ContentAlignsWithTitle: Story = {
+  args: { children: <Text size="sm">Body content</Text> },
+  play: async ({ canvas, userEvent }) => {
+    await openModal(canvas, userEvent);
+    const title = screen.getByRole('heading', { name: 'Edit vehicle' }).getBoundingClientRect();
+    const text = screen.getByText('Body content').getBoundingClientRect();
+    await expect(text.left).toBe(title.left);
+  },
+};
+
+// A flush body reaches the rounded corners, so the dialog has to clip it.
+export const FlushClipsToCorners: Story = {
+  args: { flush: true, children: <div>Row</div> },
+  play: async ({ canvas, userEvent }) => {
+    const dialog = await openModal(canvas, userEvent);
+    await expect(getComputedStyle(dialog).overflow).toBe('clip');
   },
 };

@@ -171,3 +171,17 @@ export const Dark: Story = {
     await waitFor(() => expect(screen.getByRole('listbox')).toBeVisible());
   },
 };
+
+// Scrolling areas run to their container's edge, so the scrollbar sits on the border.
+export const ScrollbarOnPopupEdge: Story = {
+  play: async ({ canvas, userEvent }) => {
+    await open(canvas, userEvent);
+    const popup = screen.getByRole('dialog', { name: 'Filter' }).getBoundingClientRect();
+    const row = screen.getByRole('button', { name: /^School/ });
+    const scroller = row.closest('[data-slot="popover-content"] > div:nth-child(2)')!;
+    await expect(getComputedStyle(scroller).overflowY).toBe('auto');
+    await expect(scroller.getBoundingClientRect().right).toBe(popup.right);
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  },
+};

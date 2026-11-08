@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 
+import { modeOklch, modeRgb, useMode as registerMode, wcagContrast } from 'culori/fn';
 import { describe, expect, it } from 'vitest';
 
 import { brandTheme, DEFAULT_BRAND_HEX } from '../src/theme/brandTheme';
@@ -16,6 +17,15 @@ const block = (selector: string): Record<string, string> => {
     ])
   );
 };
+
+registerMode(modeRgb);
+registerMode(modeOklch);
+
+const contrast = (a: string, b: string): number => wcagContrast(a, b);
+
+// Fixed text colours (status tones, muted) must be readable on every surface, light and dark.
+const TEXT_TOKENS = ['--success', '--warning', '--info', '--destructive', '--muted-foreground'];
+const STATUS_COLOURS = ['success', 'warning', 'info'];
 
 const root = block(':root');
 const dark = block('\\.dark');
@@ -64,6 +74,18 @@ describe('src/styles/index.css', () => {
     Object.keys(defaults.light)
       .filter(name => name !== '--brand-map')
       .forEach(name => expect(css).toContain(`--color-${name.slice(2)}: var(${name});`));
+  });
+
+  it.each(TEXT_TOKENS)('%s reaches 4.5:1 on background and card in both modes', token => {
+    [root, dark].forEach(mode =>
+      ['--background', '--card'].forEach(surface =>
+        expect(contrast(mode[token], mode[surface] ?? root[surface])).toBeGreaterThanOrEqual(4.5)
+      )
+    );
+  });
+
+  it('exposes status colours as Tailwind utilities', () => {
+    STATUS_COLOURS.forEach(name => expect(css).toContain(`--color-${name}: var(--${name});`));
   });
 
   it('radius matches nigam', () => {

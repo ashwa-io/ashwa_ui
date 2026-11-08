@@ -17,6 +17,9 @@ const COLOR_SWATCHES: Swatch[] = [
   { name: 'muted', className: 'bg-muted' },
   { name: 'accent', className: 'bg-accent' },
   { name: 'destructive', className: 'bg-destructive' },
+  { name: 'success', className: 'bg-success' },
+  { name: 'warning', className: 'bg-warning' },
+  { name: 'info', className: 'bg-info' },
   { name: 'border', className: 'bg-border' },
 ];
 

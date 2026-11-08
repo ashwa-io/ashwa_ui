@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
@@ -23,5 +23,9 @@ describe('public component folders', () => {
       expect(existsSync(path.join(dir, `${name}${suffix}`)), `${name}${suffix}`).toBe(true)
     );
     expect(existsSync(path.join(dir, 'index.ts')), 'index.ts').toBe(true);
+  });
+
+  it.each(componentFolders())('%s is exported from src/index.ts', dir => {
+    expect(readFileSync('src/index.ts', 'utf8')).toMatch(new RegExp(`\\b${path.basename(dir)}\\b`));
   });
 });

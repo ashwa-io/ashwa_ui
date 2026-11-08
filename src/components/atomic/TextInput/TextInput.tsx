@@ -2,12 +2,16 @@ import type React from 'react';
 
 import { FormField } from '@/components/molecule/FormField';
 import { Input } from '@/components/ui/input';
+import { InputGroupInput } from '@/components/ui/input-group';
 import type { FieldBaseProps, IconComponent } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
+import { InputAddons } from './InputAddons';
+import type { InputAddonProps } from './InputAddons';
+
 export type TextInputType = 'text' | 'email' | 'password' | 'search' | 'tel' | 'url';
 
-export interface TextInputProps extends FieldBaseProps {
+export interface TextInputProps extends FieldBaseProps, InputAddonProps {
   value: string;
   onChange: (value: string) => void;
   onBlur?: () => void;
@@ -16,6 +20,8 @@ export interface TextInputProps extends FieldBaseProps {
   type?: TextInputType;
   /** Leading icon, decorative (aria-hidden). */
   icon?: IconComponent;
+  /** e.g. an IconButton to clear or copy. */
+  endAction?: React.ReactNode;
   readOnly?: boolean;
   /** e.g. 'username', 'current-password' on login forms. */
   autoComplete?: string;
@@ -39,10 +45,15 @@ export const TextInput: React.FC<TextInputProps> = props => {
     placeholder,
     type = 'text',
     icon: Icon,
+    startText,
+    endText,
+    endAction,
     readOnly = false,
     autoComplete,
     ref,
   } = props;
+  const grouped = Boolean(startText || endText || endAction);
+  const Control = grouped ? InputGroupInput : Input;
 
   return (
     <FormField
@@ -55,15 +66,9 @@ export const TextInput: React.FC<TextInputProps> = props => {
       id={id}
       data-testid={testId}
     >
-      {control => (
-        <div className="relative">
-          {Icon && (
-            <Icon
-              aria-hidden
-              className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
-            />
-          )}
-          <Input
+      {control => {
+        const input = (
+          <Control
             ref={ref}
             id={control.id}
             aria-describedby={control['aria-describedby']}
@@ -78,10 +83,26 @@ export const TextInput: React.FC<TextInputProps> = props => {
             autoComplete={autoComplete}
             onChange={event => onChange(event.target.value)}
             onBlur={onBlur}
-            className={cn(Icon && 'pl-8')}
+            className={cn(!grouped && Icon && 'pl-8')}
           />
-        </div>
-      )}
+        );
+
+        return grouped ? (
+          <InputAddons icon={Icon} startText={startText} endText={endText} endAction={endAction}>
+            {input}
+          </InputAddons>
+        ) : (
+          <div className="relative">
+            {Icon && (
+              <Icon
+                aria-hidden
+                className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
+              />
+            )}
+            {input}
+          </div>
+        );
+      }}
     </FormField>
   );
 };

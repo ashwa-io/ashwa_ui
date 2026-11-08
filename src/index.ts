@@ -138,5 +138,7 @@ export { Calendar } from './components/atomic/Calendar';
 export type { CalendarProps } from './components/atomic/Calendar';
 export { DateInput } from './components/molecule/DateInput';
 export type { DateInputProps } from './components/molecule/DateInput';
+export { NumberInput } from './components/atomic/NumberInput';
+export type { NumberInputProps } from './components/atomic/NumberInput';
 export { UIProvider } from './providers/UIProvider';
 export type { UIProviderProps } from './providers/UIProvider';

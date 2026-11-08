@@ -1,8 +1,10 @@
 import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { SearchIcon } from 'lucide-react';
+import { SearchIcon, XIcon } from 'lucide-react';
 import { expect, fn } from 'storybook/test';
+
+import { IconButton } from '@/components/atomic/IconButton';
 
 import { TextInput, type TextInputProps } from './TextInput';
 
@@ -84,5 +86,76 @@ export const States: Story = {
 // Same states in dark mode, so the a11y check covers both themes.
 export const StatesDark: Story = {
   ...States,
+  globals: { theme: 'dark' },
+};
+
+// Without addons the markup stays exactly as it was.
+export const PlainHasNoGroup: Story = {
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelector('[data-slot="input-group"]')).toBeNull();
+  },
+};
+
+export const WithStartText: Story = {
+  args: { startText: '+91' },
+  play: async ({ canvas, userEvent }) => {
+    await expect(canvas.getByText('+91')).toBeVisible();
+    await userEvent.type(canvas.getByRole('textbox', { name: 'Name' }), '98');
+    await expect(canvas.getByRole('textbox', { name: 'Name' })).toHaveValue('98');
+  },
+};
+
+export const WithEndText: Story = {
+  args: { endText: 'km' },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText('km')).toBeVisible();
+  },
+};
+
+const clear = fn();
+
+export const WithEndAction: Story = {
+  args: {
+    endAction: <IconButton icon={XIcon} aria-label="Clear" variant="ghost" onClick={clear} />,
+  },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear' }));
+    await expect(clear).toHaveBeenCalledOnce();
+    await expect(canvas.getByRole('textbox', { name: 'Name' })).toBeVisible();
+  },
+};
+
+export const IconWithAddon: Story = {
+  args: { icon: SearchIcon, endText: 'km' },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelector('[data-slot="input-group"] svg')).toHaveAttribute(
+      'aria-hidden',
+      'true'
+    );
+  },
+};
+
+export const AddonsWithError: Story = {
+  args: { endText: 'km', error: 'Too far' },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('textbox', { name: 'Name' })).toHaveAttribute(
+      'aria-invalid',
+      'true'
+    );
+    await expect(canvas.getByText('Too far')).toBeVisible();
+  },
+};
+
+export const AddonsDisabled: Story = {
+  args: { startText: '+91', disabled: true },
+  // Disabled controls are exempt from contrast (WCAG 1.4.3); axe can't tie the addon to the input.
+  parameters: { a11y: { config: { rules: [{ id: 'color-contrast', enabled: false }] } } },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('textbox', { name: 'Name' })).toBeDisabled();
+  },
+};
+
+export const AddonsDark: Story = {
+  args: { startText: '+91', endText: 'km' },
   globals: { theme: 'dark' },
 };

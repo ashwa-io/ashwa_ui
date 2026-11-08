@@ -86,7 +86,7 @@ export const ErrorToggles: Story = {
 export const HiddenLabel: Story = {
   args: { hideLabel: true },
   play: async ({ canvas }) => {
-    await expect(canvas.getByText('Name')).toHaveClass('sr-only');
+    await expect(canvas.getByText('Name').closest('label')).toHaveClass('sr-only');
     await expect(canvas.getByRole('textbox', { name: 'Name' })).toBeInTheDocument();
   },
 };
@@ -95,7 +95,13 @@ export const Required: Story = {
   args: { required: true },
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('textbox')).toHaveAttribute('aria-required', 'true');
-    await expect(canvas.getByText('*')).toHaveAttribute('aria-hidden', 'true');
+    const star = canvas.getByText('*');
+    await expect(star).toHaveAttribute('aria-hidden', 'true');
+    const labelText = document.createRange();
+    labelText.selectNode(star.previousSibling as Text);
+    await expect(
+      star.getBoundingClientRect().left - labelText.getBoundingClientRect().right
+    ).toBeLessThan(1);
   },
 };
 

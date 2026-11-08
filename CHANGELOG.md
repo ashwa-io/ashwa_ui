@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.14
+
+### Patch Changes
+
+- f1f09ee: Required star sits directly after the label text, with no gap.
+
 ## 0.0.13
 
 ### Patch Changes

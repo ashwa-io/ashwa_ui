@@ -121,5 +121,7 @@ export { Accordion } from './components/molecule/Accordion';
 export type { AccordionItem, AccordionProps } from './components/molecule/Accordion';
 export { Breadcrumb } from './components/molecule/Breadcrumb';
 export type { BreadcrumbItem, BreadcrumbProps } from './components/molecule/Breadcrumb';
+export { Drawer } from './components/molecule/Drawer';
+export type { DrawerProps, DrawerSize } from './components/molecule/Drawer';
 export { UIProvider } from './providers/UIProvider';
 export type { UIProviderProps } from './providers/UIProvider';

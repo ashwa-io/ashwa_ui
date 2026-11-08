@@ -167,3 +167,9 @@ export const ArrowLeftKeepsTabVisible: Story = {
     });
   },
 };
+
+export const ScrollFade: Story = {
+  play: async ({ canvas }) => {
+    await expect(getComputedStyle(canvas.getByRole('tablist')).maskImage).not.toBe('none');
+  },
+};

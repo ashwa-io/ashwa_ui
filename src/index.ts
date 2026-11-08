@@ -34,6 +34,8 @@ export { DropdownMenu } from './components/molecule/DropdownMenu';
 export type { DropdownMenuProps, MenuItem } from './components/molecule/DropdownMenu';
 export { FormField } from './components/molecule/FormField';
 export type { FormFieldControlProps, FormFieldProps } from './components/molecule/FormField';
+export { Modal } from './components/molecule/Modal';
+export type { ModalProps, ModalSize } from './components/molecule/Modal';
 export { Popover } from './components/molecule/Popover';
 export type { PopoverProps, PopoverWidth } from './components/molecule/Popover';
 export { HStack, Stack, VStack } from './components/layout/Stack';

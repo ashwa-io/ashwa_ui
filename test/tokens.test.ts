@@ -1,6 +1,15 @@
 import { readFileSync } from 'node:fs';
 
-import { modeOklch, modeRgb, useMode as registerMode, wcagContrast } from 'culori/fn';
+import {
+  converter,
+  modeLrgb,
+  modeOklab,
+  modeOklch,
+  modeRgb,
+  parse,
+  useMode as registerMode,
+  wcagContrast,
+} from 'culori/fn';
 import { describe, expect, it } from 'vitest';
 
 import { brandTheme, DEFAULT_BRAND_HEX } from '../src/theme/brandTheme';
@@ -19,12 +28,37 @@ const block = (selector: string): Record<string, string> => {
 };
 
 registerMode(modeRgb);
+registerMode(modeLrgb);
+registerMode(modeOklab);
 registerMode(modeOklch);
 
 const contrast = (a: string, b: string): number => wcagContrast(a, b);
 
 // Fixed text colours (status tones, muted) must be readable on every surface, light and dark.
-const TEXT_TOKENS = ['--success', '--warning', '--info', '--destructive', '--muted-foreground'];
+const TEXT_TOKENS = [
+  '--success',
+  '--warning',
+  '--info',
+  '--destructive',
+  '--muted-foreground',
+  '--brand-text',
+];
+const TEXT_SURFACES = ['--background', '--card', '--muted', '--accent', '--sidebar'];
+const STATUS_TOKENS = ['--success', '--warning', '--info', '--destructive'];
+const toRgb = converter('rgb');
+
+// A status colour on its own Badge tint (10% light, 20% dark) composited over a surface.
+const tintContrast = (token: string, surface: string, alpha: number): number => {
+  const fg = toRgb(parse(token))!;
+  const bg = toRgb(parse(surface))!;
+  const mix = (a: number, b: number) => a * alpha + b * (1 - alpha);
+  return wcagContrast(fg, {
+    mode: 'rgb',
+    r: mix(fg.r, bg.r),
+    g: mix(fg.g, bg.g),
+    b: mix(fg.b, bg.b),
+  });
+};
 const STATUS_COLOURS = ['success', 'warning', 'info'];
 
 const root = block(':root');
@@ -86,10 +120,27 @@ describe('src/styles/index.css', () => {
       .forEach(name => expect(css).toContain(`--color-${name.slice(2)}: var(${name});`));
   });
 
-  it.each(TEXT_TOKENS)('%s reaches 4.5:1 on background and card in both modes', token => {
-    [root, dark].forEach(mode =>
-      ['--background', '--card'].forEach(surface =>
-        expect(contrast(mode[token], mode[surface] ?? root[surface])).toBeGreaterThanOrEqual(4.5)
+  it.each(TEXT_TOKENS)('%s reaches 4.5:1 on every text surface in both modes', token => {
+    [root, { ...root, ...dark }].forEach(mode =>
+      TEXT_SURFACES.forEach(surface =>
+        expect(contrast(mode[token], mode[surface])).toBeGreaterThanOrEqual(4.5)
+      )
+    );
+  });
+
+  it.each(['--muted-foreground', ...STATUS_TOKENS])('%s reaches 4.5:1 on the brand tint', token => {
+    [root, { ...root, ...dark }].forEach(mode =>
+      expect(contrast(mode[token], mode['--brand-tint'])).toBeGreaterThanOrEqual(4.5)
+    );
+  });
+
+  it.each(STATUS_TOKENS)('%s Badge tint reaches 4.5:1 on muted and the brand tint', token => {
+    [
+      { mode: root, alpha: 0.1 },
+      { mode: { ...root, ...dark }, alpha: 0.2 },
+    ].forEach(({ mode, alpha }) =>
+      ['--muted', '--brand-tint'].forEach(surface =>
+        expect(tintContrast(mode[token], mode[surface], alpha)).toBeGreaterThanOrEqual(4.5)
       )
     );
   });

@@ -8,6 +8,8 @@ const SURFACES = {
   light: ['oklch(1 0 0)'],
   dark: ['oklch(0.141 0.005 285.823)', 'oklch(0.21 0.006 285.885)'],
 };
+// --brand-text must also hold on muted rows.
+const MUTED = { light: 'oklch(0.967 0.001 286.375)', dark: 'oklch(0.274 0.006 286.033)' };
 const SAMPLES = ['#ffffff', '#000000', '#ffff00', '#ff0000', '#000080', '#8b5cf6', '#1a73e8'];
 
 const ratio = (a: string, b: string): number => {
@@ -109,5 +111,13 @@ describe('brandThemeCss', () => {
     expect(css).toContain('--brand-text:');
     expect(css).toContain('--brand-map:#');
     expect(css).not.toContain('undefined');
+  });
+});
+
+describe('--brand-text on muted rows', () => {
+  it.each(SAMPLES)('%s reaches 4.5:1 on muted in both modes', hex => {
+    const theme = brandTheme(hex);
+    expect(ratio(theme.light['--brand-text'], MUTED.light)).toBeGreaterThanOrEqual(4.5);
+    expect(ratio(theme.dark['--brand-text'], MUTED.dark)).toBeGreaterThanOrEqual(4.5);
   });
 });

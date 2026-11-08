@@ -14,6 +14,7 @@ import {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import type { IconComponent } from '@/lib/types';
 import { useLink } from '@/providers/useLink';
@@ -52,6 +53,7 @@ const NavLink: React.FC<{
 }> = props => {
   const { item, active, showTooltip } = props;
   const link = useLink(item.href);
+  const { setOpenMobile } = useSidebar();
   const Icon = item.icon;
 
   return (
@@ -69,6 +71,8 @@ const NavLink: React.FC<{
             onClick={event => {
               item.onClick?.();
               link.onClick(event);
+              // AppShell outlives the route, so the phone drawer won't close by itself.
+              setOpenMobile(false);
             }}
           />
         }
@@ -91,6 +95,9 @@ export const SideNav: React.FC<SideNavProps> = props => {
     'aria-label': ariaLabel = 'Main',
     'data-testid': testId,
   } = props;
+  const { isMobile } = useSidebar();
+  // 'none' has no phone drawer; offcanvas on desktop lets Ctrl+B hide the only nav.
+  const mode = collapsible ? 'icon' : isMobile ? 'offcanvas' : 'none';
   const current = activeHref(
     groups.flatMap(group => group.items.map(item => item.href)),
     currentPath
@@ -99,12 +106,12 @@ export const SideNav: React.FC<SideNavProps> = props => {
   return (
     // absolute h-full: sits under whatever header AppShell has, instead of filling the viewport.
     <Sidebar
-      collapsible={collapsible ? 'icon' : 'offcanvas'}
+      collapsible={mode}
       data-testid={testId}
-      className="absolute h-full"
+      className={mode === 'none' ? 'h-full shrink-0 border-r' : 'absolute h-full'}
     >
       {header && <SidebarHeader>{header}</SidebarHeader>}
-      <SidebarContent>
+      <SidebarContent className="group-data-[collapsible=icon]:overflow-auto">
         <nav aria-label={ariaLabel}>
           {groups.map((group, index) => (
             <Fragment key={group.label ?? index}>

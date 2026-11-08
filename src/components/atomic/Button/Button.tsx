@@ -67,6 +67,8 @@ export const Button: React.FC<ButtonProps> = props => {
   const LeadingIcon = loading ? LoaderCircleIcon : icon;
   const link = useLink(disabled || loading ? undefined : href);
   const isLink = href !== undefined;
+  // Disabled or a blocked href. :disabled styles never match an <a>, so the look is set here.
+  const deadLink = isLink && !loading && link.href === undefined;
 
   return (
     <ButtonPrimitive
@@ -79,8 +81,12 @@ export const Button: React.FC<ButtonProps> = props => {
       render={isLink ? <a href={link.href} target={link.target} rel={link.rel} /> : undefined}
       variant={BUTTON_VARIANT[variant]}
       size={SIZE[size]}
-      className={cn(VARIANT_CLASS[variant], fullWidth && 'w-full')}
-      disabled={disabled || loading}
+      className={cn(
+        VARIANT_CLASS[variant],
+        fullWidth && 'w-full',
+        deadLink && 'pointer-events-none opacity-50'
+      )}
+      disabled={disabled || loading || deadLink}
       // While loading, stay focusable (aria-disabled) so keyboard users keep their place.
       focusableWhenDisabled={loading}
       aria-busy={loading || undefined}

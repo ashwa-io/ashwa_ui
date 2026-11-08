@@ -123,7 +123,20 @@ export const DisabledLink: Story = {
     const link = canvasElement.querySelector('a')!;
     await expect(link).not.toHaveAttribute('href');
     await expect(link).toHaveAttribute('aria-disabled', 'true');
+    await expect(getComputedStyle(link).opacity).toBe('0.5');
+    await expect(getComputedStyle(link).pointerEvents).toBe('none');
     await fireEvent.click(link);
     await expect(navigate).not.toHaveBeenCalled();
+  },
+};
+
+// A blocked href must not leave a focusable link that goes nowhere.
+export const UnsafeHrefIsInert: Story = {
+  args: { href: 'javascript:alert(1)', children: 'Unsafe' },
+  play: async ({ canvasElement }) => {
+    const link = canvasElement.querySelector('a')!;
+    await expect(link).not.toHaveAttribute('href');
+    await expect(link).toHaveAttribute('aria-disabled', 'true');
+    await expect(getComputedStyle(link).opacity).toBe('0.5');
   },
 };

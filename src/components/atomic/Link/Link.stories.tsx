@@ -123,3 +123,32 @@ export const UnsafeHrefIsBlocked: Story = {
     await expect(navigate).not.toHaveBeenCalled();
   },
 };
+
+// The app's useHref resolves routes: an external URL must reach the DOM untouched.
+export const ExternalSkipsUseHref: Story = {
+  args: { href: 'https://ashwa.io/help', children: 'Help' },
+  parameters: { provider: false },
+  decorators: [
+    Story => (
+      <UIProvider navigate={navigate} useHref={prefixed}>
+        {Story()}
+      </UIProvider>
+    ),
+  ],
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('link', { name: 'Help' })).toHaveAttribute(
+      'href',
+      'https://ashwa.io/help'
+    );
+  },
+};
+
+// Mail and phone links hand off to another app: a new tab would be left blank.
+export const MailtoStaysInTab: Story = {
+  args: { href: 'mailto:help@ashwa.io', children: 'Mail' },
+  play: async ({ canvas }) => {
+    const link = canvas.getByRole('link', { name: 'Mail' });
+    await expect(link).toHaveAttribute('href', 'mailto:help@ashwa.io');
+    await expect(link).not.toHaveAttribute('target');
+  },
+};

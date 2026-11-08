@@ -1,13 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ColumnDef } from '@tanstack/react-table';
 import { TruckIcon } from 'lucide-react';
-import { expect, screen, waitFor } from 'storybook/test';
+import { expect, fn, screen, waitFor } from 'storybook/test';
 
 import { DataTable } from '@/components/molecule/DataTable';
 import { SideNav } from '@/components/organism/SideNav';
 import { TopNav } from '@/components/organism/TopNav';
+import { UIProvider } from '@/providers/UIProvider';
 
 import { AppShell } from './AppShell';
+
+const navigate = fn();
 
 const sideNav = (
   <SideNav
@@ -56,9 +59,7 @@ export const ContentIsKeyboardScrollable: Story = {
 export const SidebarUnderHeader: Story = {
   play: async ({ canvasElement, canvas }) => {
     const banner = canvas.getByRole('banner').getBoundingClientRect();
-    const side = canvasElement
-      .querySelector('[data-slot="sidebar-container"]')!
-      .getBoundingClientRect();
+    const side = canvasElement.querySelector('[data-slot="sidebar"]')!.getBoundingClientRect();
     await expect(side.top).toBe(banner.bottom);
     await expect(side.bottom).toBe(
       canvasElement.querySelector('[data-testid="shell"]')?.getBoundingClientRect().bottom ??
@@ -116,19 +117,51 @@ export const Dark: Story = {
   globals: { theme: 'dark' },
 };
 
-// Phones get the sidebar as a drawer from a trigger.
+// A portal's shell nests inside the global one: the page still has a single main landmark.
+export const NestedShells: Story = {
+  args: {
+    sideNav: undefined,
+    children: (
+      <AppShell height="fill" sideNav={sideNav}>
+        {TALL}
+      </AppShell>
+    ),
+  },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelectorAll('main')).toHaveLength(1);
+  },
+};
+
+export const ScreenHeight: Story = {
+  args: { height: 'screen', 'data-testid': 'shell' },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByTestId('shell').getBoundingClientRect().height).toBe(
+      window.innerHeight
+    );
+  },
+};
+
+// Phones get the sidebar as a drawer from a trigger that scrolling can't take away.
 export const PhoneDrawer: Story = {
-  decorators: [Story => <div className="h-[500px] w-full">{Story()}</div>],
+  globals: { viewport: { value: 'mobile2' } },
+  decorators: [
+    Story => (
+      <UIProvider navigate={navigate}>
+        <div className="h-[500px] w-full">{Story()}</div>
+      </UIProvider>
+    ),
+  ],
   play: async ({ canvas, userEvent }) => {
-    // Resizing needs the test browser; on the published Storybook use the viewport toolbar.
-    if (!import.meta.env.VITEST) return;
-    const { page } = await import('@vitest/browser/context');
-    await page.viewport(400, 700);
-    await waitFor(() => expect(canvas.queryByRole('link', { name: 'Vehicles' })).toBeNull());
-    await userEvent.click(canvas.getByRole('button', { name: 'Toggle Sidebar' }));
-    await expect(await screen.findByRole('link', { name: 'Vehicles' })).toBeInTheDocument();
-    await userEvent.keyboard('{Escape}');
+    const trigger = await canvas.findByRole('button', { name: 'Toggle Sidebar' });
+    const main = canvas.getByRole('main');
+    await waitFor(() => expect(main.scrollHeight).toBeGreaterThan(main.clientHeight));
+    main.scrollTop = 600;
+    await expect(trigger.getBoundingClientRect().top).toBeGreaterThanOrEqual(
+      canvas.getByRole('banner').getBoundingClientRect().bottom
+    );
+    await userEvent.click(trigger);
+    await userEvent.click(await screen.findByRole('link', { name: 'Vehicles' }));
+    await expect(navigate).toHaveBeenCalledWith('/vehicles');
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
-    await page.viewport(1000, 900);
   },
 };

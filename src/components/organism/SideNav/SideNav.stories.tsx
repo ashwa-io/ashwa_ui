@@ -96,6 +96,21 @@ export const CollapsedKeepsNames: Story = {
     await waitFor(() => expect(container.getBoundingClientRect().width).toBe(48));
     await expect(canvas.getByRole('link', { name: 'Routes' })).toBeInTheDocument();
     await expect(canvas.getByRole('link', { name: 'Vehicles' })).toBeInTheDocument();
+    // A long list must stay reachable while collapsed.
+    await expect(
+      getComputedStyle(canvasElement.querySelector('[data-slot="sidebar-content"]')!).overflowY
+    ).toBe('auto');
+  },
+};
+
+// With no collapse control there is no way back, so the shortcut must not hide the nav.
+export const ShortcutCannotHideFixedNav: Story = {
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.keyboard('{Control>}b{/Control}');
+    await new Promise(resolve => setTimeout(resolve, 300));
+    await expect(
+      canvas.getByRole('link', { name: 'Routes' }).getBoundingClientRect().left
+    ).toBeGreaterThanOrEqual(0);
   },
 };
 

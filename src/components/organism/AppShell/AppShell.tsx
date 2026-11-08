@@ -1,6 +1,7 @@
+import { createContext, useContext } from 'react';
 import type React from 'react';
 
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
 
 export interface AppShellProps {
@@ -12,35 +13,45 @@ export interface AppShellProps {
   'data-testid'?: string;
 }
 
+// A portal's shell nests inside the global one, and a page gets a single main landmark.
+const NestedShell = createContext(false);
+
 // The only vertical scroller, at the page's edge: tables stick and virtualise against it.
-// block: shadcn's inset is a flex column, which would squeeze tall children instead of scrolling.
 const CONTENT =
-  'focus-visible:outline-ring block min-h-0 flex-1 overflow-y-auto focus-visible:outline-1 focus-visible:-outline-offset-1';
+  'bg-background focus-visible:outline-ring relative min-h-0 flex-1 overflow-y-auto focus-visible:outline-1 focus-visible:-outline-offset-1';
 
 export const AppShell: React.FC<AppShellProps> = props => {
   const { topNav, sideNav, children, height = 'screen', 'data-testid': testId } = props;
+  const nested = useContext(NestedShell);
+  const Content = nested ? 'div' : 'main';
+  const content = (
+    <Content tabIndex={0} className={CONTENT}>
+      {children}
+    </Content>
+  );
 
   return (
-    <div
-      data-testid={testId}
-      className={cn('flex min-h-0 flex-col', height === 'screen' ? 'h-svh' : 'h-full')}
-    >
-      {topNav}
-      {sideNav ? (
-        <SidebarProvider className="relative min-h-0 flex-1">
-          {sideNav}
-          <SidebarInset tabIndex={0} className={CONTENT}>
-            <div className="border-b p-2 md:hidden">
-              <SidebarTrigger />
+    <NestedShell value={true}>
+      <div
+        data-testid={testId}
+        className={cn('flex min-h-0 flex-col', height === 'screen' ? 'h-svh' : 'h-full')}
+      >
+        {topNav}
+        {sideNav ? (
+          <SidebarProvider className="relative min-h-0 flex-1">
+            {sideNav}
+            <div className="flex min-w-0 flex-1 flex-col">
+              {/* Outside the scroller, so phones can always reach navigation. */}
+              <div className="border-b p-2 md:hidden">
+                <SidebarTrigger />
+              </div>
+              {content}
             </div>
-            {children}
-          </SidebarInset>
-        </SidebarProvider>
-      ) : (
-        <main tabIndex={0} className={CONTENT}>
-          {children}
-        </main>
-      )}
-    </div>
+          </SidebarProvider>
+        ) : (
+          content
+        )}
+      </div>
+    </NestedShell>
   );
 };

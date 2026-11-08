@@ -1,7 +1,11 @@
+export { Avatar } from './components/atomic/Avatar';
+export type { AvatarProps } from './components/atomic/Avatar';
 export { Badge } from './components/atomic/Badge';
 export type { BadgeProps } from './components/atomic/Badge';
 export { Button } from './components/atomic/Button';
 export type { ButtonProps, ButtonVariant } from './components/atomic/Button';
+export { Card } from './components/atomic/Card';
+export type { CardPadding, CardProps } from './components/atomic/Card';
 export { Checkbox } from './components/atomic/Checkbox';
 export type { CheckboxProps } from './components/atomic/Checkbox';
 export { ColorInput } from './components/atomic/ColorInput';
@@ -52,10 +56,16 @@ export type {
 } from './components/molecule/FilterMenu';
 export { FormField } from './components/molecule/FormField';
 export type { FormFieldControlProps, FormFieldProps } from './components/molecule/FormField';
+export { List, ListItem } from './components/molecule/List';
+export type { ListItemProps, ListProps } from './components/molecule/List';
+export { MetadataList, MetadataListItem } from './components/molecule/MetadataList';
+export type { MetadataListItemProps, MetadataListProps } from './components/molecule/MetadataList';
 export { Modal } from './components/molecule/Modal';
 export type { ModalProps, ModalSize } from './components/molecule/Modal';
 export { Popover } from './components/molecule/Popover';
 export type { PopoverProps, PopoverWidth } from './components/molecule/Popover';
+export { Tabs } from './components/molecule/Tabs';
+export type { TabItem, TabsProps } from './components/molecule/Tabs';
 export { toast, Toaster } from './components/molecule/Toaster';
 export type { ToastOptions } from './components/molecule/Toaster';
 export { HStack, Stack, VStack } from './components/layout/Stack';

@@ -66,7 +66,7 @@
      brandThemeCss(hex) in @ashwa-io/ui/theme, injected at runtime, and outrank these. */
   --brand: oklch(0.586 0.218 292.5);
   --brand-foreground: oklch(1 0 0);
-  --brand-text: oklch(0.586 0.218 292.5);
+  --brand-text: oklch(0.561 0.218 292.5);
   --brand-tint: oklch(0.965 0.018 292.5);
   --brand-tint-foreground: oklch(0.561 0.218 292.5);
   --brand-map: #8556ef;
@@ -82,7 +82,8 @@
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.21 0.006 285.885);
   --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
+  /* Slightly darker than nigam's so secondary text reaches 4.5:1 on muted and tinted rows. */
+  --muted-foreground: oklch(0.54 0.016 285.938);
   --accent: oklch(0.967 0.001 286.375);
   --accent-foreground: oklch(0.21 0.006 285.885);
   /* Tailwind red-700, darker than base-nova's red-600: destructive text on its 10% tint
@@ -115,7 +116,7 @@
 .dark {
   --brand: oklch(0.586 0.218 292.5);
   --brand-foreground: oklch(1 0 0);
-  --brand-text: oklch(0.626 0.218 292.5);
+  --brand-text: oklch(0.666 0.195 292.5);
   --brand-tint: oklch(0.3 0.04 292.5);
   --brand-tint-foreground: oklch(0.686 0.181 292.5);
   --brand-map: #8556ef;
@@ -132,12 +133,13 @@
   --muted-foreground: oklch(0.705 0.015 286.067);
   --accent: oklch(0.274 0.006 286.033);
   --accent-foreground: oklch(0.985 0 0);
-  /* Lighter than nigam's red-400: destructive text on its 20% tint must reach 4.5:1 on dialog
-     footers (red-400 only reached 4.2). */
-  --destructive: oklch(0.76 0.191 22.216);
+  /* Lighter than nigam's red-400: destructive text on its 20% tint must reach 4.5:1 on muted and
+     brand-tinted surfaces too. */
+  --destructive: oklch(0.798 0.115 22.216);
   --success: oklch(0.792 0.209 151.711);
   --warning: oklch(0.828 0.189 84.429);
-  --info: oklch(0.707 0.165 254.624);
+  /* In sRGB gamut on purpose: out-of-gamut colours get clipped on screen and lose contrast. */
+  --info: oklch(0.79 0.108 254.624);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --chart-2: oklch(0.696 0.17 162.48);

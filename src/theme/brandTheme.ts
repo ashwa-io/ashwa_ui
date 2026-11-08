@@ -58,6 +58,12 @@ const TINT: Record<BrandMode, { l: number; chromaScale: number; maxChroma: numbe
 const WHITE: Oklch = { mode: 'oklch', l: 1, c: 0 };
 const BLACK: Oklch = { mode: 'oklch', l: 0, c: 0 };
 
+// Brand text also sits on muted rows and hovers; fills don't need to hold there.
+const MUTED_SURFACE: Record<BrandMode, Oklch> = {
+  light: { mode: 'oklch', l: 0.967, c: 0.001, h: 286.375 },
+  dark: { mode: 'oklch', l: 0.274, c: 0.006, h: 286.033 },
+};
+
 const MIN_UI_CONTRAST = 3; // WCAG 1.4.11 non-text contrast
 const MIN_TEXT_CONTRAST = 4.55; // WCAG 1.4.3 is 4.5; the margin absorbs browsers rounding to 8-bit colour
 const LIGHTNESS_STEP = 0.005;
@@ -132,7 +138,8 @@ const modeTokens = (input: Oklch, mode: BrandMode): BrandTokens => {
     stepUntil(input, direction, c => minContrast(c, surfaces) >= MIN_UI_CONTRAST),
     surfaces
   );
-  const text = stepUntil(brand, direction, c => minContrast(c, surfaces) >= MIN_TEXT_CONTRAST);
+  const textSurfaces = [...surfaces, MUTED_SURFACE[mode]];
+  const text = stepUntil(brand, direction, c => minContrast(c, textSurfaces) >= MIN_TEXT_CONTRAST);
   const tint = settle({
     mode: 'oklch',
     l: tintSpec.l,

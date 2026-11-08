@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.5
+
+### Patch Changes
+
+- Add Tooltip, Popover, DropdownMenu, Modal, ConfirmDialog and Toaster + toast. Dark destructive colour is lighter so it reaches 4.5:1 on muted surfaces.
+
 ## 0.0.4
 
 ### Patch Changes

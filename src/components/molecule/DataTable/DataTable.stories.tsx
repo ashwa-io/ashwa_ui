@@ -371,7 +371,7 @@ export const IgnoresDisabledControlsAndLabels: Story = {
       clientY: box.top + box.height / 2,
     });
     await expect(onDisabledRow).not.toHaveBeenCalled();
-    await userEvent.click(canvas.getByText('Pick', { selector: 'label' }));
+    await userEvent.click(canvas.getByText('Pick', { selector: 'label span' }));
     await expect(onDisabledRow).not.toHaveBeenCalled();
   },
 };

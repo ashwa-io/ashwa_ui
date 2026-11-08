@@ -59,12 +59,15 @@ export const FormField: React.FC<FormFieldProps> = props => {
 
   const labelNode = (
     <FieldLabel id={labelId} htmlFor={id} className={cn(hideLabel && 'sr-only')}>
-      {label}
-      {required && (
-        <span aria-hidden className="text-destructive">
-          *
-        </span>
-      )}
+      {/* One flex item: the label's flex gap would otherwise split the text from the star. */}
+      <span>
+        {label}
+        {required && (
+          <span aria-hidden className="text-destructive">
+            *
+          </span>
+        )}
+      </span>
     </FieldLabel>
   );
   const helpNodes = (

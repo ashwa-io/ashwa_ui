@@ -102,7 +102,7 @@ export const FacetList: React.FC<FacetListProps> = props => {
         </div>
       )}
       <ComboboxEmpty className="flex empty:hidden">No results</ComboboxEmpty>
-      <ComboboxList className="max-h-60">
+      <ComboboxList className="max-h-60" aria-multiselectable={multiple}>
         {(item: string) => {
           const option = byValue.get(item);
           if (!option) return null;

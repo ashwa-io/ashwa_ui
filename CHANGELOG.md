@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.15
+
+### Patch Changes
+
+- b312464: Popover takes custom trigger content and a flush popup. AppShell can start a collapsible SideNav as a rail.
+
 ## 0.0.14
 
 ### Patch Changes

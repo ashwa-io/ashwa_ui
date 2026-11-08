@@ -78,6 +78,30 @@ export const Controlled: Story = {
   },
 };
 
+// An avatar or a switcher row: the button is still Popover's, named by label.
+export const CustomTrigger: Story = {
+  args: {
+    label: 'Account menu',
+    triggerContent: <span data-testid="avatar" className="bg-muted block size-8 rounded-md" />,
+  },
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole('button', { name: 'Account menu' });
+    await expect(trigger).toContainElement(canvas.getByTestId('avatar'));
+    await userEvent.click(trigger);
+    await screen.findByRole('dialog', { name: 'Account menu' });
+  },
+};
+
+// A scrolling list inside needs the popup's edge, so its scrollbar sits on the border.
+export const Flush: Story = {
+  args: { flush: true },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Columns' }));
+    const popup = await screen.findByRole('dialog', { name: 'Columns' });
+    await expect(getComputedStyle(popup).paddingTop).toBe('0px');
+  },
+};
+
 export const Dark: Story = {
   globals: { theme: 'dark' },
   play: async ({ canvas, userEvent }) => {

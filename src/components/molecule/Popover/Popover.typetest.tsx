@@ -22,5 +22,8 @@ export const PopoverTypeTest: React.FC = () => (
     <Popover label="a" variant="ghost" side="top" align="end" width="lg">
       b
     </Popover>
+    <Popover label="a" triggerContent={<span />} flush>
+      b
+    </Popover>
   </div>
 );

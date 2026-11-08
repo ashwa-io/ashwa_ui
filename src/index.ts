@@ -127,5 +127,12 @@ export { RadioGroup } from './components/atomic/RadioGroup';
 export type { RadioGroupProps, RadioOption } from './components/atomic/RadioGroup';
 export { Slider } from './components/atomic/Slider';
 export type { SliderProps } from './components/atomic/Slider';
+export { SegmentedControl } from './components/molecule/SegmentedControl';
+export type {
+  SegmentedControlProps,
+  SegmentedOption,
+} from './components/molecule/SegmentedControl';
+export { Toggle } from './components/atomic/Toggle';
+export type { ToggleProps } from './components/atomic/Toggle';
 export { UIProvider } from './providers/UIProvider';
 export type { UIProviderProps } from './providers/UIProvider';

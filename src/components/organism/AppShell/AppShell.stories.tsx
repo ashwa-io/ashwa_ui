@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ColumnDef } from '@tanstack/react-table';
-import { page } from '@vitest/browser/context';
 import { TruckIcon } from 'lucide-react';
 import { expect, screen, waitFor } from 'storybook/test';
 
@@ -121,6 +120,9 @@ export const Dark: Story = {
 export const PhoneDrawer: Story = {
   decorators: [Story => <div className="h-[500px] w-full">{Story()}</div>],
   play: async ({ canvas, userEvent }) => {
+    // Resizing needs the test browser; on the published Storybook use the viewport toolbar.
+    if (!import.meta.env.VITEST) return;
+    const { page } = await import('@vitest/browser/context');
     await page.viewport(400, 700);
     await waitFor(() => expect(canvas.queryByRole('link', { name: 'Vehicles' })).toBeNull());
     await userEvent.click(canvas.getByRole('button', { name: 'Toggle Sidebar' }));

@@ -1,0 +1,6 @@
+dist
+storybook-static
+coverage
+.yarn
+CHANGELOG.md
+src/styles/shadcn.css

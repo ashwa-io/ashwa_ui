@@ -34,6 +34,22 @@ export { ConfirmDialog } from './components/molecule/ConfirmDialog';
 export type { ConfirmDialogProps } from './components/molecule/ConfirmDialog';
 export { DropdownMenu } from './components/molecule/DropdownMenu';
 export type { DropdownMenuProps, MenuItem } from './components/molecule/DropdownMenu';
+export { FacetFilter } from './components/molecule/FacetFilter';
+export type { FacetFilterProps, FacetOption } from './components/molecule/FacetFilter';
+export { FacetFilterSelect } from './components/molecule/FacetFilterSelect';
+export type { FacetFilterSelectProps } from './components/molecule/FacetFilterSelect';
+export { FacetFilterNumber } from './components/molecule/FacetFilterNumber';
+export type {
+  FacetFilterNumberProps,
+  NumberCondition,
+  NumberFilterValue,
+} from './components/molecule/FacetFilterNumber';
+export { FilterMenu } from './components/molecule/FilterMenu';
+export type {
+  FilterCategory,
+  FilterMenuProps,
+  FilterMenuValue,
+} from './components/molecule/FilterMenu';
 export { FormField } from './components/molecule/FormField';
 export type { FormFieldControlProps, FormFieldProps } from './components/molecule/FormField';
 export { Modal } from './components/molecule/Modal';

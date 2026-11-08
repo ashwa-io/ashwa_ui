@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.6
+
+### Patch Changes
+
+- Add FacetFilter, FacetFilterSelect, FacetFilterNumber and FilterMenu.
+
 ## 0.0.5
 
 ### Patch Changes

@@ -10,6 +10,8 @@ export interface AppShellProps {
   children: React.ReactNode;
   /** screen fills the window; fill fills its parent, for a nested portal layout. */
   height?: 'screen' | 'fill';
+  /** Starts a collapsible SideNav as an icon rail. */
+  defaultSideNavCollapsed?: boolean;
   'data-testid'?: string;
 }
 
@@ -21,7 +23,14 @@ const CONTENT =
   'bg-background focus-visible:outline-ring relative min-h-0 flex-1 overflow-y-auto focus-visible:outline-1 focus-visible:-outline-offset-1';
 
 export const AppShell: React.FC<AppShellProps> = props => {
-  const { topNav, sideNav, children, height = 'screen', 'data-testid': testId } = props;
+  const {
+    topNav,
+    sideNav,
+    children,
+    height = 'screen',
+    defaultSideNavCollapsed = false,
+    'data-testid': testId,
+  } = props;
   const nested = useContext(NestedShell);
   const Content = nested ? 'div' : 'main';
   const content = (
@@ -38,7 +47,10 @@ export const AppShell: React.FC<AppShellProps> = props => {
       >
         {topNav}
         {sideNav ? (
-          <SidebarProvider className="relative min-h-0 flex-1">
+          <SidebarProvider
+            defaultOpen={!defaultSideNavCollapsed}
+            className="relative min-h-0 flex-1"
+          >
             {sideNav}
             <div className="flex min-w-0 flex-1 flex-col">
               {/* Outside the scroller, so phones can always reach navigation. */}

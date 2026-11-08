@@ -141,6 +141,23 @@ export const ScreenHeight: Story = {
   },
 };
 
+export const SideNavStartsCollapsed: Story = {
+  args: {
+    sideNav: (
+      <SideNav
+        collapsible
+        currentPath="/vehicles"
+        groups={[{ items: [{ label: 'Vehicles', href: '/vehicles', icon: TruckIcon }] }]}
+      />
+    ),
+    defaultSideNavCollapsed: true,
+  },
+  play: async ({ canvasElement }) => {
+    const container = canvasElement.querySelector('[data-slot="sidebar-container"]')!;
+    await waitFor(() => expect(container.getBoundingClientRect().width).toBe(48));
+  },
+};
+
 // Phones get the sidebar as a drawer from a trigger that scrolling can't take away.
 export const PhoneDrawer: Story = {
   globals: { viewport: { value: 'mobile2' } },

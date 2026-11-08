@@ -3,10 +3,10 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
+import { ALIAS_IMPORT, DEV_ONLY } from './dist-rules.mjs';
+
 const DIST = 'dist';
 const ENTRIES = ['index.js', 'index.d.ts', 'theme.js', 'theme.d.ts'];
-const ALIAS_IMPORT = /(?:from\s+|import\s*\(\s*)['"]@\//;
-const DEV_ONLY = /\.(test|stories|typetest)\./;
 
 const walk = dir =>
   readdirSync(dir).flatMap(name => {

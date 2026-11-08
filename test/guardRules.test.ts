@@ -26,6 +26,65 @@ const BASE_UI_SNIPPET = `import { Button } from '@base-ui/react/button';
 export { Button };
 `;
 
+// Ways a future component could quietly re-open className/style (spec §9.1, §9.2).
+const LEAK_SNIPPETS: [string, string][] = [
+  [
+    "a quoted 'className' key",
+    `export interface FooProps {
+  'className'?: string;
+}
+`,
+  ],
+  [
+    'extends React.ComponentProps',
+    `import type React from 'react';
+
+export interface FooProps extends React.ComponentProps<'button'> {
+  tone?: string;
+}
+`,
+  ],
+  [
+    'extends imported ComponentProps',
+    `import type { ComponentProps } from 'react';
+
+export interface FooProps extends ComponentProps<'button'> {
+  tone?: string;
+}
+`,
+  ],
+  [
+    'extends Omit<…HTMLAttributes>',
+    `import type React from 'react';
+
+export interface FooProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
+  tone?: string;
+}
+`,
+  ],
+  [
+    'an intersection with HTMLAttributes',
+    `import type React from 'react';
+
+export type FooProps = { tone?: string } & React.HTMLAttributes<HTMLDivElement>;
+`,
+  ],
+  [
+    'createElement with forwarded props',
+    `import React from 'react';
+
+export const Foo: React.FC<{ id: string }> = props => React.createElement('div', props);
+`,
+  ],
+];
+
+const PRIVATE_ALIAS_SNIPPET = `import type React from 'react';
+
+import { Button as Primitive } from '@/components/ui/button';
+
+export type PrimitiveProps = React.ComponentProps<typeof Primitive>;
+`;
+
 describe('public API guard rules', () => {
   // First lint loads every plugin (several seconds); keep it out of each test's timeout.
   beforeAll(async () => {
@@ -38,6 +97,14 @@ describe('public API guard rules', () => {
       expect(await ruleIds(propSnippet(prop), PUBLIC_FILE)).toContain('no-restricted-syntax');
     }
   );
+
+  it.each(LEAK_SNIPPETS)('rejects %s in public components', async (_label, code) => {
+    expect(await ruleIds(code, PUBLIC_FILE)).toContain('no-restricted-syntax');
+  });
+
+  it('allows a private ComponentProps alias for the wrapped primitive', async () => {
+    expect(await ruleIds(PRIVATE_ALIAS_SNIPPET, PUBLIC_FILE)).not.toContain('no-restricted-syntax');
+  });
 
   it('rejects JSX spread in public components', async () => {
     expect(await ruleIds(SPREAD_SNIPPET, PUBLIC_FILE)).toContain('no-restricted-syntax');

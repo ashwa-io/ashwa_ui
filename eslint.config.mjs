@@ -130,12 +130,31 @@ export default defineConfig([
       'no-restricted-syntax': [
         'error',
         {
-          selector: 'TSPropertySignature[key.name=/^(className|style|asChild|render)$/]',
+          selector:
+            'TSPropertySignature[key.name=/^(className|style|asChild|render)$/], TSPropertySignature[key.value=/^(className|style|asChild|render)$/]',
           message: 'Public components never accept className, style, asChild or render (spec §9).',
+        },
+        {
+          // Inheriting DOM props re-opens className/style; list allowed props instead.
+          selector: [
+            'TSInterfaceHeritage[expression.name=/^(ComponentProps\\w*|\\w*HTMLAttributes)$/]',
+            'TSInterfaceHeritage[expression.property.name=/^(ComponentProps\\w*|\\w*HTMLAttributes)$/]',
+            'TSInterfaceHeritage TSTypeReference[typeName.name=/^(ComponentProps\\w*|\\w*HTMLAttributes)$/]',
+            'TSInterfaceHeritage TSTypeReference[typeName.right.name=/^(ComponentProps\\w*|\\w*HTMLAttributes)$/]',
+            'TSIntersectionType TSTypeReference[typeName.name=/^(ComponentProps\\w*|\\w*HTMLAttributes)$/]',
+            'TSIntersectionType TSTypeReference[typeName.right.name=/^(ComponentProps\\w*|\\w*HTMLAttributes)$/]',
+          ].join(', '),
+          message:
+            'Public props are an allow-list: never extend or intersect ComponentProps / HTMLAttributes (spec §9.1).',
         },
         {
           selector: 'JSXSpreadAttribute',
           message: 'Pass props by name in public components (spec §9).',
+        },
+        {
+          selector:
+            'CallExpression[callee.property.name=/^(createElement|cloneElement)$/], CallExpression[callee.name=/^(createElement|cloneElement)$/]',
+          message: 'Render JSX with named props in public components (spec §9).',
         },
       ],
       'no-restricted-imports': [

@@ -78,6 +78,8 @@ export const Button: React.FC<ButtonProps> = props => {
       size={SIZE[size]}
       className={cn(VARIANT_CLASS[variant], fullWidth && 'w-full')}
       disabled={disabled || loading}
+      // While loading, stay focusable (aria-disabled) so keyboard users keep their place.
+      focusableWhenDisabled={loading}
       aria-busy={loading || undefined}
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}

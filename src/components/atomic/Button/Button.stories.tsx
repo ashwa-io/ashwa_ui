@@ -75,7 +75,10 @@ export const Loading: Story = {
   play: async ({ args, canvas }) => {
     const button = canvas.getByRole('button', { name: 'Save' });
     await expect(button).toHaveAttribute('aria-busy', 'true');
-    await expect(button).toBeDisabled();
+    await expect(button).toHaveAttribute('aria-disabled', 'true');
+    // A submit that starts loading must keep keyboard focus (native `disabled` drops it).
+    button.focus();
+    await expect(button).toHaveFocus();
     await fireEvent.click(button);
     await expect(args.onClick).not.toHaveBeenCalled();
   },

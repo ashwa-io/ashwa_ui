@@ -24,15 +24,35 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-      - run: corepack enable
-      - run: yarn install --immutable
-      - name: Publish if this version is new
+      - name: Is this version new?
+        id: version
         run: |
           VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           if npm view "@ashwa-io/ui@$VERSION" version > /dev/null 2>&1; then
             echo "@ashwa-io/ui@$VERSION is already on npm, nothing to publish."
-            exit 0
+            echo "new=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "new=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # Same gates as CI: a merged version bump goes live with no human step.
+      - if: steps.version.outputs.new == 'true'
+        run: corepack enable && yarn install --immutable
+      - if: steps.version.outputs.new == 'true'
+        run: yarn playwright install --with-deps chromium
+      - if: steps.version.outputs.new == 'true'
+        run: yarn lint
+      - if: steps.version.outputs.new == 'true'
+        run: yarn typecheck
+      - if: steps.version.outputs.new == 'true'
+        run: yarn test
+
+      - name: Publish and tag
+        if: steps.version.outputs.new == 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
           echo "npm $(npm -v)"
           npm publish --access public
           git tag "v$VERSION"

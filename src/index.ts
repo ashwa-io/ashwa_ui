@@ -89,6 +89,8 @@ export type {
   Size,
   Tone,
 } from './lib/types';
+export { AppShell } from './components/organism/AppShell';
+export type { AppShellProps } from './components/organism/AppShell';
 export { SideNav } from './components/organism/SideNav';
 export type { SideNavGroup, SideNavItem, SideNavProps } from './components/organism/SideNav';
 export { TopNav } from './components/organism/TopNav';

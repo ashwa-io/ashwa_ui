@@ -1,6 +1,5 @@
 import type React from 'react';
 
-import { PRESSED_CLASS } from '@/components/atomic/Toggle/toggleLook';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import type { IconComponent } from '@/lib/types';
 
@@ -24,6 +23,9 @@ export interface SegmentedControlProps {
 }
 
 const SIZE = { sm: 'sm', md: 'default' } as const;
+// Filled, unlike other selected states: nigam's pill reads this way.
+const PRESSED =
+  'aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:hover:bg-primary aria-pressed:hover:text-primary-foreground';
 const VARIANT = { ghost: 'default', outline: 'outline' } as const;
 
 export const SegmentedControl: React.FC<SegmentedControlProps> = props => {
@@ -61,7 +63,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = props => {
             key={option.value}
             value={option.value}
             disabled={option.disabled}
-            className={PRESSED_CLASS}
+            className={PRESSED}
           >
             {Icon && <Icon aria-hidden />}
             {option.label}

@@ -109,3 +109,16 @@ export const Ghost: Story = {
 export const Dark: Story = {
   globals: { theme: 'dark' },
 };
+
+// The active option is filled with the brand, like nigam's Halts | Properties pill.
+export const ActiveIsFilled: Story = {
+  play: async ({ canvas }) => {
+    const probe = document.createElement('div');
+    probe.className = 'bg-primary';
+    document.body.append(probe);
+    const primary = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+    const active = canvas.getByRole('button', { name: 'Inherit' });
+    await expect(getComputedStyle(active).backgroundColor).toBe(primary);
+  },
+};

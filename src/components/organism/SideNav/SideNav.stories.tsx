@@ -51,16 +51,16 @@ export const Default: Story = {
   },
 };
 
-const tint = () => {
+const neutralAccent = () => {
   const probe = document.createElement('div');
-  probe.className = 'bg-brand-tint';
+  probe.className = 'bg-sidebar-accent';
   document.body.append(probe);
   const color = getComputedStyle(probe).backgroundColor;
   probe.remove();
   return color;
 };
 
-// Exactly one item is active, in the brand tint.
+// Exactly one item is active, in the neutral accent: the brand stays out of the nav.
 export const Active: Story = {
   play: async ({ canvas }) => {
     const routes = canvas.getByRole('link', { name: 'Routes' });
@@ -68,7 +68,7 @@ export const Active: Story = {
     await expect(
       canvas.getAllByRole('link').filter(l => l.hasAttribute('aria-current'))
     ).toHaveLength(1);
-    await waitFor(() => expect(getComputedStyle(routes).backgroundColor).toBe(tint()));
+    await waitFor(() => expect(getComputedStyle(routes).backgroundColor).toBe(neutralAccent()));
   },
 };
 
@@ -91,9 +91,10 @@ export const HeaderAndFooter: Story = {
 export const CollapsedKeepsNames: Story = {
   args: { collapsible: true },
   play: async ({ canvas, canvasElement, userEvent }) => {
-    await userEvent.click(canvasElement.querySelector('[data-slot="sidebar-trigger"]')!);
+    await userEvent.click(canvas.getByRole('button', { name: 'Collapse' }));
     const container = canvasElement.querySelector('[data-slot="sidebar-container"]')!;
     await waitFor(() => expect(container.getBoundingClientRect().width).toBe(48));
+    await expect(canvas.getByRole('button', { name: 'Expand' })).toBeInTheDocument();
     await expect(canvas.getByRole('link', { name: 'Routes' })).toBeInTheDocument();
     await expect(canvas.getByRole('link', { name: 'Vehicles' })).toBeInTheDocument();
     // A long list must stay reachable while collapsed.

@@ -67,6 +67,14 @@ export const Shapes: Story = {
   },
 };
 
+export const PixelSize: Story = {
+  args: { size: 40, 'data-testid': 'avatar' },
+  play: async ({ canvas }) => {
+    const { width, height } = canvas.getByTestId('avatar').getBoundingClientRect();
+    await expect([width, height]).toEqual([40, 40]);
+  },
+};
+
 export const Dark: Story = {
   globals: { theme: 'dark' },
 };

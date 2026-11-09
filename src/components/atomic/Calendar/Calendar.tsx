@@ -40,7 +40,6 @@ export const Calendar: React.FC<CalendarProps> = props => {
       labels={{ labelDayButton }}
       components={STABLE_PARTS}
       data-testid={testId}
-      className="**:data-[selected-single=true]:bg-brand-tint **:data-[selected-single=true]:text-brand-tint-foreground"
     />
   );
 };

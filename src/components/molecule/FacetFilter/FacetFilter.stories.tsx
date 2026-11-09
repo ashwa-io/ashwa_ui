@@ -232,13 +232,24 @@ export const TickKeepsColourOnHover: Story = {
   },
 };
 
-// Stays open so axe checks the popup and the selected row.
+// Multi-select rows lead with a checkbox, so the primitive's trailing tick must not show too.
+export const OneTickPerRow: Story = {
+  args: { value: ['truck'] },
+  play: async ({ canvas, userEvent }) => {
+    await open(canvas, userEvent);
+    const row = screen.getByRole('option', { name: /Truck/ });
+    await expect(getComputedStyle(row.querySelector('.absolute')!).display).toBe('none');
+    await close(userEvent);
+  },
+};
+
 export const GhostTrigger: Story = {
   play: async ({ canvas }) => {
     await expect(getComputedStyle(trigger(canvas)).borderTopColor).toBe('rgba(0, 0, 0, 0)');
   },
 };
 
+// Stays open so axe checks the popup and the selected row.
 export const Dark: Story = {
   args: { value: ['car'] },
   globals: { theme: 'dark' },

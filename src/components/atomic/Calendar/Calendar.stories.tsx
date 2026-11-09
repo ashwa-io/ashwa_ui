@@ -21,9 +21,9 @@ const Controlled: React.FC<CalendarProps> = props => {
   );
 };
 
-const tint = () => {
+const primary = () => {
   const probe = document.createElement('div');
-  probe.className = 'bg-brand-tint';
+  probe.className = 'bg-primary';
   document.body.append(probe);
   const color = getComputedStyle(probe).backgroundColor;
   probe.remove();
@@ -65,10 +65,10 @@ export const ReselectingKeepsValue: Story = {
   },
 };
 
-export const SelectedIsTinted: Story = {
+export const SelectedIsPrimary: Story = {
   play: async ({ canvasElement }) => {
     const selected = canvasElement.querySelector('[data-selected-single="true"]')!;
-    await waitFor(() => expect(getComputedStyle(selected).backgroundColor).toBe(tint()));
+    await waitFor(() => expect(getComputedStyle(selected).backgroundColor).toBe(primary()));
   },
 };
 

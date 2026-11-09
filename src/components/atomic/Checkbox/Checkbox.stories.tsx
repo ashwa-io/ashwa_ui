@@ -28,6 +28,14 @@ const meta = {
 
 export default meta;
 
+// The tick takes the box's colour, so a fading box would start the tick black.
+export const TickDoesNotFade: StoryObj<typeof meta> = {
+  args: { value: true },
+  play: async ({ canvas }) => {
+    await expect(getComputedStyle(canvas.getByRole('checkbox')).transitionProperty).toBe('none');
+  },
+};
+
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {

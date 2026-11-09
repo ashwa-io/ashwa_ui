@@ -119,9 +119,9 @@ export const FacetList: React.FC<FacetListProps> = props => {
               value={item}
               disabled={option.disabled}
               className={cn(
-                selected && 'bg-brand-tint text-brand-tint-foreground',
+                selected && 'bg-secondary text-secondary-foreground',
                 // The primitive's trailing check is replaced by a leading checkbox in multi mode.
-                multiple && 'pr-1.5 [&>.absolute]:hidden'
+                multiple && 'hide-item-indicator pr-1.5'
               )}
             >
               {multiple && <CheckBox checked={selected} />}

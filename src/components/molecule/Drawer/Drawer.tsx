@@ -60,7 +60,7 @@ export const Drawer: React.FC<DrawerProps> = props => {
       <SheetContent
         side={side}
         data-testid={testId}
-        className={cn('gap-0 [--surface:var(--popover)]', SIZE[size])}
+        className={cn('surface-popover gap-0', SIZE[size])}
       >
         <SheetHeader>
           <SheetTitle>{title}</SheetTitle>

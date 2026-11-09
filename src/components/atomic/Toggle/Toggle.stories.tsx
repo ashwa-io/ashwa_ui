@@ -22,9 +22,9 @@ const Controlled: React.FC<ToggleProps> = props => {
   );
 };
 
-const tint = () => {
+const secondary = () => {
   const probe = document.createElement('div');
-  probe.className = 'bg-brand-tint';
+  probe.className = 'bg-secondary';
   document.body.append(probe);
   const color = getComputedStyle(probe).backgroundColor;
   probe.remove();
@@ -56,17 +56,17 @@ export const Pressed: Story = {
   play: async ({ canvas }) => {
     const button = canvas.getByRole('button', { name: 'Bold' });
     await expect(button).toHaveAttribute('aria-pressed', 'true');
-    await waitFor(() => expect(getComputedStyle(button).backgroundColor).toBe(tint()));
+    await waitFor(() => expect(getComputedStyle(button).backgroundColor).toBe(secondary()));
   },
 };
 
 // Hovering must not drop the selected look.
-export const PressedKeepsTintOnHover: Story = {
+export const PressedKeepsColourOnHover: Story = {
   args: { pressed: true },
   play: async ({ canvas, userEvent }) => {
     const button = canvas.getByRole('button', { name: 'Bold' });
     await userEvent.hover(button);
-    await waitFor(() => expect(getComputedStyle(button).backgroundColor).toBe(tint()));
+    await waitFor(() => expect(getComputedStyle(button).backgroundColor).toBe(secondary()));
   },
 };
 

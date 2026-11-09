@@ -1,6 +1,8 @@
 import { Fragment } from 'react';
 import type React from 'react';
 
+import { ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react';
+
 import {
   Sidebar,
   SidebarContent,
@@ -13,7 +15,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarSeparator,
-  SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
 import type { IconComponent } from '@/lib/types';
@@ -61,7 +62,6 @@ const NavLink: React.FC<{
       <SidebarMenuButton
         isActive={active}
         tooltip={showTooltip ? item.label : undefined}
-        className="data-active:bg-brand-tint data-active:text-brand-tint-foreground"
         render={
           <a
             href={link.href}
@@ -81,6 +81,24 @@ const NavLink: React.FC<{
         <span>{item.label}</span>
       </SidebarMenuButton>
     </SidebarMenuItem>
+  );
+};
+
+const CollapseToggle: React.FC = () => {
+  const { state, toggleSidebar } = useSidebar();
+  const expanded = state === 'expanded';
+  const Icon = expanded ? ChevronsLeftIcon : ChevronsRightIcon;
+  const label = expanded ? 'Collapse' : 'Expand';
+
+  return (
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <SidebarMenuButton tooltip={label} onClick={toggleSidebar}>
+          <Icon aria-hidden />
+          <span>{label}</span>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    </SidebarMenu>
   );
 };
 
@@ -136,7 +154,7 @@ export const SideNav: React.FC<SideNavProps> = props => {
       {(footer || collapsible) && (
         <SidebarFooter>
           {footer}
-          {collapsible && <SidebarTrigger />}
+          {collapsible && <CollapseToggle />}
         </SidebarFooter>
       )}
       {collapsible && <SidebarRail />}

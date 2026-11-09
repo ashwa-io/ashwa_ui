@@ -49,7 +49,7 @@ export const Tabs: React.FC<TabsProps> = props => {
         className={cn(
           // relative: Base UI scrolls the focused tab using offsets from this element.
           // No visible scrollbar: a classic one would eat the fixed-height row.
-          'supports-[animation-timeline:scroll()]:scroll-fade-x relative max-w-full [scrollbar-width:none] justify-start overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:hidden',
+          'supports-[animation-timeline:scroll()]:scroll-fade-x no-scrollbar relative max-w-full justify-start overflow-x-auto overflow-y-hidden',
           size === 'sm' && 'group-data-horizontal/tabs:h-7',
           isLine && 'p-0'
         )}

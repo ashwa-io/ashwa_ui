@@ -56,6 +56,8 @@ export const Checkbox: React.FC<CheckboxProps> = props => {
           onBlur={onBlur}
           name={name}
           readOnly={readOnly}
+          // The tick takes the box's colour, so a fading box would start the tick black.
+          className="transition-none"
         />
       )}
     </FormField>

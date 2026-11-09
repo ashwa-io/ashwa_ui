@@ -77,7 +77,7 @@ export const Modal: React.FC<ModalProps> = props => {
         data-testid={testId}
         className={cn(
           // overflow-clip: a flush body reaches the rounded corners.
-          'flex max-h-[85dvh] flex-col overflow-clip [--surface:var(--popover)]',
+          'surface-popover flex max-h-[85dvh] flex-col overflow-clip',
           SIZE[size],
           fixedHeight && 'h-[min(40rem,85dvh)]'
         )}

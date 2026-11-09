@@ -92,6 +92,25 @@ export const ClickableFocusIndicator: Story = {
   },
 };
 
+// A real border and a soft shadow, plain or clickable, not the primitive's thin ring.
+export const BorderAndShadow: Story = {
+  render: () => (
+    <div className="flex flex-col gap-3">
+      <Card data-testid="plain">Plain</Card>
+      <Card data-testid="clickable" onClick={fn()} aria-label="Clickable">
+        Clickable
+      </Card>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    for (const id of ['plain', 'clickable']) {
+      const style = getComputedStyle(canvas.getByTestId(id));
+      await expect(style.borderTopWidth).toBe('1px');
+      await expect(style.boxShadow).toContain('rgba(0, 0, 0, 0.1)');
+    }
+  },
+};
+
 // Adding onClick must not change how the card lays out its content.
 export const ClickableMatchesPlain: Story = {
   args: { onClick: fn(), 'aria-label': 'Card content, open' },

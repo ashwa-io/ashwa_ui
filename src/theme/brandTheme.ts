@@ -18,8 +18,10 @@ registerMode(modeLrgb);
 registerMode(modeOklab);
 registerMode(modeOklch);
 
-// nigam's violet (#8b5cf6) after the generator's darkening for a 4.5:1 white label.
-export const DEFAULT_BRAND_HEX = '#8556ef';
+// nigam's violet-500 (#8e51ff) after the generator's darkening for a 4.5:1 white label.
+export const DEFAULT_BRAND_HEX = '#8b4efb';
+// nigam's violet-600. An org gives one colour; only the default goes a shade deeper in dark mode.
+const DEFAULT_BRAND_HEX_DARK = '#7f22fe';
 
 export type BrandWarning = 'adjusted' | 'near-destructive' | 'invalid';
 
@@ -162,12 +164,12 @@ const modeTokens = (input: Oklch, mode: BrandMode): BrandTokens => {
   };
 };
 
-const buildTheme = (input: Oklch): BrandTheme => {
+const buildTheme = (input: Oklch, darkInput = input): BrandTheme => {
   const light = modeTokens(input, 'light');
   const warnings: BrandWarning[] = [];
   if (light['--brand'] !== formatOklch(settle(input))) warnings.push('adjusted');
   if (isNearDestructive(input)) warnings.push('near-destructive');
-  return { light, dark: modeTokens(input, 'dark'), warnings };
+  return { light, dark: modeTokens(darkInput, 'dark'), warnings };
 };
 
 const parseBrand = (hex: string): Oklch | undefined => {
@@ -178,11 +180,13 @@ const parseBrand = (hex: string): Oklch | undefined => {
 
 /** Brand tokens for light and dark from one org hex. Never throws; bad input → default. */
 export const brandTheme = (hex: string | null | undefined): BrandTheme => {
-  const input = parseBrand(hex ?? DEFAULT_BRAND_HEX);
-  if (input) return buildTheme(input);
-  // BLACK is unreachable: DEFAULT_BRAND_HEX always parses.
-  const fallback = buildTheme(parseBrand(DEFAULT_BRAND_HEX) ?? BLACK);
-  return { ...fallback, warnings: ['invalid'] };
+  const source = hex ?? DEFAULT_BRAND_HEX;
+  // BLACK is unreachable: the default hexes always parse.
+  const defaultTheme = () =>
+    buildTheme(parseBrand(DEFAULT_BRAND_HEX) ?? BLACK, parseBrand(DEFAULT_BRAND_HEX_DARK) ?? BLACK);
+  if (source.toLowerCase() === DEFAULT_BRAND_HEX) return defaultTheme();
+  const input = parseBrand(source);
+  return input ? buildTheme(input) : { ...defaultTheme(), warnings: ['invalid'] };
 };
 
 const declarations = (tokens: BrandTokens): string =>

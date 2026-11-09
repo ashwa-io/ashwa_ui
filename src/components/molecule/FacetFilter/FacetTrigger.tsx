@@ -18,7 +18,7 @@ export interface FacetTriggerProps {
   'data-testid'?: string;
 }
 
-/** Internal: the dashed filter button; must be rendered inside a popover root. */
+/** Internal: the ghost filter button; must be rendered inside a popover root. */
 export const FacetTrigger: React.FC<FacetTriggerProps> = props => {
   const { title, summary, active, size = 'sm', disabled = false, 'data-testid': testId } = props;
 
@@ -28,9 +28,9 @@ export const FacetTrigger: React.FC<FacetTriggerProps> = props => {
       data-testid={testId}
       render={
         <ButtonPrimitive
-          variant="outline"
+          variant="ghost"
           size={size === 'sm' ? 'sm' : 'default'}
-          className={cn('font-normal', !active && 'border-dashed')}
+          className="font-normal"
         />
       }
     >

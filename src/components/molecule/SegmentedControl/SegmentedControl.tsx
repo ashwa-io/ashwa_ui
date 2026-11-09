@@ -18,11 +18,13 @@ export interface SegmentedControlProps {
   onChange: (value: string) => void;
   options: SegmentedOption[];
   size?: 'sm' | 'md';
+  variant?: 'outline' | 'ghost';
   disabled?: boolean;
   'data-testid'?: string;
 }
 
 const SIZE = { sm: 'sm', md: 'default' } as const;
+const VARIANT = { ghost: 'default', outline: 'outline' } as const;
 
 export const SegmentedControl: React.FC<SegmentedControlProps> = props => {
   const {
@@ -31,6 +33,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = props => {
     onChange,
     options,
     size = 'md',
+    variant = 'outline',
     disabled = false,
     'data-testid': testId,
   } = props;
@@ -44,7 +47,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = props => {
         const [picked] = next as string[];
         if (picked !== undefined) onChange(picked);
       }}
-      variant="outline"
+      variant={VARIANT[variant]}
       size={SIZE[size]}
       spacing={0}
       disabled={disabled}

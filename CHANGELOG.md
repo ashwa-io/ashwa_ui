@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.18
+
+### Patch Changes
+
+- dbd3db4: Tabs takes a line variant, SegmentedControl takes a variant, facet filter triggers are ghost, and the default brand matches nigam's violet in both modes.
+
 ## 0.0.17
 
 ### Patch Changes

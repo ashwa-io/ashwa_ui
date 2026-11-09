@@ -233,6 +233,12 @@ export const TickKeepsColourOnHover: Story = {
 };
 
 // Stays open so axe checks the popup and the selected row.
+export const GhostTrigger: Story = {
+  play: async ({ canvas }) => {
+    await expect(getComputedStyle(trigger(canvas)).borderTopColor).toBe('rgba(0, 0, 0, 0)');
+  },
+};
+
 export const Dark: Story = {
   args: { value: ['car'] },
   globals: { theme: 'dark' },

@@ -98,6 +98,11 @@ describe('brandTheme', () => {
     expect(brandTheme(null).light['--brand-foreground']).toBe('oklch(1 0 0)');
   });
 
+  it('only the default goes a shade deeper in dark mode, like nigam', () => {
+    expect(brandTheme(null).dark['--brand']).toBe('oklch(0.54 0.281 292.9)');
+    expect(brandTheme('#8e51ff').dark['--brand']).toBe(brandTheme('#8e51ff').light['--brand']);
+  });
+
   it('null falls back to default without warning', () => {
     expect(brandTheme(null)).toEqual(brandTheme(DEFAULT_BRAND_HEX));
   });

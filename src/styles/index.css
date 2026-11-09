@@ -65,12 +65,12 @@
 :root {
   /* Brand group: defaults = brandTheme(DEFAULT_BRAND_HEX). Per-org values come from
      brandThemeCss(hex) in @ashwa-io/ui/theme, injected at runtime, and outrank these. */
-  --brand: oklch(0.586 0.218 292.5);
+  --brand: oklch(0.591 0.241 293.8);
   --brand-foreground: oklch(1 0 0);
-  --brand-text: oklch(0.561 0.218 292.5);
-  --brand-tint: oklch(0.965 0.018 292.5);
-  --brand-tint-foreground: oklch(0.561 0.218 292.5);
-  --brand-map: #8556ef;
+  --brand-text: oklch(0.566 0.241 293.8);
+  --brand-tint: oklch(0.965 0.018 293.8);
+  --brand-tint-foreground: oklch(0.566 0.241 293.8);
+  --brand-map: #8b4efb;
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
@@ -117,12 +117,12 @@
 }
 
 .dark {
-  --brand: oklch(0.586 0.218 292.5);
+  --brand: oklch(0.54 0.281 292.9);
   --brand-foreground: oklch(1 0 0);
-  --brand-text: oklch(0.666 0.195 292.5);
-  --brand-tint: oklch(0.3 0.04 292.5);
-  --brand-tint-foreground: oklch(0.686 0.181 292.5);
-  --brand-map: #8556ef;
+  --brand-text: oklch(0.67 0.193 292.9);
+  --brand-tint: oklch(0.3 0.04 292.9);
+  --brand-tint-foreground: oklch(0.685 0.183 292.9);
+  --brand-map: #7f22fe;
 
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);

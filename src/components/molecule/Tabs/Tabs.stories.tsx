@@ -168,6 +168,19 @@ export const ArrowLeftKeepsTabVisible: Story = {
   },
 };
 
+// The row clips overflow, so the underline has to sit inside it, on its bottom edge.
+export const Line: Story = {
+  args: { variant: 'line' },
+  play: async ({ canvas }) => {
+    const list = canvas.getByRole('tablist');
+    const tab = canvas.getByRole('tab', { name: 'Vehicles' });
+    await expect(list).toHaveAttribute('data-variant', 'line');
+    await waitFor(() => expect(getComputedStyle(tab, '::after').opacity).toBe('1'));
+    await expect(getComputedStyle(tab, '::after').bottom).toBe('0px');
+    await expect(tab.getBoundingClientRect().bottom).toBe(list.getBoundingClientRect().bottom);
+  },
+};
+
 export const ScrollFade: Story = {
   play: async ({ canvas }) => {
     await expect(getComputedStyle(canvas.getByRole('tablist')).maskImage).not.toBe('none');

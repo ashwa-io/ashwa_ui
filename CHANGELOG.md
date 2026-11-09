@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.1.1
+
+### Patch Changes
+
+- 6830054: IconButton takes a circle shape, and SideNav items take an end icon.
+
 ## 0.1.0
 
 ### Minor Changes

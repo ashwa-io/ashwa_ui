@@ -15,6 +15,7 @@ export interface IconButtonProps {
   'aria-label': string;
   variant?: IconButtonVariant;
   size?: Size;
+  shape?: 'rounded' | 'circle';
   /** Disables the button, sets aria-busy and swaps the icon for a spinner. */
   loading?: boolean;
   disabled?: boolean;
@@ -40,6 +41,7 @@ export const IconButton: React.FC<IconButtonProps> = props => {
     'aria-label': ariaLabel,
     variant = 'ghost',
     size = 'md',
+    shape = 'rounded',
     loading = false,
     disabled = false,
     type = 'button',
@@ -58,6 +60,7 @@ export const IconButton: React.FC<IconButtonProps> = props => {
       type={type}
       variant={BUTTON_VARIANT[variant]}
       size={SIZE[size]}
+      className={cn(shape === 'circle' && 'rounded-full')}
       disabled={disabled || loading}
       // While loading, stay focusable (aria-disabled) so keyboard users keep their place.
       focusableWhenDisabled={loading}

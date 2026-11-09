@@ -82,8 +82,9 @@ export const FacetFilterNumber: React.FC<FacetFilterNumberProps> = props => {
     <Popover>
       <FacetTrigger
         title={title}
-        summary={value && condition ? summarize(value, condition, format) : 'All'}
+        summary={value && condition ? summarize(value, condition, format) : undefined}
         active={condition !== undefined}
+        onClear={() => onChange(null)}
         size={size}
         disabled={disabled}
         data-testid={testId}

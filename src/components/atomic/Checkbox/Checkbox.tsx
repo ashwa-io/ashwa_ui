@@ -6,6 +6,8 @@ import type { FieldBaseProps } from '@/lib/types';
 
 export interface CheckboxProps extends FieldBaseProps {
   value: boolean;
+  /** Some of a list is picked: shows a dash. Clicking still calls onChange. */
+  indeterminate?: boolean;
   onChange: (value: boolean) => void;
   onBlur?: () => void;
   name?: string;
@@ -24,6 +26,7 @@ export const Checkbox: React.FC<CheckboxProps> = props => {
     id,
     'data-testid': testId,
     value,
+    indeterminate = false,
     onChange,
     onBlur,
     name,
@@ -52,12 +55,13 @@ export const Checkbox: React.FC<CheckboxProps> = props => {
           aria-required={control['aria-required']}
           disabled={control.disabled}
           checked={value}
+          indeterminate={indeterminate}
           onCheckedChange={checked => onChange(checked)}
           onBlur={onBlur}
           name={name}
           readOnly={readOnly}
           // The tick takes the box's colour, so a fading box would start the tick black.
-          className="transition-none"
+          className="checkbox-partial transition-none"
         />
       )}
     </FormField>

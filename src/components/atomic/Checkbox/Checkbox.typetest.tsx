@@ -11,6 +11,6 @@ export const CheckboxTypeTest: React.FC = () => (
     <Checkbox label="a" value={false} onChange={noop} style={{ color: 'red' }} />
     {/* @ts-expect-error value is a boolean */}
     <Checkbox label="a" value="on" onChange={noop} />
-    <Checkbox label="a" value onChange={noop} description="b" hideLabel />
+    <Checkbox label="a" value onChange={noop} description="b" hideLabel indeterminate />
   </div>
 );

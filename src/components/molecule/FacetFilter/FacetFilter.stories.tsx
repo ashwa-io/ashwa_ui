@@ -56,11 +56,11 @@ const close = async (userEvent: { keyboard: (text: string) => Promise<void> }) =
 
 export const Default: Story = {
   play: async ({ args, canvas, userEvent }) => {
-    await expect(trigger(canvas)).toHaveTextContent('All');
+    await expect(trigger(canvas)).not.toHaveTextContent('All');
     await open(canvas, userEvent);
     await userEvent.click(screen.getByRole('option', { name: /Truck/ }));
     await expect(args.onChange).toHaveBeenLastCalledWith(['truck']);
-    await expect(trigger(canvas)).toHaveTextContent('1');
+    await expect(trigger(canvas)).toHaveTextContent('Truck');
     // Stays open so several values can be picked.
     await expect(screen.getByRole('listbox')).toBeInTheDocument();
     await close(userEvent);
@@ -83,7 +83,7 @@ export const SelectAll: Story = {
     await open(canvas, userEvent);
     await userEvent.click(screen.getByRole('button', { name: 'Select all' }));
     await expect(args.onChange).toHaveBeenLastCalledWith(['car', 'truck', 'bus']);
-    await expect(trigger(canvas)).toHaveTextContent('All');
+    await expect(trigger(canvas)).not.toHaveTextContent('All');
     await userEvent.click(screen.getByRole('button', { name: 'Select all' }));
     await expect(args.onChange).toHaveBeenLastCalledWith([]);
     await close(userEvent);
@@ -137,7 +137,7 @@ export const ClearFilters: Story = {
 export const StaleValue: Story = {
   args: { value: ['gone'] },
   play: async ({ canvas }) => {
-    await expect(trigger(canvas)).toHaveTextContent('All');
+    await expect(trigger(canvas)).not.toHaveTextContent('All');
   },
 };
 
@@ -209,11 +209,12 @@ export const SelectAllShowsKeyboardFocus: Story = {
 
 // Brand text is only guaranteed on background and card, but the button changes colour on hover
 // and while open, so the summary brings its own surface.
-export const ActiveSummaryHasOwnSurface: Story = {
+// What is picked is plain coloured text, not a tag.
+export const ActiveSummaryIsPlainText: Story = {
   args: { value: ['car'] },
   play: async ({ canvas }) => {
-    const summary = canvas.getByText('1');
-    await expect(getComputedStyle(summary).backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+    const summary = canvas.getByText('Car');
+    await expect(getComputedStyle(summary).backgroundColor).toBe('rgba(0, 0, 0, 0)');
   },
 };
 
@@ -243,9 +244,33 @@ export const OneTickPerRow: Story = {
   },
 };
 
-export const GhostTrigger: Story = {
+export const DashedUntilActive: Story = {
   play: async ({ canvas }) => {
-    await expect(getComputedStyle(trigger(canvas)).borderTopColor).toBe('rgba(0, 0, 0, 0)');
+    await expect(getComputedStyle(trigger(canvas)).borderTopStyle).toBe('dashed');
+  },
+};
+
+export const SolidWhileActive: Story = {
+  args: { value: ['car'] },
+  play: async ({ canvas }) => {
+    await expect(getComputedStyle(trigger(canvas)).borderTopStyle).toBe('solid');
+  },
+};
+
+// The × clears the filter without opening the list.
+export const CrossClears: Story = {
+  args: { value: ['car'] },
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.click(trigger(canvas).querySelector('.rotate-45')!);
+    await expect(args.onChange).toHaveBeenCalledWith([]);
+    await expect(screen.queryByRole('listbox')).toBeNull();
+  },
+};
+
+export const NamesWhatIsPicked: Story = {
+  args: { value: ['car', 'truck'] },
+  play: async ({ canvas }) => {
+    await expect(trigger(canvas)).toHaveTextContent('Car, Truck');
   },
 };
 

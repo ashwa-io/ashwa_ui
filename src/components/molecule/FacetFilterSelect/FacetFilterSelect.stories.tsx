@@ -45,7 +45,7 @@ const closed = () => waitFor(() => expect(screen.queryByRole('listbox')).toBeNul
 
 export const Default: Story = {
   play: async ({ args, canvas, userEvent }) => {
-    await expect(trigger(canvas)).toHaveTextContent('All');
+    await expect(trigger(canvas)).not.toHaveTextContent('All');
     await userEvent.click(trigger(canvas));
     // One choice only, so screen readers must not announce a multi-select list.
     await expect(await screen.findByRole('listbox')).not.toHaveAttribute(
@@ -76,7 +76,7 @@ export const ClearsOnSecondPick: Story = {
     await userEvent.click(await screen.findByRole('option', { name: 'Morning' }));
     await expect(args.onChange).toHaveBeenLastCalledWith(null);
     await closed();
-    await expect(trigger(canvas)).toHaveTextContent('All');
+    await expect(trigger(canvas)).not.toHaveTextContent('All');
   },
 };
 
@@ -96,7 +96,7 @@ export const Required: Story = {
 export const StaleValue: Story = {
   args: { value: 'gone' },
   play: async ({ canvas }) => {
-    await expect(trigger(canvas)).toHaveTextContent('All');
+    await expect(trigger(canvas)).not.toHaveTextContent('All');
   },
 };
 

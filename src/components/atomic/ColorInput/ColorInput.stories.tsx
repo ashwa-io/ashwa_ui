@@ -88,3 +88,12 @@ export const WithError: Story = {
 export const Dark: Story = {
   globals: { theme: 'dark' },
 };
+
+// A colour input cannot be empty: white reads as nothing chosen, where black read as a choice.
+export const EmptyLooksUnset: Story = {
+  args: { value: '' },
+  play: async ({ canvasElement }) => {
+    const swatch = canvasElement.querySelector<HTMLInputElement>('input[type="color"]')!;
+    await expect(swatch.value).toBe('#ffffff');
+  },
+};

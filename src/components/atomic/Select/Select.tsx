@@ -16,6 +16,8 @@ const LEFT_FIELD_REASONS = new Set(['outside-press', 'focus-out']);
 export interface SelectOption {
   value: string;
   label: string;
+  /** A second line in the list; the closed field shows only the label. */
+  description?: string;
   disabled?: boolean;
 }
 
@@ -93,7 +95,14 @@ export const Select: React.FC<SelectProps> = props => {
           <SelectContent>
             {options.map(option => (
               <SelectItem key={option.value} value={option.value} disabled={option.disabled}>
-                {option.label}
+                {option.description ? (
+                  <span className="flex flex-col">
+                    {option.label}
+                    <span className="text-muted-foreground text-xs">{option.description}</span>
+                  </span>
+                ) : (
+                  option.label
+                )}
               </SelectItem>
             ))}
           </SelectContent>

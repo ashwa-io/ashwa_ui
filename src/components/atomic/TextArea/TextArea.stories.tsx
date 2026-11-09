@@ -83,3 +83,10 @@ export const Rows: Story = {
     await expect(six.height).toBeGreaterThan(three.height);
   },
 };
+
+export const SpellCheckOff: Story = {
+  args: { spellCheck: false },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('textbox')).toHaveAttribute('spellcheck', 'false');
+  },
+};

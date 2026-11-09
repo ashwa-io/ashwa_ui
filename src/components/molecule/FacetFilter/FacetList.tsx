@@ -91,7 +91,7 @@ export const FacetList: React.FC<FacetListProps> = props => {
       }}
     >
       <div className="border-b p-1">
-        <ComboboxInput showTrigger={false} placeholder="Search" aria-label={label} />
+        <ComboboxInput showTrigger={false} placeholder={label} aria-label={label} />
       </div>
       {showSelectAll && query === '' && (
         <div className="px-1 pt-1">
@@ -118,19 +118,18 @@ export const FacetList: React.FC<FacetListProps> = props => {
               key={item}
               value={item}
               disabled={option.disabled}
-              className={cn(
-                selected && 'bg-secondary text-secondary-foreground',
-                // The primitive's trailing check is replaced by a leading checkbox in multi mode.
-                multiple && 'hide-item-indicator pr-1.5'
-              )}
+              // The primitive's trailing check gives way to a leading checkbox or tick.
+              className="hide-item-indicator pr-1.5"
             >
-              {multiple && <CheckBox checked={selected} />}
+              {multiple ? (
+                <CheckBox checked={selected} />
+              ) : (
+                <CheckIcon aria-hidden className={cn('size-4', !selected && 'opacity-0')} />
+              )}
               {Icon && <Icon aria-hidden />}
               <span className="min-w-0 flex-1 truncate">{option.label}</span>
               {option.count !== undefined && (
-                <span className={cn('text-xs tabular-nums', !selected && 'text-muted-foreground')}>
-                  {option.count}
-                </span>
+                <span className="text-muted-foreground font-mono text-xs">{option.count}</span>
               )}
             </ComboboxItem>
           );

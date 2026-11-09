@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.1.2
+
+### Patch Changes
+
+- 55bb8e4: The active SegmentedControl option is filled with the brand colour.
+
 ## 0.1.1
 
 ### Patch Changes

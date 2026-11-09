@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- dbd3db4: Tabs takes a line variant, and FilterMenu and SegmentedControl take a variant so they can drop the outline.
+- dbd3db4: Tabs takes a line variant, SegmentedControl takes a variant, facet filter triggers are ghost, and the default brand matches nigam's violet in both modes.
 
 ## 0.0.17
 

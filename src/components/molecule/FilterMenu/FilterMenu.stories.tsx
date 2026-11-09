@@ -172,13 +172,6 @@ export const Dark: Story = {
   },
 };
 
-export const GhostTrigger: Story = {
-  args: { variant: 'ghost' },
-  play: async ({ canvas }) => {
-    await expect(getComputedStyle(trigger(canvas)).borderTopColor).toBe('rgba(0, 0, 0, 0)');
-  },
-};
-
 // Scrolling areas run to their container's edge, so the scrollbar sits on the border.
 export const ScrollbarOnPopupEdge: Story = {
   play: async ({ canvas, userEvent }) => {

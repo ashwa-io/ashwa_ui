@@ -111,7 +111,8 @@ describe('src/styles/index.css', () => {
     expect(root['--chart-2']).toBe('oklch(0.6 0.118 184.704)');
     expect(dark['--muted']).toBe('oklch(0.274 0.006 286.033)');
     expect(dark['--chart-2']).toBe('oklch(0.696 0.17 162.48)');
-    expect(DEFAULT_BRAND_HEX).toBe('#8556ef');
+    expect(DEFAULT_BRAND_HEX).toBe('#8b4efb');
+    expect(dark['--brand-map']).toBe('#7f22fe');
   });
 
   it('primary, ring, sidebar-primary and chart-1 follow the brand in both modes', () => {

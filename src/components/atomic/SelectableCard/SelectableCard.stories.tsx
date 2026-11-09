@@ -21,9 +21,9 @@ const Controlled: React.FC<SelectableCardProps> = props => {
   );
 };
 
-const tint = () => {
+const secondary = () => {
   const probe = document.createElement('div');
-  probe.className = 'bg-brand-tint';
+  probe.className = 'bg-secondary';
   document.body.append(probe);
   const color = getComputedStyle(probe).backgroundColor;
   probe.remove();
@@ -55,16 +55,16 @@ export const Selected: Story = {
   play: async ({ canvas }) => {
     const card = canvas.getByRole('button', { name: 'Tracking' });
     await expect(card).toHaveAttribute('aria-pressed', 'true');
-    await waitFor(() => expect(getComputedStyle(card).backgroundColor).toBe(tint()));
+    await waitFor(() => expect(getComputedStyle(card).backgroundColor).toBe(secondary()));
   },
 };
 
-export const SelectedKeepsTintOnHover: Story = {
+export const SelectedKeepsColourOnHover: Story = {
   args: { selected: true },
   play: async ({ canvas, userEvent }) => {
     const card = canvas.getByRole('button', { name: 'Tracking' });
     await userEvent.hover(card);
-    await waitFor(() => expect(getComputedStyle(card).backgroundColor).toBe(tint()));
+    await waitFor(() => expect(getComputedStyle(card).backgroundColor).toBe(secondary()));
   },
 };
 

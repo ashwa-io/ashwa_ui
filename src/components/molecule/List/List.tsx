@@ -53,7 +53,7 @@ export const ListItem: React.FC<ListItemProps> = props => {
   const row = cn(
     'flex w-full items-center gap-3 rounded-md px-2 text-left text-sm',
     size === 'sm' ? 'py-1' : 'py-2',
-    selected && 'bg-brand-tint text-brand-tint-foreground'
+    selected && 'bg-secondary text-secondary-foreground'
   );
   const content = (
     <>

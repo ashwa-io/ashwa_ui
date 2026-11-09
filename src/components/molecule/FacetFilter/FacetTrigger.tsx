@@ -36,12 +36,10 @@ export const FacetTrigger: React.FC<FacetTriggerProps> = props => {
     >
       <span>{title}</span>
       <span aria-hidden className="bg-border h-4 w-px" />
-      {/* Brand text is only guaranteed on background and card; the button changes colour on hover
-          and while open, so an active summary brings its own surface. */}
       <span
         className={cn(
           'max-w-40 truncate font-medium',
-          active && 'bg-brand-tint text-brand-tint-foreground rounded-sm px-1'
+          active && 'bg-secondary text-secondary-foreground rounded-sm px-1'
         )}
       >
         {summary}

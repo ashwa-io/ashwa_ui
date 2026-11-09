@@ -10,7 +10,8 @@ export interface AvatarProps {
   /** Gives the initials and the image's alt text. */
   name: string;
   src?: string | null;
-  size?: Size;
+  /** A step, or exact pixels. */
+  size?: Size | number;
   shape?: 'circle' | 'rounded';
   'data-testid'?: string;
 }
@@ -22,6 +23,7 @@ export const Avatar: React.FC<AvatarProps> = props => {
   return (
     <AvatarPrimitive
       size={size === 'sm' ? 'sm' : 'default'}
+      style={typeof size === 'number' ? { width: size, height: size } : undefined}
       data-testid={testId}
       className={cn(size === 'lg' && 'size-12', rounded && 'rounded-lg after:rounded-lg')}
     >

@@ -156,6 +156,38 @@
   --sidebar-border: oklch(1 0 0 / 10%);
 }
 
+/* Anything that has to reach inside a primitive gets a name here, never a selector at the call site. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Which background a sticky element inside this container paints. */
+@utility surface-card {
+  --surface: var(--card);
+}
+
+@utility surface-popover {
+  --surface: var(--popover);
+}
+
+/* For a combobox row that leads with its own checkbox instead of the primitive's trailing tick. */
+@utility hide-item-indicator {
+  & > .absolute {
+    display: none;
+  }
+}
+
+/* The primitive owns the indicator, and gives an unknown amount no width of its own. */
+@utility progress-indeterminate {
+  & [data-slot='progress-indicator'][data-indeterminate] {
+    @apply w-full animate-pulse;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

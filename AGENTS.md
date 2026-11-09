@@ -10,6 +10,7 @@ Public React component library `@ashwa-io/ui`. Full design: `ashwa/docs/superpow
 - Tokens only in `src/styles/index.css`. Brand defaults must equal `brandTheme(DEFAULT_BRAND_HEX)`. Fix contrast in tokens, not components. Brand text uses `text-brand-text` (≥4.5:1), not `text-primary` / `text-brand` (fills, 3:1).
 - Keep `@import './shadcn.css'` (vendored); never depend on `shadcn` at runtime.
 - `src/theme/**` stays pure TypeScript: no React, no DOM.
+- No selector strings in class names outside `ui/` (`[&_svg]:size-4`, `[&>x]:`, `**:`, `[--x:y]`). Pass a prop (an icon takes its own `size-4`), or, when a primitive's internals must be reached, add a named `@utility` to `src/styles/index.css`.
 - A scrolling area always runs to its container's edge, so the scrollbar sits on the border. Padding goes inside the scroller, never around it.
 
 ## Code style

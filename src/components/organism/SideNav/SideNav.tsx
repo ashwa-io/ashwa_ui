@@ -26,6 +26,8 @@ export interface SideNavItem {
   label: string;
   href: string;
   icon?: IconComponent;
+  /** At the end of the row, e.g. a chevron on an item that opens its own nav. */
+  endIcon?: IconComponent;
   onClick?: () => void;
 }
 
@@ -56,6 +58,7 @@ const NavLink: React.FC<{
   const link = useLink(item.href);
   const { setOpenMobile } = useSidebar();
   const Icon = item.icon;
+  const EndIcon = item.endIcon;
 
   return (
     <SidebarMenuItem>
@@ -78,7 +81,8 @@ const NavLink: React.FC<{
         }
       >
         {Icon && <Icon aria-hidden />}
-        <span>{item.label}</span>
+        <span className="truncate">{item.label}</span>
+        {EndIcon && <EndIcon aria-hidden className="text-muted-foreground ml-auto" />}
       </SidebarMenuButton>
     </SidebarMenuItem>
   );

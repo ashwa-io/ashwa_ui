@@ -13,6 +13,12 @@ export const IconButtonTypeTest: React.FC = () => (
     <IconButton icon={Trash2Icon} aria-label="Delete" style={{ color: 'red' }} />
     {/* @ts-expect-error an icon-only button has no link look */}
     <IconButton icon={Trash2Icon} aria-label="Delete" variant="link" />
-    <IconButton icon={Trash2Icon} aria-label="Delete" variant="destructive" size="sm" />
+    <IconButton
+      icon={Trash2Icon}
+      aria-label="Delete"
+      variant="destructive"
+      size="sm"
+      shape="circle"
+    />
   </div>
 );

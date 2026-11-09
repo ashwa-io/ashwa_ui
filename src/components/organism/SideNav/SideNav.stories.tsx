@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MapPinIcon, RouteIcon, TruckIcon } from 'lucide-react';
+import { ChevronRightIcon, MapPinIcon, RouteIcon, TruckIcon } from 'lucide-react';
 import { expect, fn, waitFor } from 'storybook/test';
 
 import { SidebarProvider } from '@/components/ui/sidebar';
@@ -118,4 +118,16 @@ export const ShortcutCannotHideFixedNav: Story = {
 export const Dark: Story = {
   args: { collapsible: true, footer: <div>Account</div> },
   globals: { theme: 'dark' },
+};
+
+// An item that opens its own nav says so at the end of the row; its name stays the label.
+export const EndIcon: Story = {
+  args: {
+    groups: [{ items: [{ label: 'ULB setup', href: '/admin/ulb', endIcon: ChevronRightIcon }] }],
+  },
+  play: async ({ canvas }) => {
+    const link = canvas.getByRole('link', { name: 'ULB setup' });
+    await expect(link.lastElementChild?.tagName).toBe('svg');
+    await expect(link.lastElementChild).toHaveAttribute('aria-hidden', 'true');
+  },
 };

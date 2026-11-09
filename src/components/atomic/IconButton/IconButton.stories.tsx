@@ -73,3 +73,13 @@ export const Loading: Story = {
     await expect(args.onClick).not.toHaveBeenCalled();
   },
 };
+
+export const Circle: Story = {
+  args: { shape: 'circle', variant: 'outline' },
+  play: async ({ canvas }) => {
+    const { borderTopLeftRadius } = getComputedStyle(
+      canvas.getByRole('button', { name: 'Delete' })
+    );
+    await expect(Number.parseFloat(borderTopLeftRadius)).toBeGreaterThan(100);
+  },
+};

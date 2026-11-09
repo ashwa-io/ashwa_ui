@@ -11,5 +11,6 @@ export const SegmentedControlTypeTest: React.FC = () => (
     {/* @ts-expect-error style is not part of the public API */}
     <SegmentedControl label="a" value="a" onChange={change} options={options} style={{}} />
     <SegmentedControl label="a" value="a" onChange={change} options={options} size="sm" disabled />
+    <SegmentedControl label="a" value="a" onChange={change} options={options} variant="ghost" />
   </div>
 );

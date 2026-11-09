@@ -4,7 +4,7 @@ import type React from 'react';
 import { ChevronRightIcon, FilterIcon } from 'lucide-react';
 
 import { Badge } from '@/components/atomic/Badge';
-import { Button } from '@/components/atomic/Button';
+import { Button, type ButtonVariant } from '@/components/atomic/Button';
 import { buttonLook } from '@/components/atomic/Button/buttonLook';
 import { FacetList, type FacetOption } from '@/components/molecule/FacetFilter/FacetList';
 import { Button as ButtonPrimitive } from '@/components/ui/button';
@@ -30,6 +30,7 @@ export interface FilterMenuProps {
   onChange: (value: FilterMenuValue) => void;
   label?: string;
   size?: Size;
+  variant?: ButtonVariant;
   disabled?: boolean;
   'data-testid'?: string;
 }
@@ -41,6 +42,7 @@ export const FilterMenu: React.FC<FilterMenuProps> = props => {
     onChange,
     label = 'Filter',
     size = 'sm',
+    variant = 'outline',
     disabled = false,
     'data-testid': testId,
   } = props;
@@ -50,7 +52,7 @@ export const FilterMenu: React.FC<FilterMenuProps> = props => {
   const selectedCount = (category: FilterCategory) =>
     category.options.filter(option => value[category.id]?.includes(option.value)).length;
   const activeCount = categories.filter(category => selectedCount(category) > 0).length;
-  const look = buttonLook('outline', size, false);
+  const look = buttonLook(variant, size, false);
   const needle = query.trim().toLowerCase();
   const visible = categories.filter(category => category.label.toLowerCase().includes(needle));
 

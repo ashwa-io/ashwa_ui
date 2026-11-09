@@ -12,6 +12,6 @@ export const TabsTypeTest: React.FC = () => (
     <Tabs items={items} value="a" onChange={noop} aria-label="b" style={{}} />
     {/* @ts-expect-error aria-label is required: it names the tab list */}
     <Tabs items={items} value="a" onChange={noop} />
-    <Tabs items={items} value="a" onChange={noop} aria-label="b" size="sm" />
+    <Tabs items={items} value="a" onChange={noop} aria-label="b" size="sm" variant="line" />
   </div>
 );

@@ -13,5 +13,6 @@ export const FilterMenuTypeTest: React.FC = () => (
     {/* @ts-expect-error value maps a category id to its selected values */}
     <FilterMenu categories={list} value={[]} onChange={noop} />
     <FilterMenu categories={list} value={{ a: ['b'] }} onChange={noop} label="Filters" size="sm" />
+    <FilterMenu categories={list} value={{}} onChange={noop} variant="ghost" />
   </div>
 );

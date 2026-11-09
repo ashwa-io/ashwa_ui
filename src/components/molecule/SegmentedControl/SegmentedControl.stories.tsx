@@ -97,6 +97,15 @@ export const Small: Story = {
   args: { size: 'sm' },
 };
 
+export const Ghost: Story = {
+  args: { variant: 'ghost' },
+  play: async ({ canvas }) => {
+    await expect(getComputedStyle(canvas.getByRole('button', { name: 'On' })).borderTopWidth).toBe(
+      '0px'
+    );
+  },
+};
+
 export const Dark: Story = {
   globals: { theme: 'dark' },
 };

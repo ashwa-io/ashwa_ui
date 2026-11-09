@@ -129,3 +129,24 @@ export const BlurOnOutsideClick: Story = {
     await listClosed();
   },
 };
+
+const WITH_DESCRIPTIONS: SelectOption[] = [
+  { value: 'concox', label: 'Concox', description: 'GT06 protocol' },
+  { value: 'jt808', label: 'JT/T 808', description: 'FT920' },
+];
+
+// The description helps while choosing; the closed field names only the option.
+export const OptionDescriptions: Story = {
+  args: { options: WITH_DESCRIPTIONS, value: 'concox' },
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole('combobox', { name: 'Category' });
+    await expect(trigger).toHaveTextContent('Concox');
+    await expect(trigger).not.toHaveTextContent('GT06');
+    await userEvent.click(trigger);
+    await expect(await screen.findByRole('option', { name: /Concox/ })).toHaveTextContent(
+      'GT06 protocol'
+    );
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('option')).toBeNull());
+  },
+};

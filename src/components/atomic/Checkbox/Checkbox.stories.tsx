@@ -92,3 +92,13 @@ export const Dark: Story = {
   ),
   globals: { theme: 'dark' },
 };
+
+// Part of a list picked: a dash, not a tick and not an empty box.
+export const Indeterminate: Story = {
+  args: { indeterminate: true },
+  play: async ({ canvas }) => {
+    const box = canvas.getByRole('checkbox');
+    await expect(box).toHaveAttribute('aria-checked', 'mixed');
+    await expect(getComputedStyle(box.querySelector('svg')!).display).toBe('none');
+  },
+};

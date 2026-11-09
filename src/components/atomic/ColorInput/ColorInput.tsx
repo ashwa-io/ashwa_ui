@@ -53,7 +53,8 @@ export const ColorInput: React.FC<ColorInputProps> = props => {
           <input
             type="color"
             aria-label={`${label} picker`}
-            value={normalizeHex(value) ?? '#000000'}
+            // A colour input cannot be empty; white reads as unset, black read as a choice.
+            value={normalizeHex(value) ?? '#ffffff'}
             disabled={control.disabled}
             onChange={event => handleText(event.target.value)}
             className="border-input h-8 w-10 shrink-0 cursor-pointer rounded-lg border bg-transparent p-0.5 disabled:cursor-not-allowed disabled:opacity-50"

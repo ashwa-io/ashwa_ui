@@ -181,6 +181,25 @@
   }
 }
 
+/* The primitive always draws a tick; a part-selected box shows a dash instead. */
+@utility checkbox-partial {
+  &[data-indeterminate] {
+    @apply border-primary bg-primary;
+  }
+
+  &[data-indeterminate] svg {
+    display: none;
+  }
+
+  &[data-indeterminate] [data-slot='checkbox-indicator']::after {
+    content: '';
+    display: block;
+    width: 0.5rem;
+    height: 2px;
+    background: var(--primary-foreground);
+  }
+}
+
 /* The primitive owns the indicator, and gives an unknown amount no width of its own. */
 @utility progress-indeterminate {
   & [data-slot='progress-indicator'][data-indeterminate] {

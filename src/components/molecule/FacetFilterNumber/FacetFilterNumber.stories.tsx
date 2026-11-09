@@ -63,7 +63,7 @@ const close = async (userEvent: { keyboard: (text: string) => Promise<void> }) =
 
 export const Default: Story = {
   play: async ({ args, canvas, userEvent }) => {
-    await expect(trigger(canvas)).toHaveTextContent('All');
+    await expect(trigger(canvas)).not.toHaveTextContent('All');
     await open(canvas, userEvent);
     await pickCondition(userEvent, 'Greater than');
     // Picking from the nested list must not close the filter's own popup.
@@ -118,7 +118,7 @@ export const Clear: Story = {
     await open(canvas, userEvent);
     await userEvent.click(screen.getByRole('button', { name: 'Clear filter' }));
     await expect(args.onChange).toHaveBeenLastCalledWith(null);
-    await expect(trigger(canvas)).toHaveTextContent('All');
+    await expect(trigger(canvas)).not.toHaveTextContent('All');
     await close(userEvent);
   },
 };
@@ -127,7 +127,7 @@ export const Clear: Story = {
 export const StaleCondition: Story = {
   args: { value: { condition: 'gone', from: '5', to: '' } },
   play: async ({ canvas }) => {
-    await expect(trigger(canvas)).toHaveTextContent('All');
+    await expect(trigger(canvas)).not.toHaveTextContent('All');
   },
 };
 

@@ -37,9 +37,9 @@ export const SelectableCard: React.FC<SelectableCardProps> = props => {
       className={cn(
         CARD_BUTTON,
         PADDING[padding],
-        // The darker border carries the state: secondary alone is too close to the card.
+        // The darker ring carries the state: secondary alone is too close to the card.
         selected &&
-          'bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground border-foreground/60',
+          'bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground ring-foreground/60',
         'disabled:pointer-events-none disabled:opacity-50'
       )}
     >

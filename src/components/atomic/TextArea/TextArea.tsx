@@ -12,6 +12,8 @@ export interface TextAreaProps extends FieldBaseProps {
   placeholder?: string;
   rows?: number;
   maxLength?: number;
+  /** false for machine text such as commands or codes. */
+  spellCheck?: boolean;
   readOnly?: boolean;
   ref?: React.Ref<HTMLTextAreaElement>;
 }
@@ -33,6 +35,7 @@ export const TextArea: React.FC<TextAreaProps> = props => {
     placeholder,
     rows = 3,
     maxLength,
+    spellCheck,
     readOnly = false,
     ref,
   } = props;
@@ -61,6 +64,7 @@ export const TextArea: React.FC<TextAreaProps> = props => {
           placeholder={placeholder}
           rows={rows}
           maxLength={maxLength}
+          spellCheck={spellCheck}
           readOnly={readOnly}
           onChange={event => onChange(event.target.value)}
           onBlur={onBlur}

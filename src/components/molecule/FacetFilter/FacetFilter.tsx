@@ -18,20 +18,23 @@ export interface FacetFilterProps {
 
 export const FacetFilter: React.FC<FacetFilterProps> = props => {
   const { title, options, value, onChange, size, disabled, 'data-testid': testId } = props;
-  const selected = options.filter(option => value.includes(option.value)).length;
-  const active = selected > 0 && selected < options.length;
+  const picked = options.filter(option => value.includes(option.value)).map(({ label }) => label);
+  const active = picked.length > 0 && picked.length < options.length;
+  const words =
+    picked.length < 3 ? picked.join(', ') : `${picked[0]} and ${picked.length - 1} more`;
 
   return (
     <Popover>
       <FacetTrigger
         title={title}
-        summary={active ? String(selected) : 'All'}
+        summary={active ? words : undefined}
         active={active}
+        onClear={() => onChange([])}
         size={size}
         disabled={disabled}
         data-testid={testId}
       />
-      <PopoverContent align="start" aria-label={title} className="w-60 gap-0 p-0">
+      <PopoverContent align="start" aria-label={title} className="w-50 gap-0 p-0">
         <FacetList
           label={title}
           options={options}

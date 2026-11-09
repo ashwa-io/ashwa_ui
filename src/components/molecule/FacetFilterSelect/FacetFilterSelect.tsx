@@ -41,13 +41,14 @@ export const FacetFilterSelect: React.FC<FacetFilterSelectProps> = props => {
     <Popover open={open} onOpenChange={setOpen}>
       <FacetTrigger
         title={title}
-        summary={selected?.label ?? 'All'}
+        summary={selected?.label}
         active={selected !== undefined}
+        onClear={required ? undefined : () => onChange(null)}
         size={size}
         disabled={disabled}
         data-testid={testId}
       />
-      <PopoverContent align="start" aria-label={title} className="w-60 gap-0 p-0">
+      <PopoverContent align="start" aria-label={title} className="w-50 gap-0 p-0">
         <FacetList
           label={title}
           options={options}

@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.0.18
+
+### Patch Changes
+
+- dbd3db4: Tabs takes a line variant, and FilterMenu and SegmentedControl take a variant so they can drop the outline.
+
 ## 0.0.17
 
 ### Patch Changes

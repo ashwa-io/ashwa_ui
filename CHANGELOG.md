@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.2.0
+
+### Minor Changes
+
+- 591165e: DateRangeInput picks a from and to date from presets or a two-month calendar, with dateRangePresets for an app's own today.
+
 ## 0.1.2
 
 ### Patch Changes

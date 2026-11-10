@@ -138,6 +138,16 @@ export { Calendar } from './components/atomic/Calendar';
 export type { CalendarProps } from './components/atomic/Calendar';
 export { DateInput } from './components/molecule/DateInput';
 export type { DateInputProps } from './components/molecule/DateInput';
+export {
+  DateRangeInput,
+  DEFAULT_DATE_RANGE_PRESETS,
+  dateRangePresets,
+} from './components/molecule/DateRangeInput';
+export type {
+  DateRangeInputProps,
+  DateRangePreset,
+  DateRangeValue,
+} from './components/molecule/DateRangeInput';
 export { NumberInput } from './components/atomic/NumberInput';
 export type { NumberInputProps } from './components/atomic/NumberInput';
 export { SelectableCard } from './components/atomic/SelectableCard';

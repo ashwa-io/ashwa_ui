@@ -10,3 +10,9 @@ export const parseDateString = (value: string | null | undefined): Date | undefi
 };
 
 export const toDateString = (date: Date): string => format(date, FORMAT);
+
+// The visible number has to be a word in the name; the default says "November 8th".
+export const labelDayButton = (date: Date, modifiers: { today?: boolean; selected?: boolean }) =>
+  [format(date, 'd MMMM yyyy'), modifiers.today && 'today', modifiers.selected && 'selected']
+    .filter(Boolean)
+    .join(', ');

@@ -1,10 +1,8 @@
 import type React from 'react';
 
-import { format } from 'date-fns';
-
 import { Calendar as CalendarPrimitive } from '@/components/ui/calendar';
 
-import { parseDateString, toDateString } from './dateString';
+import { labelDayButton, parseDateString, toDateString } from './dateString';
 import { STABLE_PARTS } from './stableParts';
 
 export interface CalendarProps {
@@ -15,12 +13,6 @@ export interface CalendarProps {
   max?: string;
   'data-testid'?: string;
 }
-
-// The visible number has to be a word in the name; the default says "November 8th".
-const labelDayButton = (date: Date, modifiers: { today?: boolean; selected?: boolean }) =>
-  [format(date, 'd MMMM yyyy'), modifiers.today && 'today', modifiers.selected && 'selected']
-    .filter(Boolean)
-    .join(', ');
 
 export const Calendar: React.FC<CalendarProps> = props => {
   const { value, onChange, min, max, 'data-testid': testId } = props;

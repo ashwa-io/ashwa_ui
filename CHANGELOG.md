@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- `Text` and `Heading` with `truncate` show their full text in a tooltip on hover, only when the text is actually cut off. The check runs when the tooltip is about to open, so long lists of truncated text cost no measuring. Remove any `Tooltip` you wrapped around a truncated `Text` to repeat its text.
+- `Text` and `Heading` with `truncate` show their full text in a tooltip on hover, only when the text is actually cut off. `ListItem` labels and descriptions and the `TopNav` title do the same. The check runs when the tooltip is about to open, so long lists of truncated text cost no measuring. Remove any `Tooltip` you wrapped around a truncated `Text` to repeat its text.
 
 ## 0.4.0
 

@@ -1,5 +1,6 @@
 import type React from 'react';
 
+import { OverflowTooltip } from '@/components/atomic/Text/OverflowTooltip';
 import { useLink } from '@/providers/useLink';
 
 export interface TopNavProps {
@@ -48,7 +49,9 @@ export const TopNav: React.FC<TopNavProps> = props => {
           <>
             {logo && <span aria-hidden className="bg-border h-5 w-px shrink-0" />}
             {/* An h1 for screen readers; a 40px bar has no room for the page-heading size. */}
-            <h1 className="min-w-0 truncate text-sm font-semibold">{title}</h1>
+            <OverflowTooltip element={<h1 className="min-w-0 truncate text-sm font-semibold" />}>
+              {title}
+            </OverflowTooltip>
           </>
         )}
       </div>

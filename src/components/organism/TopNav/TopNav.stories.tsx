@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn } from 'storybook/test';
+import { expect, fn, screen, waitFor } from 'storybook/test';
 
 import { Button } from '@/components/atomic/Button';
 import { UIProvider } from '@/providers/UIProvider';
@@ -46,17 +46,22 @@ export const EndContent: Story = {
   },
 };
 
-// A long title truncates; the right-hand controls stay on screen.
+const LONG_TITLE = 'A very long organisation name that cannot possibly fit in this narrow header';
+
+// A long title truncates, with the full name on hover; the right-hand controls stay on screen.
 export const LongTitle: Story = {
   args: {
-    title: 'A very long organisation name that cannot possibly fit in this narrow header',
+    title: LONG_TITLE,
     endContent: <Button size="sm">Account</Button>,
   },
   decorators: [Story => <div className="w-80">{Story()}</div>],
-  play: async ({ canvas }) => {
+  play: async ({ canvas, userEvent }) => {
     const header = canvas.getByRole('banner').getBoundingClientRect();
     const end = canvas.getByRole('button', { name: 'Account' }).getBoundingClientRect();
     await expect(end.right).toBeLessThanOrEqual(header.right);
+    await userEvent.hover(canvas.getByRole('heading', { name: LONG_TITLE }));
+    const tip = await screen.findByText(LONG_TITLE, { selector: '[data-slot="tooltip-content"]' });
+    await waitFor(() => expect(tip).toBeVisible());
   },
 };
 

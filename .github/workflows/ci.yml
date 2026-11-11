@@ -19,9 +19,11 @@ jobs:
       - run: corepack enable
       - run: yarn install --immutable
       - run: |
-          # The runner's apt mirrors drop out now and then; retry before failing the run.
+          # Browser only, no --with-deps: GitHub's Ubuntu image already has Chromium's system
+          # libraries, and --with-deps pulled optional fonts from apt mirrors the runner could
+          # not reach, failing releases before any test ran. Retry covers a flaky download.
           for attempt in 1 2 3; do
-            yarn playwright install --with-deps chromium && exit 0
+            yarn playwright install chromium && exit 0
             echo "Browser install failed (attempt $attempt of 3); retrying in 30s"
             sleep 30
           done

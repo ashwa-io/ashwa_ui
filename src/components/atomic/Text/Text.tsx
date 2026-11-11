@@ -3,6 +3,8 @@ import type React from 'react';
 import type { Tone } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
+import { OverflowTooltip } from './OverflowTooltip';
+
 export type TextSize = 'xs' | 'sm' | 'md' | 'lg';
 export type TextTone = Tone | 'muted';
 export type TextWeight = 'normal' | 'medium' | 'semibold';
@@ -16,7 +18,10 @@ export interface TextProps {
   tone?: TextTone;
   /** Leave unset to inherit the parent's weight. */
   weight?: TextWeight;
-  /** One line with an ellipsis; the parent must constrain the width. */
+  /**
+   * One line with an ellipsis; the parent must constrain the width. When the text is cut off,
+   * hovering it shows the full text in a tooltip.
+   */
   truncate?: boolean;
   id?: string;
   'data-testid'?: string;
@@ -58,17 +63,19 @@ export const Text: React.FC<TextProps> = props => {
     'data-testid': testId,
   } = props;
 
-  return (
-    <Element
-      id={id}
-      data-testid={testId}
-      className={cn(
-        size && SIZE[size],
-        tone && TONE[tone],
-        weight && WEIGHT[weight],
-        truncate && 'block truncate'
-      )}
-    >
+  const className = cn(
+    size && SIZE[size],
+    tone && TONE[tone],
+    weight && WEIGHT[weight],
+    truncate && 'block truncate'
+  );
+
+  return truncate ? (
+    <OverflowTooltip id={id} element={<Element data-testid={testId} className={className} />}>
+      {children}
+    </OverflowTooltip>
+  ) : (
+    <Element id={id} data-testid={testId} className={className}>
       {children}
     </Element>
   );

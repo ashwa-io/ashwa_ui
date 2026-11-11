@@ -1,5 +1,6 @@
 import type React from 'react';
 
+import { OverflowTooltip } from '@/components/atomic/Text/OverflowTooltip';
 import { cn } from '@/lib/utils';
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
@@ -8,7 +9,10 @@ export interface HeadingProps {
   children: React.ReactNode;
   /** Renders h1–h6; the visual size follows the level. */
   level: HeadingLevel;
-  /** One line with an ellipsis; the parent must constrain the width. */
+  /**
+   * One line with an ellipsis; the parent must constrain the width. When the heading is cut off,
+   * hovering it shows the full text in a tooltip.
+   */
   truncate?: boolean;
   id?: string;
   'data-testid'?: string;
@@ -36,16 +40,18 @@ export const Heading: React.FC<HeadingProps> = props => {
   const { children, level, truncate = false, id, 'data-testid': testId } = props;
   const Element = ELEMENT[level];
 
-  return (
-    <Element
-      id={id}
-      data-testid={testId}
-      className={cn(
-        'font-heading text-foreground font-semibold',
-        SIZE[level],
-        truncate && 'truncate'
-      )}
-    >
+  const className = cn(
+    'font-heading text-foreground font-semibold',
+    SIZE[level],
+    truncate && 'truncate'
+  );
+
+  return truncate ? (
+    <OverflowTooltip id={id} element={<Element data-testid={testId} className={className} />}>
+      {children}
+    </OverflowTooltip>
+  ) : (
+    <Element id={id} data-testid={testId} className={className}>
       {children}
     </Element>
   );

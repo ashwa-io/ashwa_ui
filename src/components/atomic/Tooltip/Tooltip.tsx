@@ -11,7 +11,8 @@ import type { OverlaySide } from '@/lib/types';
 export interface TooltipProps {
   /**
    * Short plain text, a visual hint only: screen readers don't get it, and it needs a focusable
-   * child to appear for keyboards. Never put essential information only here.
+   * child to appear for keyboards. Never put essential information only here. Cut-off text needs
+   * no Tooltip: `Text` and `Heading` with `truncate` show their full text themselves.
    */
   content: string;
   children: React.ReactNode;

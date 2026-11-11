@@ -6,6 +6,10 @@
 
 - `Tabs` items take an `icon`, and `Tabs` takes `iconOnly` to show just the icons, with each label as the accessible name and a tooltip, for compact view switchers such as grid and list.
 
+### Patch Changes
+
+- A collapsed `SideNav` no longer lets a group's faded label catch the clicks meant for the previous group's last link (for example a vehicle profile's Overview).
+
 ## 0.3.0
 
 ### Minor Changes

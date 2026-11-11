@@ -101,6 +101,14 @@ export const CollapsedKeepsNames: Story = {
     await expect(
       getComputedStyle(canvasElement.querySelector('[data-slot="sidebar-content"]')!).overflowY
     ).toBe('auto');
+    // Collapsed, a group's faded label slides up over the previous group's last link; that link
+    // must still take the click.
+    const label = canvas.getByText('Assets');
+    await waitFor(() => expect(getComputedStyle(label).marginTop).toBe('-32px'));
+    const link = canvas.getByRole('link', { name: 'Global points' });
+    const box = link.getBoundingClientRect();
+    const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+    await expect(link.contains(hit)).toBe(true);
   },
 };
 

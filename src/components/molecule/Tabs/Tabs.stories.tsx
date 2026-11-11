@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { LayoutGrid, List } from 'lucide-react';
 import { expect, fireEvent, fn, waitFor } from 'storybook/test';
 
 import { HStack } from '@/components/layout/Stack';
@@ -184,5 +185,41 @@ export const Line: Story = {
 export const ScrollFade: Story = {
   play: async ({ canvas }) => {
     await expect(getComputedStyle(canvas.getByRole('tablist')).maskImage).not.toBe('none');
+  },
+};
+
+export const WithIcons: Story = {
+  args: {
+    items: [
+      { value: 'grid', label: 'Grid', icon: LayoutGrid },
+      { value: 'list', label: 'List', icon: List },
+    ],
+    value: 'grid',
+    'aria-label': 'View',
+  },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('tab', { name: 'Grid' })).toHaveTextContent('Grid');
+  },
+};
+
+export const IconOnly: Story = {
+  args: {
+    items: [
+      { value: 'grid', label: 'Grid', icon: LayoutGrid },
+      { value: 'list', label: 'List', icon: List },
+    ],
+    value: 'grid',
+    'aria-label': 'View',
+    iconOnly: true,
+  },
+  play: async ({ args, canvas, userEvent }) => {
+    const grid = canvas.getByRole('tab', { name: 'Grid' });
+    const list = canvas.getByRole('tab', { name: 'List' });
+    // The label names the tab but is not drawn as text.
+    await expect(grid).not.toHaveTextContent('Grid');
+    await expect(grid).toHaveAttribute('aria-selected', 'true');
+    await userEvent.click(list);
+    await expect(args.onChange).toHaveBeenCalledWith('list');
+    await expect(list).toHaveAttribute('aria-selected', 'true');
   },
 };

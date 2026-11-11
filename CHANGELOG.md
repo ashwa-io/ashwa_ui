@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.4.0
+
+### Minor Changes
+
+- `Tabs` items take an `icon`, and `Tabs` takes `iconOnly` to show just the icons, with each label as the accessible name and a tooltip, for compact view switchers such as grid and list.
+
 ## 0.3.0
 
 ### Minor Changes

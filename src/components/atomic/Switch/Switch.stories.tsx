@@ -71,6 +71,9 @@ export const HiddenLabel: Story = {
   args: { label: 'Enable tracking', hideLabel: true },
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('switch', { name: 'Enable tracking' })).toBeInTheDocument();
+    // A hidden label must not take its text width, or it widens the scroll area around it.
+    const label = canvas.getByText('Enable tracking').closest('label');
+    await expect(label?.getBoundingClientRect().width).toBeLessThanOrEqual(1);
   },
 };
 

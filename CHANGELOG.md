@@ -1,5 +1,15 @@
 # @ashwa-io/ui
 
+## 0.3.0
+
+### Minor Changes
+
+- `Card` takes `fill` to take its parent's full height, so cards side by side in a grid row end level.
+
+### Patch Changes
+
+- A field with a hidden label (`hideLabel`) no longer gives the visually hidden label its text width, which widened the scroll area around it, for example a page showing a second, sideways scrollbar for a table of switches.
+
 ## 0.2.0
 
 ### Minor Changes

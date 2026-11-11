@@ -58,7 +58,9 @@ export const FormField: React.FC<FormFieldProps> = props => {
   });
 
   const labelNode = (
-    <FieldLabel id={labelId} htmlFor={id} className={cn(hideLabel && 'sr-only')}>
+    // w-px replaces the label's w-fit: a hidden label that keeps its text width still widens
+    // the scroll area of whatever positioned box it lands in, such as a table inside a page.
+    <FieldLabel id={labelId} htmlFor={id} className={cn(hideLabel && 'sr-only w-px')}>
       {/* One flex item: the label's flex gap would otherwise split the text from the star. */}
       <span>
         {label}

@@ -72,6 +72,25 @@ export const Clickable: Story = {
   },
 };
 
+export const Fill: Story = {
+  render: () => (
+    <div className="grid h-48 grid-cols-2 gap-4">
+      <Card fill>Short</Card>
+      <Card fill>
+        <span>Taller content</span>
+        <span>on two lines</span>
+      </Card>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    // The text sits straight in the card, so the match is the card itself.
+    const card = canvas.getByText('Short');
+    const row = card.parentElement;
+    // Both cards take the row's height, so their bottoms line up.
+    await expect(card.getBoundingClientRect().height).toBe(row?.getBoundingClientRect().height);
+  },
+};
+
 export const Dark: Story = {
   globals: { theme: 'dark' },
 };

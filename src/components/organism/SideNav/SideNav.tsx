@@ -139,7 +139,13 @@ export const SideNav: React.FC<SideNavProps> = props => {
             <Fragment key={group.label ?? index}>
               {index > 0 && <SidebarSeparator className="mx-0" />}
               <SidebarGroup className="p-1">
-                {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
+                {group.label && (
+                  // Collapsed, the primitive fades the label and slides it up over the previous
+                  // group's last link; without this it would still catch that link's clicks.
+                  <SidebarGroupLabel className="group-data-[collapsible=icon]:pointer-events-none">
+                    {group.label}
+                  </SidebarGroupLabel>
+                )}
                 <SidebarMenu className="gap-0">
                   {group.items.map(item => (
                     <NavLink

@@ -18,7 +18,14 @@ jobs:
           node-version: 24
       - run: corepack enable
       - run: yarn install --immutable
-      - run: yarn playwright install --with-deps chromium
+      - run: |
+          # The runner's apt mirrors drop out now and then; retry before failing the run.
+          for attempt in 1 2 3; do
+            yarn playwright install --with-deps chromium && exit 0
+            echo "Browser install failed (attempt $attempt of 3); retrying in 30s"
+            sleep 30
+          done
+          exit 1
       - run: yarn lint
       - run: yarn typecheck
       - run: yarn test

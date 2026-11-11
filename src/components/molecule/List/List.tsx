@@ -1,5 +1,6 @@
 import type React from 'react';
 
+import { Text } from '@/components/atomic/Text';
 import { cn } from '@/lib/utils';
 
 export interface ListProps {
@@ -59,11 +60,13 @@ export const ListItem: React.FC<ListItemProps> = props => {
     <>
       {startContent}
       <span className="flex min-w-0 flex-1 flex-col">
-        <span className="truncate">{label}</span>
+        <Text as="span" truncate>
+          {label}
+        </Text>
         {description && (
-          <span className={cn('truncate text-xs', !selected && 'text-muted-foreground')}>
+          <Text as="span" size="xs" tone={selected ? undefined : 'muted'} truncate>
             {description}
-          </span>
+          </Text>
         )}
       </span>
       {endContent}

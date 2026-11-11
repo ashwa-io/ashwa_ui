@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fireEvent, fn } from 'storybook/test';
+import { expect, fireEvent, fn, screen, waitFor } from 'storybook/test';
 
 import { Badge } from '@/components/atomic/Badge';
 
@@ -84,22 +84,22 @@ export const WithContent: Story = {
   },
 };
 
-// Long text truncates instead of pushing end content out of the row.
+const LONG_LABEL = 'A very long vehicle name that cannot possibly fit in this narrow list';
+
+// Long text truncates instead of pushing end content out of the row, with the full text on hover.
 export const LongLabel: Story = {
   args: {
-    children: (
-      <ListItem
-        label="A very long vehicle name that cannot possibly fit in this narrow list"
-        endContent={<Badge>End</Badge>}
-      />
-    ),
+    children: <ListItem label={LONG_LABEL} endContent={<Badge>End</Badge>} />,
   },
   decorators: [Story => <div className="w-48">{Story()}</div>],
-  play: async ({ canvas }) => {
+  play: async ({ canvas, userEvent }) => {
     const row = canvas.getByRole('listitem').getBoundingClientRect();
     await expect(canvas.getByText('End').getBoundingClientRect().right).toBeLessThanOrEqual(
       row.right
     );
+    await userEvent.hover(canvas.getByText(LONG_LABEL));
+    const tip = await screen.findByText(LONG_LABEL, { selector: '[data-slot="tooltip-content"]' });
+    await waitFor(() => expect(tip).toBeVisible());
   },
 };
 

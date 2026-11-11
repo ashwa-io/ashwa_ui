@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect } from 'storybook/test';
+import { expect, screen, waitFor } from 'storybook/test';
 
 import { Text, type TextTone } from './Text';
 
@@ -80,19 +80,83 @@ export const InheritsColour: Story = {
   },
 };
 
-// A span is inline, so truncation needs it to become a block.
+const LONG = 'A very long line of text that cannot fit in the box';
+const TIP = { selector: '[data-slot="tooltip-content"]' };
+
+// Gives a tooltip that would open a moment to do so, so its absence means something.
+const settle = () => new Promise(resolve => setTimeout(resolve, 150));
+
+// A span is inline, so truncation needs it to become a block. Cut-off text shows in full on hover.
 export const Truncate: Story = {
   render: () => (
-    <div className="w-40">
+    // Room above, so the tooltip takes its default top side.
+    <div className="w-40 pt-12">
       <Text as="span" truncate>
-        A very long line of text that cannot fit in the box
+        {LONG}
       </Text>
     </div>
   ),
-  play: async ({ canvas }) => {
-    const style = getComputedStyle(canvas.getByText(/A very long line/));
+  play: async ({ canvas, userEvent }) => {
+    const text = canvas.getByText(LONG);
+    const style = getComputedStyle(text);
     await expect(style.textOverflow).toBe('ellipsis');
     await expect(style.display).toBe('block');
+    await userEvent.hover(text);
+    // The popup fades in; wait until it is visible rather than checking mid-animation.
+    const tip = await screen.findByText(LONG, TIP);
+    await waitFor(() => expect(tip).toBeVisible());
+    // Anchored to the text itself (it is the trigger), above it.
+    await waitFor(() =>
+      expect(tip.getBoundingClientRect().bottom).toBeLessThanOrEqual(
+        text.getBoundingClientRect().top
+      )
+    );
+  },
+};
+
+// Text that fits has nothing to reveal, so hovering it shows no tooltip.
+export const TruncateFits: Story = {
+  render: () => (
+    <div className="w-40">
+      <Text truncate>Short</Text>
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.hover(canvas.getByText('Short'));
+    await settle();
+    await expect(screen.queryByText('Short', TIP)).not.toBeInTheDocument();
+  },
+};
+
+// Without truncate the text wraps, and no tooltip machinery is rendered at all.
+export const NoTruncateNoTooltip: Story = {
+  render: () => (
+    <div className="w-40">
+      <Text>{LONG}</Text>
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    const text = canvas.getByText(LONG);
+    await expect(text).not.toHaveAttribute('data-base-ui-tooltip-trigger');
+    await userEvent.hover(text);
+    await settle();
+    await expect(screen.queryByText(LONG, TIP)).not.toBeInTheDocument();
+  },
+};
+
+// The tooltip shows the text as written, including text from nested elements.
+export const TruncateNestedText: Story = {
+  render: () => (
+    <div className="w-40">
+      <Text truncate>
+        Registration number <Text as="span">MH 12 AB 1234</Text> and more
+      </Text>
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.hover(canvas.getByText(/Registration number/));
+    const tip = await screen.findByText('Registration number MH 12 AB 1234 and more', TIP);
+    await waitFor(() => expect(tip).toBeVisible());
   },
 };
 

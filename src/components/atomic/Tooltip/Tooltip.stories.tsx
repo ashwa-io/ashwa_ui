@@ -4,7 +4,6 @@ import { expect, screen, waitFor } from 'storybook/test';
 
 import { Button } from '@/components/atomic/Button';
 import { IconButton } from '@/components/atomic/IconButton';
-import { Text } from '@/components/atomic/Text';
 
 import { Tooltip } from './Tooltip';
 
@@ -56,21 +55,6 @@ export const Sides: Story = {
       </Tooltip>
     </div>
   ),
-};
-
-// The classic use: a truncated name with the full text in a tooltip.
-export const TruncatedText: Story = {
-  render: () => (
-    <div className="w-32">
-      <Tooltip content="A very long vehicle name that cannot fit">
-        <Text truncate>A very long vehicle name that cannot fit</Text>
-      </Tooltip>
-    </div>
-  ),
-  play: async ({ canvas }) => {
-    const text = canvas.getByText(/A very long vehicle name/);
-    await expect(text.getBoundingClientRect().width).toBeLessThanOrEqual(128);
-  },
 };
 
 export const FullWidth: Story = {

@@ -340,6 +340,15 @@ export const FocusClearsStickyHeader: Story = {
   },
 };
 
+// A page that pins a toolbar above the table passes its height, and the header sticks below it.
+export const HeaderSticksBelowPinnedBar: Story = {
+  args: { data: makeRows(3), stickyHeaderOffset: 48 },
+  play: async ({ canvas }) => {
+    const head = (await canvas.findAllByRole('columnheader'))[0];
+    await expect(getComputedStyle(head).top).toBe('48px');
+  },
+};
+
 const onDisabledRow = fn();
 
 const disabledColumns: ColumnDef<Vehicle, string>[] = [

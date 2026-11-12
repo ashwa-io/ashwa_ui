@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.6.0
+
+### Minor Changes
+
+- `DataTable` takes `stickyHeaderOffset`: how far below the top its header sticks. A page that pins a toolbar above the table passes the toolbar's height (pixels, or any CSS length such as a variable), and the column names stay visible under it. Left out, the header sticks to the top as before.
+
 ## 0.5.0
 
 ### Minor Changes

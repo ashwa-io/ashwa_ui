@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- `DataTable` reads `--data-table-sticky-top` for where its header sticks. A page that pins a toolbar above the table sets the variable on a wrapper to the toolbar's height, and the column names stay visible under it. Unset, the header sticks to the top as before.
+- `DataTable` takes `stickyHeaderOffset`: how far below the top its header sticks. A page that pins a toolbar above the table passes the toolbar's height (pixels, or any CSS length such as a variable), and the column names stay visible under it. Left out, the header sticks to the top as before.
 
 ## 0.5.0
 

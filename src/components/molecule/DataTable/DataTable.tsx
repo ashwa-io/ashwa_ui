@@ -119,7 +119,7 @@ const DataTableRowInner = <TData, TValue>(props: DataTableRowProps<TData, TValue
       className={cn(
         // scroll-mt: Shift+Tab must not leave the focused row under the sticky header.
         onRowClick &&
-          'focus-visible:outline-ring cursor-pointer scroll-mt-10 focus-visible:outline-1',
+          'focus-visible:outline-ring cursor-pointer scroll-mt-[calc(var(--data-table-sticky-top,0px)+2.5rem)] focus-visible:outline-1',
         isArchived && ARCHIVED_ROW
       )}
     >
@@ -215,7 +215,8 @@ export const DataTable = <TData, TValue>(props: DataTableProps<TData, TValue>) =
   return (
     <div className="px-2" data-testid={testId}>
       {/* Not shadcn's Table: its overflow wrapper would scroll here instead of the page and
-          break the sticky header. Borders sit on cells because collapsed ones vanish when sticky. */}
+          break the sticky header. Borders sit on cells because collapsed ones vanish when sticky.
+          --data-table-sticky-top, set on any ancestor, drops the header below a bar pinned above it. */}
       <table
         aria-label={ariaLabel}
         aria-rowcount={rows.length + 1}
@@ -229,7 +230,7 @@ export const DataTable = <TData, TValue>(props: DataTableProps<TData, TValue>) =
                 <TableHead
                   key={header.id}
                   colSpan={header.colSpan}
-                  className="bg-surface sticky top-0 z-10 truncate border-b px-4 py-2"
+                  className="bg-surface sticky top-(--data-table-sticky-top,0px) z-10 truncate border-b px-4 py-2"
                   style={{ width: columnWidth(header.column) }}
                 >
                   {header.isPlaceholder

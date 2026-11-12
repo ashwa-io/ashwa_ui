@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type CSSProperties } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ColumnDef } from '@tanstack/react-table';
@@ -337,6 +337,22 @@ export const FocusClearsStickyHeader: Story = {
   play: async ({ canvas }) => {
     const row = (await canvas.findByRole('cell', { name: 'Row 0' })).closest('tr')!;
     await expect(getComputedStyle(row).scrollMarginTop).toBe('40px');
+  },
+};
+
+// A page that pins a toolbar above the table says how tall it is, and the header sticks below it.
+export const HeaderSticksBelowPinnedBar: Story = {
+  args: { data: makeRows(3) },
+  decorators: [
+    Story => (
+      <div style={{ '--data-table-sticky-top': '48px' } as CSSProperties}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvas }) => {
+    const head = (await canvas.findAllByRole('columnheader'))[0];
+    await expect(getComputedStyle(head).top).toBe('48px');
   },
 };
 

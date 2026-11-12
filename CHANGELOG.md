@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.6.0
+
+### Minor Changes
+
+- `DataTable` reads `--data-table-sticky-top` for where its header sticks. A page that pins a toolbar above the table sets the variable on a wrapper to the toolbar's height, and the column names stay visible under it. Unset, the header sticks to the top as before.
+
 ## 0.5.0
 
 ### Minor Changes

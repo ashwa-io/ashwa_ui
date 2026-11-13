@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.7.1
+
+### Patch Changes
+
+- Base radius is 6px, down from 8px, so buttons, inputs, menus and popovers have the same corners as nigam. Every other radius follows it: cards and dialogs go from 12px to 10px.
+
 ## 0.7.0
 
 ### Minor Changes

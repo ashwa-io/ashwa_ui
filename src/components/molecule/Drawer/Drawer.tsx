@@ -20,6 +20,8 @@ export interface DrawerProps {
   title: string;
   description?: string;
   children: React.ReactNode;
+  /** Secondary actions, e.g. a three-dot menu; they sit in the header, before the close button. */
+  headerActions?: React.ReactNode;
   /** e.g. Cancel + Save buttons. */
   footer?: React.ReactNode;
   side?: 'left' | 'right';
@@ -42,6 +44,7 @@ export const Drawer: React.FC<DrawerProps> = props => {
     title,
     description,
     children,
+    headerActions,
     footer,
     side = 'right',
     size = 'md',
@@ -62,10 +65,19 @@ export const Drawer: React.FC<DrawerProps> = props => {
         data-testid={testId}
         className={cn('surface-popover gap-0', SIZE[size])}
       >
-        <SheetHeader>
+        {/* The wider right padding keeps a long title clear of the actions and the close button. */}
+        <SheetHeader className={headerActions ? 'pr-20' : undefined}>
           <SheetTitle>{title}</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}
         </SheetHeader>
+        {headerActions && (
+          <div
+            data-slot="drawer-header-actions"
+            className="absolute top-3 right-11 flex items-center gap-1"
+          >
+            {headerActions}
+          </div>
+        )}
         <div
           ref={tabStop.ref}
           tabIndex={tabStop.tabIndex}

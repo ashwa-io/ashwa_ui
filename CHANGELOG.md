@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.7.0
+
+### Minor Changes
+
+- `Drawer` takes `headerActions`: secondary actions, such as a three-dot menu, shown in the header just before the close button. Move a menu that sat in the footer's left corner there, so the footer holds only the main buttons.
+
 ## 0.6.0
 
 ### Minor Changes

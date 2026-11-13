@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { MoreHorizontal } from 'lucide-react';
 import { expect, fn, screen, waitFor } from 'storybook/test';
 
 import { Button } from '@/components/atomic/Button';
+import { IconButton } from '@/components/atomic/IconButton';
 
 import { Drawer } from './Drawer';
 
@@ -29,6 +31,25 @@ export const Default: Story = {
     await waitFor(() => expect(dialog).toBeVisible());
     await expect(dialog).toHaveAttribute('data-side', 'right');
     await expect(screen.getByRole('button', { name: 'Save' })).toBeVisible();
+  },
+};
+
+export const HeaderActions: Story = {
+  args: {
+    description: 'Registration and device',
+    headerActions: (
+      <IconButton icon={MoreHorizontal} aria-label="More actions" variant="ghost" size="sm" />
+    ),
+  },
+  play: async () => {
+    const more = await screen.findByRole('button', { name: 'More actions' });
+    const close = screen.getByRole('button', { name: 'Close' });
+    await waitFor(() => expect(more).toBeVisible());
+    // Sits just before the close button, on the same line.
+    const moreBox = more.getBoundingClientRect();
+    const closeBox = close.getBoundingClientRect();
+    await expect(moreBox.right).toBeLessThanOrEqual(closeBox.left);
+    await expect(Math.abs(moreBox.top - closeBox.top)).toBeLessThan(2);
   },
 };
 

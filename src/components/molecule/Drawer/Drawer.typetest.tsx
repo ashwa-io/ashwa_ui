@@ -17,7 +17,17 @@ export const DrawerTypeTest: React.FC = () => (
     <Drawer open onClose={close}>
       b
     </Drawer>
-    <Drawer open onClose={close} title="a" description="b" footer="c" side="left" size="lg" flush>
+    <Drawer
+      open
+      onClose={close}
+      title="a"
+      description="b"
+      headerActions="e"
+      footer="c"
+      side="left"
+      size="lg"
+      flush
+    >
       d
     </Drawer>
   </div>

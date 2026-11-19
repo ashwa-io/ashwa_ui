@@ -79,6 +79,14 @@ export type {
   StackProps,
   VStackProps,
 } from './components/layout/Stack';
+export { EventCalendar } from './components/molecule/EventCalendar';
+export type {
+  EventCalendarEvent,
+  EventCalendarProps,
+  EventCalendarRange,
+  EventCalendarResource,
+  EventCalendarView,
+} from './components/molecule/EventCalendar';
 export { DataTable } from './components/molecule/DataTable';
 export type { DataTableColumnMeta, DataTableProps } from './components/molecule/DataTable';
 export type {

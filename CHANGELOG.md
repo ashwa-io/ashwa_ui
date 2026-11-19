@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.8.0
+
+### Minor Changes
+
+- f2d9359: Add `EventCalendar`: a read-only event calendar with month, week, day, agenda and resource views, tones for event colour, and a `timeZone` prop that decides which day an instant falls on. Built on the ReUI event calendar (Base UI); adds `@date-fns/tz`.
+
 ## 0.7.0
 
 ### Minor Changes

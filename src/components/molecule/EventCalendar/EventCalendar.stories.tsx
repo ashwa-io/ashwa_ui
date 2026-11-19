@@ -129,4 +129,14 @@ export const Loading: Story = {
   parameters: { a11y: { config: { rules: [{ id: 'color-contrast', enabled: false }] } } },
 };
 
+// For a page that draws its own date controls and wants the grid edge to edge.
+export const NoToolbarNoBorder: Story = {
+  args: { toolbar: false, bordered: false },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(await canvas.findByText('Insurance due')).toBeVisible();
+    expect(canvas.queryByRole('button', { name: 'Today' })).toBeNull();
+  },
+};
+
 export const Empty: Story = { args: { events: [], defaultView: 'agenda' } };

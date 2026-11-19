@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.8.1
+
+### Patch Changes
+
+- `EventCalendar`: `toolbar={false}` hides Today, previous, next and the title for a page that has its own date controls, and `bordered={false}` drops the border and rounded corners so the grid runs edge to edge.
+
 ## 0.8.0
 
 ### Minor Changes

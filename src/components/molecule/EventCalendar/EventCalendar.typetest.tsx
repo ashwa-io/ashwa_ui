@@ -26,6 +26,8 @@ export const EventCalendarTypeTest: React.FC = () => (
       timeZone="Asia/Kolkata"
       weekStartsOn={1}
       size="fill"
+      toolbar={false}
+      bordered={false}
     />
   </div>
 );

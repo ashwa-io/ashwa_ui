@@ -51,6 +51,10 @@ export interface EventCalendarProps {
   /** Rows of the resource view. */
   resources?: EventCalendarResource[];
   loading?: boolean;
+  /** Today, previous, next and the period title. Turn off when the page has its own, driving `date`. */
+  toolbar?: boolean;
+  /** The border and rounded corners. Turn off to run the grid to the edges of its container. */
+  bordered?: boolean;
   /** `fill` takes the height of its container, which must have one. */
   size?: 'sm' | 'md' | 'lg' | 'fill';
   onEventClick?: (event: EventCalendarEvent) => void;
@@ -86,7 +90,7 @@ const NO_INTERACTIONS = { drag: false, resize: false, selectSlot: false };
 export const EventCalendar: React.FC<EventCalendarProps> = props => {
   const { events, view, defaultView, onViewChange, date, defaultDate, onDateChange } = props;
   const { views = DEFAULT_VIEWS, timeZone, weekStartsOn, resources, loading, size = 'md' } = props;
-  const { onEventClick, onRangeChange, id } = props;
+  const { onEventClick, onRangeChange, id, toolbar = true, bordered = true } = props;
 
   const calendarEvents = useMemo(
     () =>
@@ -109,7 +113,11 @@ export const EventCalendar: React.FC<EventCalendarProps> = props => {
       id={id}
       aria-label={props['aria-label']}
       data-testid={props['data-testid']}
-      className={cn('bg-background overflow-hidden rounded-lg border', SIZE_CLASS[size])}
+      className={cn(
+        'bg-background overflow-hidden',
+        bordered && 'rounded-lg border',
+        SIZE_CLASS[size]
+      )}
       events={calendarEvents}
       view={view}
       defaultView={defaultView ?? views[0]}
@@ -128,7 +136,7 @@ export const EventCalendar: React.FC<EventCalendarProps> = props => {
       }
       onRangeChange={onRangeChange && (info => onRangeChange(info.range))}
     >
-      <EventCalendarNav showViewSwitcher={views.length > 1} />
+      {toolbar && <EventCalendarNav showViewSwitcher={views.length > 1} />}
       <EventCalendarContent />
     </EventCalendarRoot>
   );

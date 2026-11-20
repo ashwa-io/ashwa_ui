@@ -48,7 +48,7 @@ const describe = (item: UploadPillItem): string => {
 const countFiles = (count: number): string => `${count} ${count === 1 ? 'file' : 'files'}`;
 
 /**
- * Uploads in progress, as a pill at the foot of the window that opens into
+ * Uploads in progress, as a pill at the bottom left of the window that opens into
  * the list. It stays out of the way while files move and says so when one
  * fails. Mount it once for the whole app.
  */
@@ -100,10 +100,11 @@ export const UploadPill: React.FC<UploadPillProps> = props => {
   );
 
   return (
-    // The strip spans the window to centre the pill but must not eat clicks meant for the page.
+    // Bottom left, out of the way of a page's own buttons, which sit on the right. The strip spans
+    // the window so an open list can grow on a phone, but must not eat clicks meant for the page.
     <div
       data-testid={testId}
-      className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-center px-4"
+      className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-start px-4"
     >
       <div
         className={cn(

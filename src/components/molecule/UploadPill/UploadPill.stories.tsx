@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 
+import { Drawer } from '@/components/molecule/Drawer';
+
 import { UploadPill } from './UploadPill';
 import type { UploadPillItem } from './UploadPill';
 
@@ -69,6 +71,34 @@ export const Failed: Story = {
     await expect(canvas.getByText('Upload failed')).toBeVisible();
     await userEvent.click(canvas.getByRole('button', { name: 'Retry tyre-invoice.pdf' }));
     await waitFor(() => expect(args.onRetry).toHaveBeenCalledWith('failed'));
+  },
+};
+
+// Files are attached from forms in drawers: the pill must stay readable and usable over one,
+// and using it must not close the form.
+const onDrawerClose = fn();
+
+export const OverDrawer: Story = {
+  render: args => (
+    <>
+      <Drawer open onClose={onDrawerClose} title="Log service" size="lg">
+        Bill photos
+      </Drawer>
+      <UploadPill {...args} />
+    </>
+  ),
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const pill = canvas.getByRole('button', { name: /Uploading 2 of 3/ });
+    // What the window shows at the pill's centre is the pill, not the drawer's dimming layer.
+    const box = pill.getBoundingClientRect();
+    const onTop = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+    await expect(pill.contains(onTop)).toBe(true);
+    await userEvent.click(pill);
+    await expect(pill).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.click(canvas.getByRole('button', { name: 'Remove garage-bill-november.jpg' }));
+    await waitFor(() => expect(args.onCancel).toHaveBeenCalledWith('moving'));
+    await expect(onDrawerClose).not.toHaveBeenCalled();
   },
 };
 

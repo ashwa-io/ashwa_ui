@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.9.2
+
+### Patch Changes
+
+- `UploadPill` stays above an open drawer or dialog instead of being dimmed behind it.
+
 ## 0.9.1
 
 ### Patch Changes

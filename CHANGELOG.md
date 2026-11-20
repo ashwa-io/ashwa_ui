@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.9.0
+
+### Minor Changes
+
+- Add `FileDropzone` (drop, pick, paste or photograph files) and `UploadPill` (uploads in progress as a pill at the foot of the window that opens into the list, built on `Attachment`).
+
 ## 0.8.1
 
 ### Patch Changes

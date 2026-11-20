@@ -109,6 +109,14 @@ export { EmptyState } from './components/molecule/EmptyState';
 export type { EmptyStateProps } from './components/molecule/EmptyState';
 export { Progress } from './components/atomic/Progress';
 export type { ProgressProps } from './components/atomic/Progress';
+export { FileDropzone } from './components/molecule/FileDropzone';
+export type { FileDropzoneProps } from './components/molecule/FileDropzone';
+export { UploadPill } from './components/molecule/UploadPill';
+export type {
+  UploadPillItem,
+  UploadPillProps,
+  UploadPillState,
+} from './components/molecule/UploadPill';
 export { Attachment, AttachmentGroup } from './components/molecule/Attachment';
 export type {
   AttachmentGroupProps,

@@ -102,9 +102,10 @@ export const UploadPill: React.FC<UploadPillProps> = props => {
   return (
     // Bottom left, out of the way of a page's own buttons, which sit on the right. The strip spans
     // the window so an open list can grow on a phone, but must not eat clicks meant for the page.
+    // One layer above drawers and dialogs (z-50): files are attached from forms inside them.
     <div
       data-testid={testId}
-      className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-start px-4"
+      className="pointer-events-none fixed inset-x-0 bottom-4 z-60 flex justify-start px-4"
     >
       <div
         className={cn(

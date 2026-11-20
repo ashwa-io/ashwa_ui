@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.9.1
+
+### Patch Changes
+
+- `UploadPill` sits at the bottom left of the window instead of the bottom centre.
+
 ## 0.9.0
 
 ### Minor Changes

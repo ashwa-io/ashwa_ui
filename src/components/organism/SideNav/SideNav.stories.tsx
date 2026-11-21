@@ -128,6 +128,20 @@ export const Dark: Story = {
   globals: { theme: 'dark' },
 };
 
+// A link pinned to the foot is a link like the others: it is the current page by path.
+export const FooterItems: Story = {
+  args: {
+    collapsible: true,
+    currentPath: '/settings',
+    footerItems: [{ label: 'Settings', href: '/settings', icon: ChevronRightIcon }],
+  },
+  play: async ({ canvas }) => {
+    const link = canvas.getByRole('link', { name: 'Settings' });
+    await expect(link).toHaveAttribute('aria-current', 'page');
+    await expect(canvas.getByRole('button', { name: 'Collapse' })).toBeVisible();
+  },
+};
+
 // An item that opens its own nav says so at the end of the row; its name stays the label.
 export const EndIcon: Story = {
   args: {

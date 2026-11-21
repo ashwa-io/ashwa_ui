@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.10.0
+
+### Minor Changes
+
+- `SideNav` takes `footerItems`: links pinned to the foot (e.g. Settings) that behave like the nav's own links, so they stay visible as an icon with a tooltip when the nav is collapsed.
+
 ## 0.9.2
 
 ### Patch Changes

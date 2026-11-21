@@ -43,6 +43,11 @@ export interface SideNavProps {
   /** Above the groups, e.g. a switcher. */
   header?: React.ReactNode;
   footer?: React.ReactNode;
+  /**
+   * Links pinned to the foot, away from the working pages (e.g. Settings). They behave like the
+   * links in `groups`: active by path, icon-only with a tooltip when collapsed.
+   */
+  footerItems?: SideNavItem[];
   /** Collapses to icons, with a rail and a trigger. */
   collapsible?: boolean;
   'aria-label'?: string;
@@ -113,6 +118,7 @@ export const SideNav: React.FC<SideNavProps> = props => {
     currentPath,
     header,
     footer,
+    footerItems = [],
     collapsible = false,
     'aria-label': ariaLabel = 'Main',
     'data-testid': testId,
@@ -121,7 +127,7 @@ export const SideNav: React.FC<SideNavProps> = props => {
   // 'none' has no phone drawer; offcanvas on desktop lets Ctrl+B hide the only nav.
   const mode = collapsible ? 'icon' : isMobile ? 'offcanvas' : 'none';
   const current = activeHref(
-    groups.flatMap(group => group.items.map(item => item.href)),
+    [...groups.flatMap(group => group.items), ...footerItems].map(item => item.href),
     currentPath
   );
 
@@ -161,9 +167,21 @@ export const SideNav: React.FC<SideNavProps> = props => {
           ))}
         </nav>
       </SidebarContent>
-      {(footer || collapsible) && (
+      {(footer || footerItems.length > 0 || collapsible) && (
         <SidebarFooter>
           {footer}
+          {footerItems.length > 0 && (
+            <SidebarMenu className="gap-0">
+              {footerItems.map(item => (
+                <NavLink
+                  key={item.href}
+                  item={item}
+                  active={item.href === current}
+                  showTooltip={collapsible}
+                />
+              ))}
+            </SidebarMenu>
+          )}
           {collapsible && <CollapseToggle />}
         </SidebarFooter>
       )}

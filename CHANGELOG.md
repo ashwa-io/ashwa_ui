@@ -1,5 +1,11 @@
 # @ashwa-io/ui
 
+## 0.11.0
+
+### Minor Changes
+
+- `FacetFilter` takes `summary="count"`: the button shows how many options are picked instead of their labels, so it keeps one width beside a field.
+
 ## 0.10.0
 
 ### Minor Changes

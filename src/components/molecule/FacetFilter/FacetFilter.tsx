@@ -11,13 +11,27 @@ export interface FacetFilterProps {
   /** Selected option values. */
   value: string[];
   onChange: (value: string[]) => void;
+  /**
+   * What the button says while filtering: the picked labels, or only how many are picked.
+   * 'count' keeps the button one width, for a filter beside a field that must not be squeezed.
+   */
+  summary?: 'labels' | 'count';
   size?: FacetSize;
   disabled?: boolean;
   'data-testid'?: string;
 }
 
 export const FacetFilter: React.FC<FacetFilterProps> = props => {
-  const { title, options, value, onChange, size, disabled, 'data-testid': testId } = props;
+  const {
+    title,
+    options,
+    value,
+    onChange,
+    summary = 'labels',
+    size,
+    disabled,
+    'data-testid': testId,
+  } = props;
   const picked = options.filter(option => value.includes(option.value)).map(({ label }) => label);
   const active = picked.length > 0 && picked.length < options.length;
   const words =
@@ -27,7 +41,7 @@ export const FacetFilter: React.FC<FacetFilterProps> = props => {
     <Popover>
       <FacetTrigger
         title={title}
-        summary={active ? words : undefined}
+        summary={active ? (summary === 'count' ? String(picked.length) : words) : undefined}
         active={active}
         onClear={() => onChange([])}
         size={size}

@@ -275,6 +275,14 @@ export const NamesWhatIsPicked: Story = {
 };
 
 // Stays open so axe checks the popup and the selected row.
+export const CountSummary: Story = {
+  args: { value: ['car', 'bus'], summary: 'count' },
+  play: async ({ canvas }) => {
+    await expect(trigger(canvas)).toHaveTextContent('2');
+    await expect(trigger(canvas)).not.toHaveTextContent('Car');
+  },
+};
+
 export const Dark: Story = {
   args: { value: ['car'] },
   globals: { theme: 'dark' },
